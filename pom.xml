@@ -177,6 +177,7 @@
                                     <include>com.zaxxer:HikariCP</include>
                                     <include>com.github.ben-manes.caffeine:caffeine</include>
                                     <include>org.bstats:bstats-bukkit</include>
+                                    <include>org.bstats:bstats-base</include>
                                     <include>com.squareup.okhttp3:okhttp</include>
                                     <include>com.squareup.okio:okio</include>
                                     <include>com.google.code.gson:gson</include>
@@ -215,6 +216,8 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                        <exclude>META-INF/versions/9/module-info.class</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
