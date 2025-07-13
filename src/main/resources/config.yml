@@ -1,0 +1,172 @@
+# SneakyCosmetics Configuration
+# Plugin by SneakyHub - https://github.com/SneakyHub/SneakyCosmetics
+
+# Credits System Configuration
+credits:
+  # How much real money each credit costs (used with Vault economy)
+  cost-per-credit: 100.0
+  
+  # Welcome credits given to new players
+  welcome-amount: 500
+  
+  # Maximum credits a player can have
+  max-credits: 100000
+  
+  # Daily login bonus
+  daily-bonus:
+    enabled: true
+    amount: 50
+    
+  # Playtime rewards (credits per hour played)
+  playtime-rewards:
+    enabled: true
+    credits-per-hour: 25
+  
+  # Bulk purchase discounts
+  bulk-discounts:
+    enabled: true
+    discounts:
+      1000: 0.05    # 5% discount for 1000+ credits
+      5000: 0.10    # 10% discount for 5000+ credits
+      10000: 0.15   # 15% discount for 10000+ credits
+
+# Database Configuration
+database:
+  # Database type: sqlite, mysql
+  type: sqlite
+  
+  # MySQL settings (only used if type is mysql)
+  mysql:
+    host: localhost
+    port: 3306
+    database: sneakycosmetics
+    username: root
+    password: password
+    ssl: false
+    
+  # Connection pool settings
+  pool:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
+# Cosmetic Configuration
+cosmetics:
+  # Update intervals (in ticks, 20 ticks = 1 second)
+  particle-interval: 10
+  trail-interval: 8
+  pet-interval: 20
+  hat-interval: 5
+  wing-interval: 15
+  aura-interval: 12
+  
+  # Maximum distance for cosmetic effects to be visible
+  max-effect-distance: 50
+  
+  # Disable cosmetics in certain worlds
+  disabled-worlds:
+    - "world_nether"
+    - "spawn"
+  
+  # VIP cosmetics (require sneakycosmetics.vip permission)
+  vip-cosmetics:
+    - "rainbow"
+    - "end"
+    - "diamond_helm"
+    - "parrot"
+    - "rocket"
+    - "galaxy"
+    - "phoenix"
+    - "void"
+    
+  # Premium cosmetics (require sneakycosmetics.premium permission)
+  premium-cosmetics:
+    - "dragon"
+    - "cosmic"
+    - "legendary"
+    - "mythic"
+
+# Performance Settings
+performance:
+  # Maximum cosmetics per player
+  max-cosmetics-per-player: 5
+  
+  # Cleanup inactive cosmetic entities (in minutes)
+  cleanup-interval: 30
+  
+  # Cache player data for X minutes after logout
+  cache-duration: 10
+  
+  # Async database operations
+  async-database: true
+  
+  # Use scheduler adapter for Folia compatibility
+  folia-support: true
+  
+  # Particle optimization
+  particle-optimization:
+    enabled: true
+    max-particles-per-player: 100
+    reduce-distance: 30
+
+# Admin Settings
+admin:
+  # Enable debug messages
+  debug: false
+  
+  # Auto-save interval (in minutes)
+  auto-save-interval: 5
+  
+  # Database cleanup (remove old transactions after X days)
+  cleanup-old-data: 90
+  
+  # Update checker
+  check-for-updates: true
+  update-url: "https://raw.githubusercontent.com/SneakyHub/SneakyCosmetics/main/latest.json"
+  
+  # Auto-update system
+  auto-update: false
+  
+  # Notify admins of updates
+  notify-updates: true
+  
+  # bStats metrics
+  metrics: true
+
+# GUI Settings
+gui:
+  # GUI update interval (in ticks)
+  update-interval: 20
+  
+  # Cosmetics per page in GUI
+  items-per-page: 28
+  
+  # Refresh GUI when cosmetic is toggled
+  refresh-on-toggle: true
+
+# Integration Settings
+integrations:
+  vault:
+    enabled: true
+    
+  luckperms:
+    enabled: true
+    
+  essentialsx:
+    enabled: true
+
+# Wing physics and effects
+effects:
+  wings:
+    enable-gliding: true
+    glide-speed: 0.8
+    fall-damage-reduction: 0.5
+    
+  particles:
+    density: 1.0
+    
+  trails:
+    length: 10
+    fade-time: 100

@@ -1,0 +1,64 @@
+{
+  "version": "1.1.0",
+  "minecraft_version": "1.21.7",
+  "download_url": "https://github.com/SneakyHub/SneakyCosmetics/releases/download/v1.1.0/SneakyCosmetics-1.1.0.jar",
+  "release_notes_url": "https://github.com/SneakyHub/SneakyCosmetics/releases/tag/v1.1.0",
+  "changelog": [
+    "Initial release of SneakyCosmetics v1.1.0",
+    "Added bStats integration with ID 26487 for analytics",
+    "Added Paper and Folia support with compatibility layer",
+    "Added 80+ cosmetics across 7 categories (Particles, Hats, Pets, Trails, Gadgets, Wings, Auras)",
+    "Added comprehensive credit system with Vault integration",
+    "Added EssentialsX integration for backup economy support",
+    "Added LuckPerms integration for advanced permission management",
+    "Added auto-update system with manual override",
+    "Added fully configurable message system with hex color support",
+    "Added SQLite and MySQL database support with connection pooling",
+    "Added GUI system with pagination and category browsing",
+    "Added daily login bonuses and playtime rewards",
+    "Added bulk credit purchase discounts",
+    "Added cosmetic permission system",
+    "Added performance optimizations for large servers",
+    "Added comprehensive admin commands and management tools"
+  ],
+  "requirements": {
+    "java": "17+",
+    "server": "Paper 1.21.7+ or Spigot 1.21.7+ or Folia",
+    "dependencies": {
+      "required": [],
+      "optional": ["Vault", "LuckPerms", "EssentialsX"]
+    }
+  },
+  "compatibility": {
+    "paper": true,
+    "spigot": true,
+    "folia": true,
+    "bukkit": true
+  },
+  "features": {
+    "cosmetic_categories": 7,
+    "total_cosmetics": 80,
+    "database_types": ["SQLite", "MySQL"],
+    "economy_integrations": ["Vault", "EssentialsX"],
+    "permission_integrations": ["LuckPerms"],
+    "auto_update": true,
+    "bstats_integration": true,
+    "configurable_messages": true,
+    "hex_color_support": true,
+    "gui_system": true,
+    "credit_system": true
+  },
+  "support": {
+    "discord": "https://discord.gg/sneakyhub",
+    "github_issues": "https://github.com/SneakyHub/SneakyCosmetics/issues",
+    "documentation": "https://github.com/SneakyHub/SneakyCosmetics/wiki",
+    "website": "https://github.com/SneakyHub/SneakyCosmetics"
+  },
+  "release_info": {
+    "release_date": "2024-07-13",
+    "is_stable": true,
+    "is_beta": false,
+    "build_number": 1,
+    "commit_hash": "latest"
+  }
+}

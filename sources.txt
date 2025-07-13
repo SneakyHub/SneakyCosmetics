@@ -1,0 +1,14 @@
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\SneakyCosmetics.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\commands\CosmeticsCommand.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\commands\CreditsCommand.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\cosmetics\Cosmetic.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\cosmetics\CosmeticType.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\database\DatabaseManager.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\gui\GUIManager.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\integrations\EssentialsXIntegration.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\integrations\LuckPermsIntegration.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\integrations\VaultIntegration.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\listeners\PlayerListener.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\utils\MessageManager.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\utils\SchedulerAdapter.java
+C:\Users\sneaky\Documents\GitHub\SneakyCosmetics\src\main\java\com\sneaky\cosmetics\utils\UpdateChecker.java

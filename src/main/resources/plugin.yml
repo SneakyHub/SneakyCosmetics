@@ -1,0 +1,61 @@
+name: SneakyCosmetics
+version: ${project.version}
+main: com.sneaky.cosmetics.SneakyCosmetics
+api-version: '1.21'
+author: SneakyHub
+description: A comprehensive cosmetics plugin with credits system, GUI, and tons of cosmetics!
+website: https://github.com/SneakyHub/SneakyCosmetics
+folia-supported: true
+
+depend: []
+softdepend: [Vault, LuckPerms, EssentialsX]
+
+commands:
+  cosmetics:
+    description: Open the cosmetics menu or manage cosmetics
+    usage: /<command> [help|list|toggle|give|reload|update]
+    aliases: [cosmetic, cosm]
+    permission: sneakycosmetics.use
+    permission-message: "&cYou do not have permission to use cosmetics!"
+  
+  credits:
+    description: Manage your credits
+    usage: /<command> [buy|give|remove|set|balance]
+    aliases: [credit, money]
+    permission: sneakycosmetics.credits
+    permission-message: "&cYou do not have permission to use credits!"
+
+permissions:
+  sneakycosmetics.*:
+    description: All SneakyCosmetics permissions
+    children:
+      sneakycosmetics.use: true
+      sneakycosmetics.credits: true
+      sneakycosmetics.admin: true
+      sneakycosmetics.vip: true
+      sneakycosmetics.premium: true
+    default: op
+  
+  sneakycosmetics.use:
+    description: Use basic cosmetics features
+    default: true
+  
+  sneakycosmetics.credits:
+    description: Use credits system
+    default: true
+  
+  sneakycosmetics.admin:
+    description: Admin commands and management
+    default: op
+  
+  sneakycosmetics.vip:
+    description: Access to VIP cosmetics
+    default: false
+  
+  sneakycosmetics.premium:
+    description: Access to premium cosmetics
+    default: false
+  
+  sneakycosmetics.bypass:
+    description: Bypass cosmetic restrictions
+    default: op

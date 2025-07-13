@@ -1,0 +1,176 @@
+# SneakyCosmetics Messages Configuration
+# Use Minecraft color codes (&c, &a, etc.) or hex colors (&#FF5555)
+
+prefix: "&8[&bSneaky&fCosmetics&8] "
+
+# General Messages
+general:
+  no-permission: "&cYou do not have permission to use this command!"
+  player-not-found: "&cPlayer &e{player} &cnot found or is not online!"
+  cosmetic-not-found: "&cCosmetic &e{cosmetic} &cnot found!"
+  insufficient-credits: "&cYou do not have enough credits! Required: &e{required}&c, You have: &e{current}"
+  invalid-amount: "&cInvalid amount! Please enter a valid number."
+  command-disabled: "&cThis command is currently disabled!"
+  reload-success: "&aConfiguration reloaded successfully!"
+  reload-error: "&cError occurred while reloading configuration!"
+
+# Success Messages
+success:
+  cosmetic-purchased: "&aSuccessfully purchased &e{cosmetic} &afor &e{price} &acredits!"
+  cosmetic-activated: "&aActivated &e{cosmetic}&a!"
+  cosmetic-deactivated: "&cDeactivated &e{cosmetic}&c!"
+  cosmetic-given: "&aYou received the &e{cosmetic} &acosmetic!"
+  cosmetic-removed: "&cRemoved &e{cosmetic} &cfrom &e{player}&c!"
+  all-cosmetics-cleared: "&cCleared all cosmetics for &e{player}&c!"
+
+# Credits Messages
+credits:
+  balance: "&aYour Credits: &e{credits}"
+  balance-other: "&a{player}'s Credits: &e{credits}"
+  purchased: "&aPurchased &e{amount} &acredits for &e${cost}&a!"
+  given: "&aYou received &e{amount} &acredits!"
+  given-other: "&aGave &e{amount} &acredits to &e{player}&a!"
+  removed: "&cRemoved &e{amount} &ccredits!"
+  removed-other: "&cRemoved &e{amount} &ccredits from &e{player}&c!"
+  set: "&aSet credits to &e{amount}&a!"
+  set-other: "&aSet &e{player}'s &acredits to &e{amount}&a!"
+  insufficient-funds: "&cInsufficient funds! You need &e${amount} &cmore!"
+
+# Welcome and Daily Messages
+daily:
+  welcome-credits: "&aWelcome to the server! You received &e{amount} &acredits to get started!"
+  daily-reward: "&a&#FFD700Daily Reward Claimed! &aYou received &e{amount} &acredits!"
+  daily-already-claimed: "&cYou have already claimed your daily reward! Try again in &e{time}&c."
+  playtime-reward: "&aPlaytime Reward! You received &e{amount} &acredits for playing &e{hours} &ahours!"
+
+# Update Messages
+updates:
+  checking: "&eChecking for updates..."
+  available: "&a&#32CD32Update Available! &eCurrent: &f{current} &e-> Latest: &f{latest}"
+  download-started: "&aStarting download of version &e{version}&a..."
+  download-success: "&aUpdate downloaded successfully! Plugin will be updated on next restart."
+  download-failed: "&cFailed to download update: &e{error}"
+  no-updates: "&aYou are already running the latest version!"
+  auto-update-disabled: "&cAuto-update is disabled in config!"
+
+# Error Messages
+errors:
+  database-error: "&cDatabase error occurred! Please contact an administrator."
+  file-error: "&cFile system error occurred!"
+  network-error: "&cNetwork error occurred while checking for updates!"
+  cosmetic-conflict: "&cYou cannot have multiple cosmetics of the same type active!"
+  world-disabled: "&cCosmetics are disabled in this world!"
+  cooldown: "&cPlease wait &e{time} &cbefore using this again!"
+
+# GUI Messages
+gui:
+  titles:
+    main: "&#FFD700Sneaky Cosmetics"
+    particles: "&#9370DBParticle Effects"
+    hats: "&#FFD700Hat Collection"
+    pets: "&#32CD32Pet Companions"
+    trails: "&#1E90FFMovement Trails"
+    gadgets: "&#FF6347Fun Gadgets"
+    wings: "&#F0F8FFWing Collection"
+    auras: "&#8A2BE2Mystic Auras"
+    active: "&#FFA500Active Cosmetics"
+    credits: "&#32CD32Buy Credits"
+    confirm: "&#FF4500Confirm Purchase"
+  
+  buttons:
+    previous-page: "&e← Previous Page"
+    next-page: "&eNext Page →"
+    back: "&c← Back"
+    close: "&cClose Menu"
+    confirm-purchase: "&aConfirm Purchase"
+    cancel-purchase: "&cCancel"
+    toggle-on: "&aClick to Activate"
+    toggle-off: "&cClick to Deactivate"
+    purchase: "&eClick to Purchase"
+    already-owned: "&aYou own this!"
+    insufficient-credits: "&cNot enough credits!"
+    vip-required: "&6VIP Required"
+    premium-required: "&5Premium Required"
+  
+  items:
+    credits:
+      name: "&e&#FFD700Your Credits"
+      lore:
+        - "&7Current Credits: &e{credits}"
+        - ""
+        - "&eClick to buy more credits!"
+    
+    particles:
+      name: "&d&#9370DBParticles"
+      lore:
+        - "&7Click to browse"
+        - "&7particle effects!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    hats:
+      name: "&6&#FFD700Hats"
+      lore:
+        - "&7Click to browse"
+        - "&7hat cosmetics!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    pets:
+      name: "&a&#32CD32Pets"
+      lore:
+        - "&7Click to browse"
+        - "&7pet companions!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    trails:
+      name: "&b&#1E90FFTrails"
+      lore:
+        - "&7Click to browse"
+        - "&7movement trails!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    gadgets:
+      name: "&c&#FF6347Gadgets"
+      lore:
+        - "&7Click to browse"
+        - "&7fun gadgets!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    wings:
+      name: "&f&#F0F8FFWings"
+      lore:
+        - "&7Click to browse"
+        - "&7wing cosmetics!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+    
+    auras:
+      name: "&5&#8A2BE2Auras"
+      lore:
+        - "&7Click to browse"
+        - "&7mystic auras!"
+        - ""
+        - "&7Owned: &e{owned}&7/&e{total}"
+
+# Command Help Messages
+help:
+  cosmetics:
+    - "&e&#FFD700SneakyCosmetics Commands:"
+    - "&a/cosmetics &7- Open cosmetics menu"
+    - "&a/cosmetics list &7- List all cosmetics"
+    - "&a/cosmetics toggle <cosmetic> &7- Toggle a cosmetic"
+    - "&a/cosmetics give <player> <cosmetic> &7- Give a cosmetic"
+    - "&a/cosmetics reload &7- Reload configuration"
+    - "&a/cosmetics update &7- Check for updates"
+  
+  credits:
+    - "&e&#32CD32Credits Commands:"
+    - "&a/credits &7- Check your credit balance"
+    - "&a/credits buy <amount> &7- Buy credits"
+    - "&a/credits give <player> <amount> &7- Give credits"
+    - "&a/credits remove <player> <amount> &7- Remove credits"
+    - "&a/credits set <player> <amount> &7- Set credits"
