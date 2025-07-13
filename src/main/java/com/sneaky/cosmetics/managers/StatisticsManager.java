@@ -350,11 +350,15 @@ public class StatisticsManager {
                     totalCosmeticsActivated.set(globalStats[2]);
                     totalAchievementsUnlocked.set(globalStats[3]);
                 }
-                
+
                 // Load player statistics
-                var loadedPlayerStats = plugin.getDatabaseManager().loadAllPlayerStatistics();
+                Map<UUID, Object> loadedPlayerStats = plugin.getDatabaseManager().loadAllPlayerStatistics();
                 if (loadedPlayerStats != null) {
-                    playerStats.putAll(loadedPlayerStats);
+                    for (Map.Entry<UUID, Object> entry : loadedPlayerStats.entrySet()) {
+                        if (entry.getValue() instanceof StatisticsManager.PlayerStatistics stats) {
+                            playerStats.put(entry.getKey(), stats);
+                        }
+                    }
                 }
                 
                 // Load cosmetic usage statistics

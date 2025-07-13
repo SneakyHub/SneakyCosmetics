@@ -138,7 +138,7 @@ public class CosmeticManager {
                 "particle_snow", "Snowflakes", 90, org.bukkit.Material.SNOWBALL,
                 java.util.Arrays.asList("§7Gentle snowflakes fall", "§7around you gracefully!"),
                 null, false, false,
-                org.bukkit.Particle.SNOWBALL, 5, 0.8, 1.2, 0.8, 0.1, plugin
+                    org.bukkit.Particle.ITEM_SNOWBALL, 5, 0.8, 1.2, 0.8, 0.1, plugin
             );
             registerCosmetic(snowParticle);
             
@@ -147,7 +147,7 @@ public class CosmeticManager {
                 "particle_slime", "Slime Bounce", 110, org.bukkit.Material.SLIME_BALL,
                 java.util.Arrays.asList("§7Bouncy slime particles", "§7add some fun to your step!"),
                 null, false, false,
-                org.bukkit.Particle.ITEM_CRACK, 4, 0.4, 0.4, 0.4, 0.1, plugin
+                org.bukkit.Particle.ITEM_SLIME, 4, 0.4, 0.4, 0.4, 0.1, plugin
             );
             registerCosmetic(slimeParticle);
             
@@ -156,7 +156,7 @@ public class CosmeticManager {
                 "particle_witch", "Witch Magic", 300, org.bukkit.Material.BREWING_STAND,
                 java.util.Arrays.asList("§7Dark witch magic", "§7swirls around you!"),
                 null, true, false,
-                org.bukkit.Particle.SPELL, 7, 0.5, 0.5, 0.5, 0.15, plugin
+                org.bukkit.Particle.SMOKE, 7, 0.5, 0.5, 0.5, 0.15, plugin
             );
             registerCosmetic(witchParticle);
             
