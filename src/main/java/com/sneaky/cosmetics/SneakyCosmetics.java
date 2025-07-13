@@ -1,11 +1,15 @@
 package com.sneaky.cosmetics;
 
+import com.sneaky.cosmetics.achievements.AchievementManager;
+import com.sneaky.cosmetics.api.SneakyCosmeticsAPI;
 import com.sneaky.cosmetics.commands.CosmeticsCommand;
 import com.sneaky.cosmetics.commands.CreditsCommand;
 import com.sneaky.cosmetics.database.DatabaseManager;
 import com.sneaky.cosmetics.gui.GUIManager;
+import com.sneaky.cosmetics.integrations.CMIIntegration;
 import com.sneaky.cosmetics.integrations.EssentialsXIntegration;
 import com.sneaky.cosmetics.integrations.LuckPermsIntegration;
+import com.sneaky.cosmetics.integrations.PlaceholderAPIIntegration;
 import com.sneaky.cosmetics.integrations.VaultIntegration;
 import com.sneaky.cosmetics.listeners.PlayerListener;
 import com.sneaky.cosmetics.managers.*;
@@ -42,6 +46,8 @@ public class SneakyCosmetics extends JavaPlugin {
     private CreditManager creditManager;
     private CosmeticManager cosmeticManager;
     private GUIManager guiManager;
+    private AchievementManager achievementManager;
+    private StatisticsManager statisticsManager;
     
     // Cosmetic type managers
     private ParticleManager particleManager;
@@ -56,6 +62,8 @@ public class SneakyCosmetics extends JavaPlugin {
     private VaultIntegration vaultIntegration;
     private LuckPermsIntegration luckPermsIntegration;
     private EssentialsXIntegration essentialsXIntegration;
+    private PlaceholderAPIIntegration placeholderAPIIntegration;
+    private CMIIntegration cmiIntegration;
     
     // Metrics
     private Metrics metrics;
@@ -161,6 +169,23 @@ public class SneakyCosmetics extends JavaPlugin {
             updateChecker.shutdown();
         }
         
+        // Cleanup PlaceholderAPI
+        if (placeholderAPIIntegration != null) {
+            placeholderAPIIntegration.unregister();
+        }
+        
+        // Cleanup pets
+        com.sneaky.cosmetics.cosmetics.pets.PetCosmetic.cleanupAllPets();
+        
+        // Cleanup gadgets
+        com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.cleanupAllGadgets();
+        
+        // Cleanup wings
+        com.sneaky.cosmetics.cosmetics.wings.WingCosmetic.cleanupAllWings();
+        
+        // Cleanup auras
+        com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.cleanupAllAuras();
+        
         // Cancel all running tasks
         getServer().getScheduler().cancelTasks(this);
         
@@ -196,6 +221,26 @@ public class SneakyCosmetics extends JavaPlugin {
                 getLogger().info("Successfully hooked into EssentialsX!");
             }
         }
+        
+        // Initialize PlaceholderAPI integration
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            this.placeholderAPIIntegration = new PlaceholderAPIIntegration(this);
+            if (placeholderAPIIntegration.register()) {
+                getLogger().info("Successfully hooked into PlaceholderAPI!");
+            }
+        } else {
+            getLogger().warning("PlaceholderAPI not found! Placeholder features will be disabled.");
+        }
+        
+        // Initialize CMI integration
+        if (getServer().getPluginManager().getPlugin("CMI") != null) {
+            this.cmiIntegration = new CMIIntegration(this);
+            if (cmiIntegration.initialize()) {
+                getLogger().info("Successfully hooked into CMI!");
+            }
+        } else {
+            getLogger().info("CMI not found, CMI integration disabled.");
+        }
     }
     
     private void initializeManagers() {
@@ -203,6 +248,8 @@ public class SneakyCosmetics extends JavaPlugin {
         this.creditManager = new CreditManager(this);
         this.cosmeticManager = new CosmeticManager(this);
         this.guiManager = new GUIManager(this);
+        this.achievementManager = new AchievementManager(this);
+        this.statisticsManager = new StatisticsManager(this);
         
         // Initialize cosmetic type managers
         this.particleManager = new ParticleManager(this);
@@ -215,6 +262,9 @@ public class SneakyCosmetics extends JavaPlugin {
         
         // Register cosmetics
         cosmeticManager.registerCosmetics();
+        
+        // Initialize public API
+        SneakyCosmeticsAPI.initialize(this);
     }
     
     private void registerCommands() {
@@ -358,5 +408,21 @@ public class SneakyCosmetics extends JavaPlugin {
     
     public EssentialsXIntegration getEssentialsXIntegration() {
         return essentialsXIntegration;
+    }
+    
+    public PlaceholderAPIIntegration getPlaceholderAPIIntegration() {
+        return placeholderAPIIntegration;
+    }
+    
+    public AchievementManager getAchievementManager() {
+        return achievementManager;
+    }
+    
+    public CMIIntegration getCMIIntegration() {
+        return cmiIntegration;
+    }
+    
+    public StatisticsManager getStatisticsManager() {
+        return statisticsManager;
     }
 }

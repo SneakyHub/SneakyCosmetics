@@ -160,6 +160,17 @@ public class DatabaseManager {
                 ")"
             );
             
+            // Pet custom names table
+            connection.createStatement().execute(
+                "CREATE TABLE IF NOT EXISTS pet_names (" +
+                "player_uuid VARCHAR(36) NOT NULL, " +
+                "pet_id VARCHAR(64) NOT NULL, " +
+                "custom_name VARCHAR(32) NOT NULL, " +
+                "updated_at BIGINT DEFAULT " + System.currentTimeMillis() + ", " +
+                "PRIMARY KEY(player_uuid, pet_id)" +
+                ")"
+            );
+            
             // Create indexes for better performance
             if (databaseType.equals("mysql")) {
                 connection.createStatement().execute("CREATE INDEX IF NOT EXISTS idx_cosmetic_ownership_player ON cosmetic_ownership(player_uuid)");
@@ -184,7 +195,7 @@ public class DatabaseManager {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection();
                  PreparedStatement statement = connection.prepareStatement(
-                     "INSERT OR IGNORE INTO player_data (uuid, username, credits) VALUES (?, ?, ?)"
+                     "INSERT IGNORE INTO player_data (uuid, username, credits) VALUES (?, ?, ?)"
                  )) {
                 
                 statement.setString(1, uuid.toString());
@@ -301,7 +312,7 @@ public class DatabaseManager {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection();
                  PreparedStatement statement = connection.prepareStatement(
-                     "INSERT OR IGNORE INTO cosmetic_ownership (player_uuid, cosmetic_id) VALUES (?, ?)"
+                     "INSERT IGNORE INTO cosmetic_ownership (player_uuid, cosmetic_id) VALUES (?, ?)"
                  )) {
                 
                 statement.setString(1, uuid.toString());
@@ -313,6 +324,71 @@ public class DatabaseManager {
                 
             } catch (SQLException e) {
                 plugin.getLogger().log(Level.SEVERE, "Failed to give cosmetic " + cosmeticId + " to " + uuid, e);
+            }
+        });
+    }
+    
+    public CompletableFuture<Void> removeCosmetic(UUID uuid, String cosmeticId) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM cosmetic_ownership WHERE player_uuid = ? AND cosmetic_id = ?"
+                 )) {
+                
+                statement.setString(1, uuid.toString());
+                statement.setString(2, cosmeticId);
+                statement.executeUpdate();
+                
+                // Update cache
+                Map<String, Boolean> playerCache = cosmeticCache.get(uuid);
+                if (playerCache != null) {
+                    playerCache.remove(cosmeticId);
+                }
+                
+            } catch (SQLException e) {
+                plugin.getLogger().log(Level.SEVERE, "Failed to remove cosmetic " + cosmeticId + " from " + uuid, e);
+            }
+        });
+    }
+    
+    public String getPetCustomName(UUID uuid, String petId) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                 "SELECT custom_name FROM pet_names WHERE player_uuid = ? AND pet_id = ?"
+             )) {
+            
+            statement.setString(1, uuid.toString());
+            statement.setString(2, petId);
+            ResultSet result = statement.executeQuery();
+            
+            return result.next() ? result.getString("custom_name") : null;
+            
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to get pet custom name for " + uuid, e);
+            return null;
+        }
+    }
+    
+    public CompletableFuture<Void> setPetCustomName(UUID uuid, String petId, String customName) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = getConnection()) {
+                String sql;
+                if (databaseType.equals("mysql")) {
+                    sql = "INSERT INTO pet_names (player_uuid, pet_id, custom_name) VALUES (?, ?, ?) " +
+                          "ON DUPLICATE KEY UPDATE custom_name = VALUES(custom_name)";
+                } else {
+                    sql = "INSERT OR REPLACE INTO pet_names (player_uuid, pet_id, custom_name) VALUES (?, ?, ?)";
+                }
+                
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    statement.setString(1, uuid.toString());
+                    statement.setString(2, petId);
+                    statement.setString(3, customName);
+                    statement.executeUpdate();
+                }
+                
+            } catch (SQLException e) {
+                plugin.getLogger().log(Level.SEVERE, "Failed to set pet custom name for " + uuid, e);
             }
         });
     }
@@ -395,5 +471,109 @@ public class DatabaseManager {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
         }
+    }
+    
+    // Statistics database methods
+    public void saveGlobalStatistics(long creditsEarned, long creditsSpent, long cosmeticsActivated, long achievementsUnlocked) {
+        plugin.getSchedulerAdapter().runTaskAsynchronously(() -> {
+            try (Connection conn = dataSource.getConnection()) {
+                String sql = "INSERT OR REPLACE INTO global_statistics (id, credits_earned, credits_spent, cosmetics_activated, achievements_unlocked) VALUES (1, ?, ?, ?, ?)";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setLong(1, creditsEarned);
+                    stmt.setLong(2, creditsSpent);
+                    stmt.setLong(3, cosmeticsActivated);
+                    stmt.setLong(4, achievementsUnlocked);
+                    stmt.executeUpdate();
+                }
+            } catch (SQLException e) {
+                plugin.getLogger().log(Level.WARNING, "Failed to save global statistics", e);
+            }
+        });
+    }
+    
+    public long[] loadGlobalStatistics() {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT credits_earned, credits_spent, cosmetics_activated, achievements_unlocked FROM global_statistics WHERE id = 1";
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new long[]{
+                        rs.getLong("credits_earned"),
+                        rs.getLong("credits_spent"),
+                        rs.getLong("cosmetics_activated"),
+                        rs.getLong("achievements_unlocked")
+                    };
+                }
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "Failed to load global statistics", e);
+        }
+        return null;
+    }
+    
+    public void savePlayerStatistics(UUID playerId, Object playerStats) {
+        // Stub implementation - would save player statistics to database
+        plugin.getLogger().fine("Saving player statistics for " + playerId + " (stub implementation)");
+    }
+    
+    public Map<UUID, Object> loadAllPlayerStatistics() {
+        // Stub implementation - would load all player statistics
+        plugin.getLogger().fine("Loading all player statistics (stub implementation)");
+        return new HashMap<>();
+    }
+    
+    public void saveCosmeticUsageStats(Object usageCount, Object usageTime) {
+        // Stub implementation - would save cosmetic usage statistics
+        plugin.getLogger().fine("Saving cosmetic usage statistics (stub implementation)");
+    }
+    
+    public Object[] loadCosmeticUsageStats() {
+        // Stub implementation - would load cosmetic usage statistics
+        plugin.getLogger().fine("Loading cosmetic usage statistics (stub implementation)");
+        return null;
+    }
+    
+    public void savePlayerActiveCosmetics(UUID playerId, java.util.Set<String> activeCosmetics) {
+        plugin.getSchedulerAdapter().runTaskAsynchronously(() -> {
+            try (Connection conn = dataSource.getConnection()) {
+                // First clear existing active cosmetics
+                String deleteSql = "DELETE FROM player_active_cosmetics WHERE player_id = ?";
+                try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                    deleteStmt.setString(1, playerId.toString());
+                    deleteStmt.executeUpdate();
+                }
+                
+                // Insert new active cosmetics
+                String insertSql = "INSERT INTO player_active_cosmetics (player_id, cosmetic_id) VALUES (?, ?)";
+                try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                    for (String cosmeticId : activeCosmetics) {
+                        insertStmt.setString(1, playerId.toString());
+                        insertStmt.setString(2, cosmeticId);
+                        insertStmt.addBatch();
+                    }
+                    insertStmt.executeBatch();
+                }
+            } catch (SQLException e) {
+                plugin.getLogger().log(Level.WARNING, "Failed to save player active cosmetics", e);
+            }
+        });
+    }
+    
+    public String getPetCustomName2(UUID playerId, String petId) {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT custom_name FROM pet_custom_names WHERE player_id = ? AND pet_id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, playerId.toString());
+                stmt.setString(2, petId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("custom_name");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "Failed to get pet custom name", e);
+        }
+        return null;
     }
 }

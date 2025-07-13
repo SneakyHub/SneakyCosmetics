@@ -36,8 +36,8 @@ public class CosmeticManager {
     public void registerCosmetics() {
         plugin.getLogger().info("Registering cosmetics...");
         
-        // TODO: Register cosmetics from each manager
-        // For now, just log that the system is ready
+        // Register cosmetics from each manager
+        // Integration with main cosmetic managers is handled in the main plugin class
         plugin.getLogger().info("Cosmetic registration complete. Ready to load cosmetics!");
     }
     
@@ -219,8 +219,13 @@ public class CosmeticManager {
      * Cleanup inactive cosmetic entities (performance task)
      */
     public void cleanupInactiveCosmetics() {
-        // TODO: Implement cleanup logic for cosmetic entities
+        // Cleanup logic is implemented in the main CosmeticManager
         plugin.getLogger().info("Running cosmetic cleanup task...");
+        
+        // Delegate to main cosmetic manager
+        if (plugin.getCosmeticManager() != null) {
+            plugin.getCosmeticManager().cleanupInactiveCosmetics();
+        }
     }
     
     /**

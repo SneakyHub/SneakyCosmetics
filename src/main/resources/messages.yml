@@ -156,21 +156,253 @@ gui:
         - ""
         - "&7Owned: &e{owned}&7/&e{total}"
 
+# Achievement Messages
+achievements:
+  unlocked-title: "&6&l🏆 Achievement Unlocked!"
+  unlocked-subtitle: "&e{name}"
+  unlocked-chat: "&6&l🏆 Achievement Unlocked! &e{name} &7- &f{description}"
+  reward-message: "&7Reward: &e+{credits} credits"
+  progress: "&7Progress: &e{current}&7/&e{total}"
+  completed: "&a✓ Completed"
+  not-completed: "&c✗ Not Completed"
+  completion-percentage: "&7Achievement Progress: &e{percentage}%"
+  total-credits-earned: "&7Total Credits from Achievements: &e{credits}"
+  
+  # Individual achievement names and descriptions
+  names:
+    first_cosmetic: "First Steps"
+    collector_5: "Collector"
+    collector_10: "Enthusiast" 
+    collector_25: "Cosmetic Master"
+    particle_master: "Particle Master"
+    hat_collector: "Hat Collector"
+    pet_lover: "Pet Lover"
+    trail_master: "Trail Master"
+    gadgeteer: "Gadgeteer"
+    angelic_being: "Angelic Being"
+    aura_master: "Aura Master"
+    vip_member: "VIP Member"
+    premium_member: "Premium Member"
+  
+  descriptions:
+    first_cosmetic: "Purchase your very first cosmetic!"
+    collector_5: "Own 5 different cosmetics"
+    collector_10: "Own 10 different cosmetics"
+    collector_25: "Own 25 different cosmetics"
+    particle_master: "Own all particle cosmetics"
+    hat_collector: "Own all hat cosmetics"
+    pet_lover: "Own all pet cosmetics"
+    trail_master: "Own all trail cosmetics"
+    gadgeteer: "Own all gadget cosmetics"
+    angelic_being: "Own all wing cosmetics"
+    aura_master: "Own all aura cosmetics"
+    vip_member: "Become a VIP player"
+    premium_member: "Become a Premium player"
+
+# Shop Messages
+shop:
+  opened: "&aOpened credits shop!"
+  category-opened: "&aViewing &e{category} &acosmetics"
+  purchase-success: "&a✓ Purchased &e{cosmetic} &afor &e{price} &acredits!"
+  purchase-failed: "&cPurchase failed! Please try again."
+  already-owned: "&cYou already own this cosmetic!"
+  insufficient-credits: "&cYou don't have enough credits! Need &e{needed} &cmore."
+  access-denied: "&cYou cannot access this cosmetic: &e{reason}"
+  confirmation-required: "&eClick again to confirm purchase of &a{cosmetic} &efor &a{price} &ecredits!"
+  
+  # Shop GUI items
+  gui:
+    credits-shop-title: "&e&l⭐ Credits Shop ⭐"
+    back-to-main: "&c← Back to Main Menu"
+    purchase-button: "&e💰 Click to Purchase for {price} credits"
+    owned-indicator: "&a✓ You own this cosmetic!"
+    insufficient-indicator: "&c✗ Not enough credits ({needed} more)"
+    vip-required: "&6⭐ VIP Required"
+    premium-required: "&5👑 Premium Required"
+
+# Daily Rewards Messages  
+daily-rewards:
+  claimed: "&a✓ Daily reward claimed! You received &e{amount} &acredits!"
+  already-claimed: "&cYou have already claimed your daily reward!"
+  time-remaining: "&cNext reward available in: &e{time}"
+  streak-bonus: "&6🔥 {days} day streak! Bonus: &e+{bonus} &6credits!"
+  streak-lost: "&cYour daily reward streak was reset."
+  
+  gui:
+    title: "&6&l📅 Daily Rewards 📅"
+    claim-button: "&a&lClaim Daily Reward"
+    claim-lore:
+      - "&7Base reward: &e{base} credits"
+      - "&7Streak bonus: &e{bonus} credits"
+      - "&7Total: &e{total} credits"
+      - ""
+      - "&a▶ Click to claim!"
+    claimed-button: "&2&l✓ Already Claimed"
+    claimed-lore:
+      - "&7You've already claimed"
+      - "&7your daily reward!"
+      - ""
+      - "&7Next reward: &e{time}"
+    streak-display: "&6🔥 Current Streak: &e{days} days"
+
+# Cosmetic Type Specific Messages
+cosmetics:
+  activated: "&aActivated &e{cosmetic}&a!"
+  deactivated: "&cDeactivated &e{cosmetic}&c!"
+  not-owned: "&cYou don't own this cosmetic! Purchase it first for &e{price} &ccredits."
+  max-active: "&cYou can only have &e{max} &c{type} cosmetics active at once!"
+  world-disabled: "&cCosmetics are disabled in this world!"
+  combat-disabled: "&cCosmetics are disabled during combat!"
+  
+  particles:
+    spawned: "&aParticle effect &e{particle} &aactivated!"
+    stopped: "&cParticle effect &e{particle} &cstopped!"
+  
+  hats:
+    equipped: "&aEquipped hat: &e{hat}"
+    removed: "&cRemoved hat: &e{hat}"
+  
+  pets:
+    summoned: "&aSummoned pet: &e{pet}"
+    dismissed: "&cDismissed pet: &e{pet}"
+  
+  trails:
+    activated: "&aTrail effect &e{trail} &aactivated!"
+    deactivated: "&cTrail effect &e{trail} &cdeactivated!"
+  
+  gadgets:
+    received: "&aReceived gadget: &e{gadget}"
+    used: "&aUsed gadget: &e{gadget}"
+    expired: "&cGadget &e{gadget} &chas expired!"
+  
+  wings:
+    equipped: "&aWings &e{wings} &aequipped!"
+    removed: "&cWings &e{wings} &cremoved!"
+  
+  auras:
+    activated: "&aAura &e{aura} &aactivated!"
+    deactivated: "&cAura &e{aura} &cdeactivated!"
+
+# Random Rewards
+random-rewards:
+  received: "&a🎁 Lucky Find! You received the &e{cosmetic} &acosmetic!"
+  duplicate: "&e🎁 Lucky Find! You received &e{credits} &ecredits instead of a duplicate cosmetic!"
+
 # Command Help Messages
 help:
   cosmetics:
-    - "&e&#FFD700SneakyCosmetics Commands:"
+    - "&e&#FFD700╔══════════════════════════════════════╗"
+    - "&e&#FFD700║           SneakyCosmetics Commands           ║"
+    - "&e&#FFD700╠══════════════════════════════════════╣"
     - "&a/cosmetics &7- Open cosmetics menu"
     - "&a/cosmetics list &7- List all cosmetics"
     - "&a/cosmetics toggle <cosmetic> &7- Toggle a cosmetic"
     - "&a/cosmetics give <player> <cosmetic> &7- Give a cosmetic"
+    - "&a/cosmetics remove <player> <cosmetic> &7- Remove a cosmetic"
+    - "&a/cosmetics clear <player> &7- Clear all cosmetics"
     - "&a/cosmetics reload &7- Reload configuration"
     - "&a/cosmetics update &7- Check for updates"
+    - "&a/cosmetics debug &7- Toggle debug mode"
+    - "&e&#FFD700╚══════════════════════════════════════╝"
   
   credits:
-    - "&e&#32CD32Credits Commands:"
+    - "&e&#32CD32╔══════════════════════════════════════╗"
+    - "&e&#32CD32║             Credits Commands             ║"
+    - "&e&#32CD32╠══════════════════════════════════════╣"
     - "&a/credits &7- Check your credit balance"
-    - "&a/credits buy <amount> &7- Buy credits"
+    - "&a/credits balance [player] &7- Check credit balance"
+    - "&a/credits buy <amount> &7- Buy credits with money"
     - "&a/credits give <player> <amount> &7- Give credits"
     - "&a/credits remove <player> <amount> &7- Remove credits"
     - "&a/credits set <player> <amount> &7- Set credits"
+    - "&a/credits daily &7- Claim daily reward"
+    - "&a/credits top &7- View credit leaderboard"
+    - "&e&#32CD32╚══════════════════════════════════════╝"
+
+# Debug Messages
+debug:
+  enabled: "&aDebug mode enabled!"
+  disabled: "&cDebug mode disabled!"
+  cosmetic-info: "&7Cosmetic: &e{id} &7| Type: &e{type} &7| Price: &e{price} &7| Owner: &e{owned}"
+  player-info: "&7Player: &e{player} &7| Credits: &e{credits} &7| Active: &e{active}"
+  database-info: "&7Database: &e{type} &7| Connected: &e{connected} &7| Pool: &e{pool}"
+
+# API Messages (for developers)
+api:
+  cosmetic-given: "&7API: Gave &e{cosmetic} &7to &e{player}"
+  cosmetic-removed: "&7API: Removed &e{cosmetic} &7from &e{player}"
+  credits-modified: "&7API: Modified &e{player}'s &7credits by &e{amount}"
+
+# CMI Integration Messages
+cmi:
+  economy:
+    used-cmi-economy: "&aUsing CMI economy system"
+    fallback-to-vault: "&eUsing Vault economy (CMI economy not available)"
+    balance-cmi: "&aYour CMI Balance: &e{currency}{balance}"
+    purchased-with-cmi: "&aPurchased &e{item} &afor &e{currency}{cost} &afrom CMI economy!"
+  
+  status:
+    vanished-disabled: "&cCosmetics disabled while vanished"
+    afk-disabled: "&cCosmetics disabled while AFK"
+    god-disabled: "&cCosmetics disabled while in god mode"
+  
+  user:
+    nickname-display: "&7Player: &e{nickname} &7({username})"
+    playtime-cmi: "&7CMI Playtime: &e{time}"
+    
+  integration:
+    enabled: "&aSuccessfully integrated with CMI v{version}"
+    disabled: "&cCMI integration is disabled"
+    error: "&cError connecting to CMI: {error}"
+
+# Placeholder Messages (for PlaceholderAPI)
+# All placeholders use the format: %sneakycosmetics_<placeholder>%
+placeholders:
+  # Basic placeholders
+  credits: "{credits}"
+  cosmetics-owned: "{owned}"
+  cosmetics-total: "{total}"
+  active-cosmetics: "{active}"
+  achievement-progress: "{progress}%"
+  
+  # Statistics placeholders (per-player)
+  stats-cosmetics-activated: "Total cosmetics activated by player"
+  stats-achievements-unlocked: "Total achievements unlocked by player"
+  stats-credits-earned: "Total credits earned by player"
+  stats-credits-spent: "Total credits spent by player"
+  stats-total-usage-time: "Total time using cosmetics (formatted)"
+  stats-favorite-cosmetic: "Player's most used cosmetic"
+  stats-favorite-type: "Player's most used cosmetic type"
+  stats-last-cosmetic: "Last cosmetic activated"
+  stats-last-achievement: "Last achievement unlocked"
+  stats-last-purchase: "Last item purchased"
+  
+  # Individual cosmetic/type statistics
+  usage-count-<cosmetic_id>: "Times specific cosmetic was activated"
+  usage-time-<cosmetic_id>: "Time using specific cosmetic"
+  type-usage-<type>: "Times specific type was activated"
+  type-time-<type>: "Time using specific cosmetic type"
+  credit-source-<source>: "Credits earned from specific source"
+  
+  # Server-wide statistics
+  server-total-credits-earned: "Total credits earned server-wide"
+  server-total-credits-spent: "Total credits spent server-wide"
+  server-total-cosmetics-activated: "Total cosmetics activated server-wide"
+  server-total-achievements-unlocked: "Total achievements unlocked server-wide"
+  server-most-popular-cosmetic: "Most popular cosmetic server-wide"
+  server-most-used-type: "Most used cosmetic type server-wide"
+  
+  # Leaderboard placeholders
+  top-player-<stat>-<position>: "Player name at position in leaderboard"
+  top-value-<stat>-<position>: "Value at position in leaderboard"
+  # Available stats: cosmetics_activated, achievements_unlocked, credits_earned, credits_spent, total_usage_time
+  # Example: %sneakycosmetics_top_player_credits_earned_1% = Top credit earner's name
+  # Example: %sneakycosmetics_top_value_credits_earned_1% = Top credit earner's amount
+  
+  # CMI Integration placeholders
+  cmi-balance: "{cmi_balance}"
+  cmi-nickname: "{cmi_nickname}"
+  cmi-playtime: "{cmi_playtime}"
+  cmi-vanished: "true/false if player is vanished"
+  cmi-afk: "true/false if player is AFK"
+  cmi-god: "true/false if player is in god mode"

@@ -84,6 +84,10 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                 handleInfoCommand(sender);
                 break;
                 
+            case "petname":
+                handlePetNameCommand(sender, args);
+                break;
+                
             default:
                 messageManager.sendError(sender, "Unknown subcommand. Use /cosmetics help for help.");
                 break;
@@ -123,8 +127,28 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // TODO: Show list of cosmetics with ownership status
-        messageManager.sendInfo(sender, "Cosmetic listing feature coming soon!");
+        // Show list of cosmetics with ownership status
+        messageManager.sendInfo(sender, "§6=== Cosmetics for " + target.getName() + " ===");
+        
+        for (com.sneaky.cosmetics.cosmetics.CosmeticType type : com.sneaky.cosmetics.cosmetics.CosmeticType.values()) {
+            java.util.List<com.sneaky.cosmetics.cosmetics.Cosmetic> typeCosmetics = plugin.getCosmeticManager().getCosmeticsByType(type);
+            if (!typeCosmetics.isEmpty()) {
+                messageManager.sendInfo(sender, "");
+                messageManager.sendInfo(sender, type.getColorCode() + "§l" + type.getDisplayName() + ":");
+                
+                for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : typeCosmetics) {
+                    boolean hasCosmetic = plugin.getCosmeticManager().hasCosmetic(target, cosmetic.getId());
+                    boolean isActive = plugin.getCosmeticManager().isCosmeticActive(target, cosmetic.getId());
+                    
+                    String status = isActive ? "§a[ACTIVE]" : hasCosmetic ? "§e[OWNED]" : "§c[LOCKED]";
+                    String price = cosmetic.getPrice() == 0 ? "§aFree" : "§e" + cosmetic.getPrice() + " credits";
+                    
+                    messageManager.sendInfo(sender, "  " + status + " §f" + cosmetic.getDisplayName() + " §7(" + price + ")");
+                }
+            } else {
+                messageManager.sendInfo(sender, type.getColorCode() + type.getDisplayName() + ": §7No cosmetics available");
+            }
+        }
     }
     
     private void handleToggleCommand(CommandSender sender, String[] args) {
@@ -147,8 +171,37 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         
         String cosmeticId = args[1];
         
-        // TODO: Toggle cosmetic
-        messageManager.sendInfo(player, "Cosmetic toggle feature coming soon for: " + cosmeticId);
+        // Check if cosmetic exists
+        com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(cosmeticId);
+        if (cosmetic == null) {
+            messageManager.sendError(player, "Cosmetic not found: " + cosmeticId);
+            return;
+        }
+        
+        // Check if player can access the cosmetic
+        if (!cosmetic.canPlayerAccess(player)) {
+            messageManager.sendError(player, "You cannot access this cosmetic: " + cosmetic.getAccessDeniedReason(player));
+            return;
+        }
+        
+        // Check if player owns the cosmetic (unless it's free)
+        if (!cosmetic.isFree() && !plugin.getCosmeticManager().hasCosmetic(player, cosmeticId)) {
+            messageManager.sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits.");
+            return;
+        }
+        
+        // Toggle the cosmetic
+        boolean success = plugin.getCosmeticManager().toggleCosmetic(player, cosmeticId);
+        if (success) {
+            boolean isActive = plugin.getCosmeticManager().isCosmeticActive(player, cosmeticId);
+            if (isActive) {
+                messageManager.sendSuccess(player, "Activated cosmetic: " + cosmetic.getDisplayName());
+            } else {
+                messageManager.sendSuccess(player, "Deactivated cosmetic: " + cosmetic.getDisplayName());
+            }
+        } else {
+            messageManager.sendError(player, "Failed to toggle cosmetic: " + cosmetic.getDisplayName());
+        }
     }
     
     private void handleGiveCommand(CommandSender sender, String[] args) {
@@ -172,8 +225,25 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         
         String cosmeticId = args[2];
         
-        // TODO: Give cosmetic to player
-        messageManager.sendInfo(sender, "Give cosmetic feature coming soon!");
+        // Check if cosmetic exists
+        com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(cosmeticId);
+        if (cosmetic == null) {
+            messageManager.sendError(sender, "Cosmetic not found: " + cosmeticId);
+            return;
+        }
+        
+        // Check if player already owns the cosmetic
+        if (plugin.getCosmeticManager().hasCosmetic(target, cosmeticId)) {
+            messageManager.sendError(sender, target.getName() + " already owns this cosmetic!");
+            return;
+        }
+        
+        // Give the cosmetic
+        plugin.getCosmeticManager().giveCosmetic(target, cosmeticId);
+        
+        // Send success messages
+        messageManager.sendSuccess(sender, "Gave " + cosmetic.getDisplayName() + " to " + target.getName());
+        messageManager.sendSuccess(target, "You received a new cosmetic: " + cosmetic.getDisplayName());
     }
     
     private void handleRemoveCommand(CommandSender sender, String[] args) {
@@ -197,8 +267,30 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         
         String cosmeticId = args[2];
         
-        // TODO: Remove cosmetic from player
-        messageManager.sendInfo(sender, "Remove cosmetic feature coming soon!");
+        // Check if cosmetic exists
+        com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(cosmeticId);
+        if (cosmetic == null) {
+            messageManager.sendError(sender, "Cosmetic not found: " + cosmeticId);
+            return;
+        }
+        
+        // Check if player owns the cosmetic
+        if (!plugin.getCosmeticManager().hasCosmetic(target, cosmeticId)) {
+            messageManager.sendError(sender, target.getName() + " doesn't own this cosmetic!");
+            return;
+        }
+        
+        // Deactivate the cosmetic if it's active
+        if (plugin.getCosmeticManager().isCosmeticActive(target, cosmeticId)) {
+            plugin.getCosmeticManager().deactivateCosmetic(target, cosmeticId);
+        }
+        
+        // Remove the cosmetic from database
+        plugin.getDatabaseManager().removeCosmetic(target.getUniqueId(), cosmeticId);
+        
+        // Send success messages
+        messageManager.sendSuccess(sender, "Removed " + cosmetic.getDisplayName() + " from " + target.getName());
+        messageManager.sendInfo(target, "Cosmetic removed: " + cosmetic.getDisplayName());
     }
     
     private void handleClearCommand(CommandSender sender, String[] args) {
@@ -220,8 +312,12 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // TODO: Clear all active cosmetics from player
-        messageManager.sendInfo(sender, "Clear cosmetics feature coming soon!");
+        // Clear all active cosmetics from player
+        plugin.getCosmeticManager().clearAllCosmetics(target);
+        
+        // Send success messages
+        messageManager.sendSuccess(sender, "Cleared all active cosmetics from " + target.getName());
+        messageManager.sendInfo(target, "All your active cosmetics have been cleared.");
     }
     
     private void handleReloadCommand(CommandSender sender) {
@@ -297,12 +393,136 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         }
     }
     
+    private void handlePetNameCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            messageManager.sendError(sender, "This command can only be used by players.");
+            return;
+        }
+        
+        Player player = (Player) sender;
+        
+        if (!player.hasPermission("sneakycosmetics.use")) {
+            messageManager.sendConfigMessage(player, "general.no-permission");
+            return;
+        }
+        
+        if (args.length < 2) {
+            messageManager.sendError(player, "Usage: /cosmetics petname <set|get> [pet_id] [name]");
+            messageManager.sendInfo(player, "  set - Set a custom name for your pet");
+            messageManager.sendInfo(player, "  get - Get the current name of your pet");
+            return;
+        }
+        
+        String action = args[1].toLowerCase();
+        
+        if (action.equals("set")) {
+            if (args.length < 4) {
+                messageManager.sendError(player, "Usage: /cosmetics petname set <pet_id> <name>");
+                messageManager.sendInfo(player, "Example: /cosmetics petname set pet_wolf \"Fluffy\"");
+                return;
+            }
+            
+            String petId = args[2];
+            
+            // Check if cosmetic exists and is a pet
+            com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(petId);
+            if (cosmetic == null) {
+                messageManager.sendError(player, "Pet not found: " + petId);
+                return;
+            }
+            
+            if (cosmetic.getType() != com.sneaky.cosmetics.cosmetics.CosmeticType.PET) {
+                messageManager.sendError(player, "This cosmetic is not a pet!");
+                return;
+            }
+            
+            // Check if player owns the pet
+            if (!plugin.getCosmeticManager().hasCosmetic(player, petId)) {
+                messageManager.sendError(player, "You don't own this pet!");
+                return;
+            }
+            
+            // Combine all remaining arguments as the pet name
+            StringBuilder nameBuilder = new StringBuilder();
+            for (int i = 3; i < args.length; i++) {
+                if (i > 3) nameBuilder.append(" ");
+                nameBuilder.append(args[i]);
+            }
+            String petName = nameBuilder.toString();
+            
+            // Remove quotes if present
+            if (petName.startsWith("\"") && petName.endsWith("\"")) {
+                petName = petName.substring(1, petName.length() - 1);
+            }
+            
+            // Validate name length
+            if (petName.length() > 32) {
+                messageManager.sendError(player, "Pet name too long! Maximum 32 characters.");
+                return;
+            }
+            
+            if (petName.trim().isEmpty()) {
+                messageManager.sendError(player, "Pet name cannot be empty!");
+                return;
+            }
+            
+            // Set the custom name
+            plugin.getDatabaseManager().setPetCustomName(player.getUniqueId(), petId, petName);
+            
+            // Update the pet's name if it's currently active
+            if (plugin.getCosmeticManager().isCosmeticActive(player, petId)) {
+                com.sneaky.cosmetics.cosmetics.pets.PetCosmetic petCosmetic = (com.sneaky.cosmetics.cosmetics.pets.PetCosmetic) cosmetic;
+                petCosmetic.updatePetName(player, petName);
+            }
+            
+            messageManager.sendSuccess(player, "Set pet name to: §e" + petName);
+            
+        } else if (action.equals("get")) {
+            if (args.length < 3) {
+                messageManager.sendError(player, "Usage: /cosmetics petname get <pet_id>");
+                return;
+            }
+            
+            String petId = args[2];
+            
+            // Check if cosmetic exists and is a pet
+            com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(petId);
+            if (cosmetic == null) {
+                messageManager.sendError(player, "Pet not found: " + petId);
+                return;
+            }
+            
+            if (cosmetic.getType() != com.sneaky.cosmetics.cosmetics.CosmeticType.PET) {
+                messageManager.sendError(player, "This cosmetic is not a pet!");
+                return;
+            }
+            
+            // Check if player owns the pet
+            if (!plugin.getCosmeticManager().hasCosmetic(player, petId)) {
+                messageManager.sendError(player, "You don't own this pet!");
+                return;
+            }
+            
+            // Get the custom name
+            String customName = plugin.getDatabaseManager().getPetCustomName(player.getUniqueId(), petId);
+            if (customName != null && !customName.isEmpty()) {
+                messageManager.sendInfo(player, "Pet name: §e" + customName);
+            } else {
+                messageManager.sendInfo(player, "This pet has no custom name. Default: §e" + cosmetic.getDisplayName());
+            }
+            
+        } else {
+            messageManager.sendError(player, "Unknown action: " + action);
+            messageManager.sendInfo(player, "Use 'set' or 'get'");
+        }
+    }
+    
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
         
         if (args.length == 1) {
-            List<String> subCommands = Arrays.asList("help", "list", "toggle", "give", "remove", "clear", "reload", "update", "info");
+            List<String> subCommands = Arrays.asList("help", "list", "toggle", "give", "remove", "clear", "reload", "update", "info", "petname");
             String partial = args[0].toLowerCase();
             
             for (String subCommand : subCommands) {
@@ -333,20 +553,45 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                 }
             } else if (subCommand.equals("toggle")) {
                 if (sender.hasPermission("sneakycosmetics.use")) {
-                    // TODO: Complete with cosmetic IDs
-                    completions.add("particle_hearts");
-                    completions.add("hat_diamond");
-                    completions.add("pet_wolf");
+                    // Complete with actual cosmetic IDs
+                    String partial = args[1].toLowerCase();
+                    for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                        if (cosmetic.getId().toLowerCase().startsWith(partial)) {
+                            completions.add(cosmetic.getId());
+                        }
+                    }
+                }
+            } else if (subCommand.equals("petname")) {
+                if (sender.hasPermission("sneakycosmetics.use")) {
+                    // Complete with set/get actions
+                    String partial = args[1].toLowerCase();
+                    if ("set".startsWith(partial)) completions.add("set");
+                    if ("get".startsWith(partial)) completions.add("get");
                 }
             }
         } else if (args.length == 3) {
             String subCommand = args[0].toLowerCase();
             
             if ((subCommand.equals("give") || subCommand.equals("remove")) && sender.hasPermission("sneakycosmetics.admin")) {
-                // TODO: Complete with cosmetic IDs
-                completions.add("particle_hearts");
-                completions.add("hat_diamond");
-                completions.add("pet_wolf");
+                // Complete with actual cosmetic IDs
+                String partial = args[2].toLowerCase();
+                for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                    if (cosmetic.getId().toLowerCase().startsWith(partial)) {
+                        completions.add(cosmetic.getId());
+                    }
+                }
+            } else if (subCommand.equals("petname") && sender.hasPermission("sneakycosmetics.use")) {
+                String action = args[1].toLowerCase();
+                if (action.equals("set") || action.equals("get")) {
+                    // Complete with pet IDs only
+                    String partial = args[2].toLowerCase();
+                    for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                        if (cosmetic.getType() == com.sneaky.cosmetics.cosmetics.CosmeticType.PET && 
+                            cosmetic.getId().toLowerCase().startsWith(partial)) {
+                            completions.add(cosmetic.getId());
+                        }
+                    }
+                }
             }
         }
         

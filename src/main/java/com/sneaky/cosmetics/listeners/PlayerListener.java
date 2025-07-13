@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Main player event listener for SneakyCosmetics
@@ -56,9 +57,31 @@ public class PlayerListener implements Listener {
         
         // Load player's active cosmetics
         plugin.getSchedulerAdapter().runTaskAsynchronously(() -> {
-            // TODO: Load and apply player's active cosmetics
-            plugin.getLogger().info("Loading cosmetics for " + player.getName());
+            try {
+                plugin.getLogger().info("Loading cosmetics for " + player.getName());
+                
+                // Load and reactivate player's previously active cosmetics
+                Set<String> activeCosmetics = plugin.getCosmeticManager().getActiveCosmetics(player);
+                for (String cosmeticId : activeCosmetics) {
+                    plugin.getSchedulerAdapter().runTask(() -> {
+                        if (player.isOnline()) {
+                            plugin.getCosmeticManager().activateCosmetic(player, cosmeticId);
+                        }
+                    });
+                }
+                
+                plugin.getLogger().fine("Loaded " + activeCosmetics.size() + " active cosmetics for " + player.getName());
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to load cosmetics for " + player.getName() + ": " + e.getMessage());
+            }
         });
+        
+        // Check achievements for this player (delayed to allow permission loading)
+        plugin.getSchedulerAdapter().runTaskLater(() -> {
+            if (player.isOnline()) {
+                plugin.getAchievementManager().checkAchievements(player);
+            }
+        }, 40L); // Wait 2 seconds after join
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -98,8 +121,24 @@ public class PlayerListener implements Listener {
         
         // Save player data asynchronously
         plugin.getSchedulerAdapter().runTaskAsynchronously(() -> {
-            // TODO: Save player's active cosmetics state
-            plugin.getLogger().info("Saving cosmetics data for " + player.getName());
+            try {
+                plugin.getLogger().info("Saving cosmetics data for " + player.getName());
+                
+                // Save current active cosmetics state to database
+                Set<String> activeCosmetics = plugin.getCosmeticManager().getActiveCosmetics(player);
+                plugin.getDatabaseManager().savePlayerActiveCosmetics(player.getUniqueId(), activeCosmetics);
+                
+                // Record session statistics
+                if (plugin.getStatisticsManager() != null) {
+                    // Update last activity time
+                    var stats = plugin.getStatisticsManager().getPlayerStatistics(player.getUniqueId());
+                    stats.lastActivity = System.currentTimeMillis();
+                }
+                
+                plugin.getLogger().fine("Saved " + activeCosmetics.size() + " active cosmetics for " + player.getName());
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to save cosmetics data for " + player.getName() + ": " + e.getMessage());
+            }
         });
         
         // Clean up any cached data after a delay

@@ -336,8 +336,40 @@ public class CreditsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // TODO: Implement credit leaderboard
-        messageManager.sendInfo(sender, "Credit leaderboard feature coming soon!");
+        // Get top players by credits earned from statistics
+        if (plugin.getStatisticsManager() != null) {
+            var topPlayers = plugin.getStatisticsManager().getTopPlayersByStat("credits_earned", 10);
+            
+            messageManager.sendInfo(sender, "&e&l⭐ TOP 10 CREDIT EARNERS ⭐");
+            messageManager.sendInfo(sender, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            
+            if (topPlayers.isEmpty()) {
+                messageManager.sendInfo(sender, "&7No statistics available yet!");
+                return;
+            }
+            
+            for (int i = 0; i < topPlayers.size(); i++) {
+                var entry = topPlayers.get(i);
+                var player = plugin.getServer().getOfflinePlayer(entry.getKey());
+                String playerName = player.getName() != null ? player.getName() : "Unknown";
+                long creditsEarned = entry.getValue();
+                
+                String position = String.valueOf(i + 1);
+                String medal = "";
+                switch (i + 1) {
+                    case 1: medal = "&6🥇"; break;
+                    case 2: medal = "&7🥈"; break;
+                    case 3: medal = "&c🥉"; break;
+                    default: medal = "&e" + position + "."; break;
+                }
+                
+                messageManager.sendInfo(sender, medal + " &f" + playerName + " &8- &e" + creditsEarned + " &7credits earned");
+            }
+            
+            messageManager.sendInfo(sender, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        } else {
+            messageManager.sendInfo(sender, "&cStatistics system not available!");
+        }
     }
     
     @Override

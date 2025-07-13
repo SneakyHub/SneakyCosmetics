@@ -8,7 +8,7 @@ website: https://github.com/SneakyHub/SneakyCosmetics
 folia-supported: true
 
 depend: []
-softdepend: [Vault, LuckPerms, EssentialsX]
+softdepend: [Vault, LuckPerms, EssentialsX, PlaceholderAPI, CMI]
 
 commands:
   cosmetics:

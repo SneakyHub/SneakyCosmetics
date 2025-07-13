@@ -1,5 +1,6 @@
 # SneakyCosmetics Configuration
 # Plugin by SneakyHub - https://github.com/SneakyHub/SneakyCosmetics
+# Version: 1.1.0 - Minecraft 1.21.7
 
 # Credits System Configuration
 credits:
@@ -12,15 +13,26 @@ credits:
   # Maximum credits a player can have
   max-credits: 100000
   
+  # Minimum credits a player can have (usually 0)
+  min-credits: 0
+  
   # Daily login bonus
   daily-bonus:
     enabled: true
     amount: 50
+    # Bonus multiplier for consecutive days (max 7 days)
+    consecutive-multiplier: 1.2
+    # Maximum consecutive bonus (amount * multiplier * days)
+    max-consecutive-bonus: 350
     
   # Playtime rewards (credits per hour played)
   playtime-rewards:
     enabled: true
     credits-per-hour: 25
+    # Minimum minutes played before first reward
+    minimum-playtime: 30
+    # Maximum credits per day from playtime
+    daily-limit: 200
   
   # Bulk purchase discounts
   bulk-discounts:
@@ -29,6 +41,13 @@ credits:
       1000: 0.05    # 5% discount for 1000+ credits
       5000: 0.10    # 10% discount for 5000+ credits
       10000: 0.15   # 15% discount for 10000+ credits
+  
+  # Credit transaction logging
+  transaction-logging:
+    enabled: true
+    log-purchases: true
+    log-rewards: true
+    log-admin-commands: true
 
 # Database Configuration
 database:
@@ -55,20 +74,39 @@ database:
 # Cosmetic Configuration
 cosmetics:
   # Update intervals (in ticks, 20 ticks = 1 second)
-  particle-interval: 10
-  trail-interval: 8
-  pet-interval: 20
-  hat-interval: 5
-  wing-interval: 15
-  aura-interval: 12
+  intervals:
+    particle: 10
+    trail: 8
+    pet: 20
+    hat: 5
+    wing: 15
+    aura: 12
+    gadget: 5
   
   # Maximum distance for cosmetic effects to be visible
   max-effect-distance: 50
+  
+  # Maximum cosmetics per player per type
+  max-active-per-type:
+    particle: 1
+    trail: 1
+    pet: 1
+    hat: 1
+    wing: 1
+    aura: 1
+    gadget: 3
+  
+  # Auto-deactivate cosmetics on logout
+  auto-deactivate-on-logout: false
   
   # Disable cosmetics in certain worlds
   disabled-worlds:
     - "world_nether"
     - "spawn"
+  
+  # Disable cosmetics in combat (requires combat plugin)
+  disable-in-combat: false
+  combat-check-interval: 20  # ticks
   
   # VIP cosmetics (require sneakycosmetics.vip permission)
   vip-cosmetics:
@@ -87,6 +125,24 @@ cosmetics:
     - "cosmic"
     - "legendary"
     - "mythic"
+  
+  # Cosmetic prices (override default prices)
+  custom-prices:
+    enabled: false
+    prices:
+      # particle:
+      #   rainbow: 1000
+      #   heart: 500
+      # hat:
+      #   diamond_helm: 2000
+  
+  # Random cosmetic rewards
+  random-rewards:
+    enabled: true
+    # Chance per hour of playtime to get random cosmetic (0.0-1.0)
+    chance-per-hour: 0.05
+    # Only give cosmetics player doesn't own
+    only-new-cosmetics: true
 
 # Performance Settings
 performance:
@@ -135,6 +191,107 @@ admin:
   # bStats metrics
   metrics: true
 
+# Achievements System
+achievements:
+  enabled: true
+  
+  # Achievement notifications
+  notifications:
+    enabled: true
+    sound: "ENTITY_PLAYER_LEVELUP"
+    title-enabled: true
+    title-duration: 60  # ticks
+    chat-enabled: true
+  
+  # Achievement rewards (override default credit rewards)
+  custom-rewards:
+    enabled: false
+    rewards:
+      # first_cosmetic: 150
+      # collector_5: 300
+      # collector_10: 600
+  
+  # Achievement checking intervals
+  check-interval: 20  # ticks (how often to check achievements)
+  check-on-join: true
+  check-on-purchase: true
+  check-on-login: true
+
+# Shop System
+shop:
+  enabled: true
+  
+  # Shop categories organization
+  categories:
+    particles:
+      enabled: true
+      display-name: "&d&lParticles"
+      icon: "BLAZE_POWDER"
+      slot: 19
+    hats:
+      enabled: true
+      display-name: "&6&lHats"
+      icon: "DIAMOND_HELMET"
+      slot: 21
+    pets:
+      enabled: true
+      display-name: "&a&lPets"
+      icon: "BONE"
+      slot: 23
+    trails:
+      enabled: true
+      display-name: "&b&lTrails"
+      icon: "FEATHER"
+      slot: 25
+    gadgets:
+      enabled: true
+      display-name: "&c&lGadgets"
+      icon: "STICK"
+      slot: 28
+    wings:
+      enabled: true
+      display-name: "&f&lWings"
+      icon: "ELYTRA"
+      slot: 30
+    auras:
+      enabled: true
+      display-name: "&5&lAuras"
+      icon: "NETHER_STAR"
+      slot: 32
+  
+  # Purchase confirmation
+  confirmation:
+    enabled: true
+    expensive-threshold: 1000  # credits
+  
+  # Shop discounts and sales
+  discounts:
+    enabled: false
+    # weekend-sale: 0.20  # 20% off on weekends
+    # vip-discount: 0.10   # 10% off for VIP
+    # bulk-discount: 0.15  # 15% off when buying 5+ items
+
+# Daily Rewards System
+daily-rewards:
+  enabled: true
+  
+  # GUI settings
+  gui:
+    enabled: true
+    title: "&6&lDaily Rewards"
+    button-slot: 49  # slot in main menu
+  
+  # Reward claiming
+  reset-time: "00:00"  # 24-hour format
+  timezone: "UTC"
+  grace-period: 3600  # seconds after reset time
+  
+  # Consecutive day bonuses
+  consecutive-bonuses:
+    enabled: true
+    max-streak: 7
+    streak-multiplier: 1.5
+
 # GUI Settings
 gui:
   # GUI update interval (in ticks)
@@ -145,6 +302,26 @@ gui:
   
   # Refresh GUI when cosmetic is toggled
   refresh-on-toggle: true
+  
+  # GUI titles (supports color codes and hex)
+  titles:
+    main: "&6&l✦ Cosmetics Menu ✦"
+    shop: "&e&l⭐ Credits Shop ⭐"
+    achievements: "&b&l🏆 Achievements 🏆"
+    daily-rewards: "&6&l📅 Daily Rewards 📅"
+  
+  # GUI sounds
+  sounds:
+    click: "UI_BUTTON_CLICK"
+    purchase: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    error: "ENTITY_VILLAGER_NO"
+    success: "ENTITY_PLAYER_LEVELUP"
+  
+  # Border customization
+  border:
+    enabled: true
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: "&0"
 
 # Integration Settings
 integrations:
@@ -156,6 +333,50 @@ integrations:
     
   essentialsx:
     enabled: true
+  
+  placeholderapi:
+    enabled: true
+  
+  cmi:
+    enabled: true
+    
+    # Economy integration
+    economy:
+      enabled: true
+      # Use CMI economy instead of Vault (if available)
+      use-cmi-economy: false
+      # Currency symbol for CMI economy
+      currency-symbol: "$"
+    
+    # Cosmetic behavior with CMI status
+    disable-on-vanish: true
+    disable-on-afk: false
+    disable-on-god: false
+    
+    # Enhanced messaging
+    messaging:
+      # Use CMI's messaging system for formatted messages
+      use-cmi-messages: true
+      # Use CMI action bar for notifications
+      use-cmi-actionbar: true
+      # Use CMI titles for achievements
+      use-cmi-titles: true
+    
+    # User data integration
+    user-data:
+      # Use CMI nickname in displays
+      use-nicknames: true
+      # Track playtime via CMI
+      use-cmi-playtime: true
+      # Log transactions to CMI
+      log-to-cmi: true
+    
+    # Permission enhancements
+    permissions:
+      # Check for CMI-specific permissions
+      check-cmi-permissions: true
+      # CMI group-based cosmetic access
+      group-based-access: false
 
 # Wing physics and effects
 effects:

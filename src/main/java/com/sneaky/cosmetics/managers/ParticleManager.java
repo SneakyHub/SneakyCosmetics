@@ -21,4 +21,18 @@ public class ParticleManager {
     public void removePet(Player player) {}
     public void stopPlayerWings(Player player) {}
     public void stopPlayerAuras(Player player) {}
+    
+    /**
+     * Clean up particle effects for offline players
+     */
+    public void cleanupOfflinePlayerParticles() {
+        try {
+            // Clean up advanced particles
+            Class.forName("com.sneaky.cosmetics.cosmetics.particles.AdvancedParticleCosmetic")
+                .getMethod("cleanupOfflinePlayerParticles")
+                .invoke(null);
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to cleanup offline player particles: " + e.getMessage());
+        }
+    }
 }
