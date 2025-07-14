@@ -19,6 +19,7 @@ import com.sneaky.cosmetics.utils.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.sneaky.cosmetics.cosmetics.wings.WingCosmetic;
 
 import java.util.logging.Level;
 
