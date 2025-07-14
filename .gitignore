@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+# Claude
+.claude
+
 # Log file
 *.log
 
