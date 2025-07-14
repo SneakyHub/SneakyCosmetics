@@ -3,6 +3,7 @@ package com.sneaky.cosmetics.managers;
 import com.sneaky.cosmetics.SneakyCosmetics;
 import com.sneaky.cosmetics.cosmetics.Cosmetic;
 import com.sneaky.cosmetics.cosmetics.CosmeticType;
+import com.sneaky.cosmetics.cosmetics.wings.WingCosmetic;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 
