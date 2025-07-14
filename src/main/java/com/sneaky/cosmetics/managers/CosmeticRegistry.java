@@ -446,7 +446,7 @@ public class CosmeticRegistry {
             );
             registerCosmetic(netheriteHelm);
             
-            // Pumpkin Head
+                        // Pumpkin Head
             com.sneaky.cosmetics.cosmetics.hats.HatCosmetic pumpkin = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
                     "hat_pumpkin", "Pumpkin Head", 300, Material.PUMPKIN,
                     java.util.Arrays.asList("§7A tasty pumpkin", "§7A snowman died for this!"),
@@ -454,7 +454,7 @@ public class CosmeticRegistry {
                     Material.PUMPKIN, "§6Pumpkin Head", java.util.Arrays.asList("§7Simple and comfortable")
             );
             registerCosmetic(pumpkin);
-
+            
             // Creative Hats - Unique Design Collection
             
             // Chef's Hat
@@ -1299,50 +1299,695 @@ public class CosmeticRegistry {
         }
     }
     
-    private void registerWingCosmetics() {
+       private void registerWingCosmetics() {
         try {
             Class.forName("com.sneaky.cosmetics.cosmetics.wings.WingCosmetic");
             
             // Angel Wings
-            com.sneaky.cosmetics.cosmetics.wings.WingCosmetic angelWings = new com.sneaky.cosmetics.cosmetics.wings.WingCosmetic(
+            WingCosmetic angelWings = new WingCosmetic(
                 "wings_angel", "Angel Wings", 500, Material.FEATHER,
-                java.util.Arrays.asList("§7Pure white wings", "§7that shine with divine light!"),
+                Arrays.asList("§7Pure white wings", "§7that shine with divine light!"),
                 null, false, true,
                 Particle.CLOUD, 6, 0.8, 1.5, 0.3, 0.1,
-                com.sneaky.cosmetics.cosmetics.wings.WingCosmetic.WingType.ANGEL, plugin
+                WingCosmetic.WingType.ANGEL, plugin
             );
             registerCosmetic(angelWings);
             
             // Demon Wings
-            com.sneaky.cosmetics.cosmetics.wings.WingCosmetic demonWings = new com.sneaky.cosmetics.cosmetics.wings.WingCosmetic(
+            WingCosmetic demonWings = new WingCosmetic(
                 "wings_demon", "Demon Wings", 600, Material.COAL,
-                java.util.Arrays.asList("§7Dark wings that emanate", "§7an ominous presence!"),
+                Arrays.asList("§7Dark wings that emanate", "§7an ominous presence!"),
                 null, false, true,
                 Particle.SMOKE, 8, 0.8, 1.5, 0.3, 0.15,
-                com.sneaky.cosmetics.cosmetics.wings.WingCosmetic.WingType.DEMON, plugin
+                WingCosmetic.WingType.DEMON, plugin
             );
             registerCosmetic(demonWings);
             
             // Butterfly Wings
-            com.sneaky.cosmetics.cosmetics.wings.WingCosmetic butterflyWings = new com.sneaky.cosmetics.cosmetics.wings.WingCosmetic(
+            WingCosmetic butterflyWings = new WingCosmetic(
                 "wings_butterfly", "Butterfly Wings", 350, Material.ORANGE_DYE,
-                java.util.Arrays.asList("§7Delicate butterfly wings", "§7with beautiful colors!"),
+                Arrays.asList("§7Delicate butterfly wings", "§7with beautiful colors!"),
                 null, false, false,
                 Particle.NOTE, 4, 0.6, 1.2, 0.3, 0.08,
-                com.sneaky.cosmetics.cosmetics.wings.WingCosmetic.WingType.BUTTERFLY, plugin
+                WingCosmetic.WingType.BUTTERFLY, plugin
             );
             registerCosmetic(butterflyWings);
             
             // Dragon Wings
-            com.sneaky.cosmetics.cosmetics.wings.WingCosmetic dragonWings = new com.sneaky.cosmetics.cosmetics.wings.WingCosmetic(
+            WingCosmetic dragonWings = new WingCosmetic(
                 "wings_dragon", "Dragon Wings", 800, Material.DRAGON_BREATH,
-                java.util.Arrays.asList("§7Mighty dragon wings", "§7with ancient power!"),
+                Arrays.asList("§7Mighty dragon wings", "§7with ancient power!"),
                 "sneakycosmetics.premium", true, true,
                 Particle.FLAME, 10, 1.0, 1.8, 0.4, 0.2,
-                com.sneaky.cosmetics.cosmetics.wings.WingCosmetic.WingType.DRAGON, plugin
+                WingCosmetic.WingType.DRAGON, plugin
             );
             registerCosmetic(dragonWings);
-            
+
+            // Phoenix Wings
+            WingCosmetic phoenixWings = new WingCosmetic(
+                    "wings_phoenix", "Phoenix Wings", 750, Material.BLAZE_POWDER,
+                    Arrays.asList("§7Fiery wings of a", "§7legendary phoenix!"),
+                    null, false, true,
+                    Particle.LAVA, 10, 0.9, 1.6, 0.3, 0.15,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(phoenixWings);
+
+
+            // Ice Wings
+            WingCosmetic iceWings = new WingCosmetic(
+                    "wings_ice", "Ice Wings", 550, Material.ICE,
+                    Arrays.asList("§7Chilling wings that", "§7freeze the air around you!"),
+                    null, false, true,
+                    Particle.SNOWFLAKE, 6, 0.7, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(iceWings);
+
+// Fairy Wings
+            WingCosmetic fairyWings = new WingCosmetic(
+                    "wings_fairy", "Fairy Wings", 300, Material.PINK_DYE,
+                    Arrays.asList("§7Sparkly fairy wings", "§7for magical moments!"),
+                    null, false, false,
+                    Particle.WITCH, 5, 0.6, 1.3, 0.2, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(fairyWings);
+
+
+            // Fallen Wings
+            WingCosmetic fallenWings = new WingCosmetic(
+                    "wings_fallen", "Fallen Wings", 650, Material.BLACK_DYE,
+                    Arrays.asList("§7Wings of a fallen angel", "§7shrouded in mystery."),
+                    null, false, true,
+                    Particle.DRIPPING_OBSIDIAN_TEAR, 7, 0.8, 1.5, 0.3, 0.13,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(fallenWings);
+
+
+            // Leaf Wings
+            WingCosmetic leafWings = new WingCosmetic(
+                    "wings_leaf", "Leaf Wings", 280, Material.OAK_LEAVES,
+                    Arrays.asList("§7Natural leafy wings", "§7fluttering in the breeze!"),
+                    null, false, false,
+                    Particle.FALLING_HONEY, 4, 0.5, 1.1, 0.2, 0.09,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(leafWings);
+
+
+            // Crystal Wings
+            WingCosmetic crystalWings = new WingCosmetic(
+                    "wings_crystal", "Crystal Wings", 700, Material.AMETHYST_SHARD,
+                    Arrays.asList("§7Gleaming wings made", "§7of pure crystal!"),
+                    null, false, true,
+                    Particle.END_ROD, 8, 0.85, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(crystalWings);
+
+// Bat Wings
+            WingCosmetic batWings = new WingCosmetic(
+                    "wings_bat", "Bat Wings", 420, Material.BAT_SPAWN_EGG,
+                    Arrays.asList("§7Silent wings of the night", "§7like a lurking bat."),
+                    null, false, false,
+                    Particle.CAMPFIRE_COSY_SMOKE, 5, 0.7, 1.3, 0.25, 0.1,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(batWings);
+
+// Mechanical Wings
+            WingCosmetic mechanicalWings = new WingCosmetic(
+                    "wings_mech", "Mechanical Wings", 900, Material.REDSTONE,
+                    Arrays.asList("§7Powered by gears and", "§7redstone energy!"),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.SMOKE, 9, 0.95, 1.7, 0.3, 0.18,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(mechanicalWings);
+
+// Spirit Wings
+            WingCosmetic spiritWings = new WingCosmetic(
+                    "wings_spirit", "Spirit Wings", 580, Material.SOUL_SAND,
+                    Arrays.asList("§7Ethereal wings of spirit", "§7glowing from the beyond."),
+                    null, true, true,
+                    Particle.SOUL, 6, 0.8, 1.5, 0.3, 0.13,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(spiritWings);
+
+// Storm Wings
+            WingCosmetic stormWings = new WingCosmetic(
+                    "wings_storm", "Storm Wings", 770, Material.LIGHTNING_ROD,
+                    Arrays.asList("§7Electrified wings that", "§7crackle with thunder!"),
+                    null, false, true,
+                    Particle.ELECTRIC_SPARK, 10, 1.0, 1.8, 0.3, 0.2,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(stormWings);
+
+            // Nebula Wings
+            WingCosmetic nebulaWings = new WingCosmetic(
+                    "wings_nebula", "Nebula Wings", 780, Material.PURPLE_DYE,
+                    Arrays.asList("§7Wings formed of cosmic clouds", "§7and stardust light."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.WITCH, 9, 0.9, 1.7, 0.4, 0.18,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(nebulaWings);
+
+// Verdant Wings
+            WingCosmetic verdantWings = new WingCosmetic(
+                    "wings_verdant", "Verdant Wings", 410, Material.FERN,
+                    Arrays.asList("§7Lush green wings", "§7overflowing with nature's energy."),
+                    null, false, false,
+                    Particle.LARGE_SMOKE, 5, 0.7, 1.3, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(verdantWings);
+
+// Eclipse Wings
+            WingCosmetic eclipseWings = new WingCosmetic(
+                    "wings_eclipse", "Eclipse Wings", 690, Material.BLACK_CONCRETE,
+                    Arrays.asList("§7Darkness meets light", "§7in celestial balance."),
+                    null, false, true,
+                    Particle.SMOKE, 8, 0.85, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(eclipseWings);
+
+// Prism Wings
+            WingCosmetic prismWings = new WingCosmetic(
+                    "wings_prism", "Prism Wings", 530, Material.ARROW,
+                    Arrays.asList("§7Wings refracting light", "§7into vibrant rainbows."),
+                    null, false, true,
+                    Particle.CRIT, 6, 0.8, 1.5, 0.3, 0.12,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(prismWings);
+
+// Ember Wings
+            WingCosmetic emberWings = new WingCosmetic(
+                    "wings_ember", "Ember Wings", 620, Material.FIRE_CHARGE,
+                    Arrays.asList("§7Glowing embers drift", "§7from your fiery wings."),
+                    null, false, true,
+                    Particle.LAVA, 8, 0.85, 1.6, 0.35, 0.15,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(emberWings);
+
+// Aurora Wings
+            WingCosmetic auroraWings = new WingCosmetic(
+                    "wings_aurora", "Aurora Wings", 760, Material.LIGHT_BLUE_DYE,
+                    Arrays.asList("§7Wings shimmering like", "§7northern lights."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.RAIN, 9, 0.9, 1.7, 0.4, 0.18,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(auroraWings);
+
+// Venom Wings
+            WingCosmetic venomWings = new WingCosmetic(
+                    "wings_venom", "Venom Wings", 600, Material.SPIDER_EYE,
+                    Arrays.asList("§7Toxic wings dripping", "§7with dark poison."),
+                    null, false, true,
+                    Particle.DRIPPING_LAVA, 7, 0.8, 1.5, 0.3, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(venomWings);
+
+// Windrider Wings
+            WingCosmetic windriderWings = new WingCosmetic(
+                    "wings_windrider", "Windrider Wings", 450, Material.WHITE_WOOL,
+                    Arrays.asList("§7Light as the breeze", "§7swift as the storm."),
+                    null, false, false,
+                    Particle.CLOUD, 6, 0.75, 1.4, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(windriderWings);
+
+// Obsidian Wings
+            WingCosmetic obsidianWings = new WingCosmetic(
+                    "wings_obsidian", "Obsidian Wings", 670, Material.OBSIDIAN,
+                    Arrays.asList("§7Heavy black wings", "§7forged in the void."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.LARGE_SMOKE, 8, 0.9, 1.6, 0.35, 0.15,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(obsidianWings);
+
+// Twilight Bloom Wings
+            WingCosmetic twilightBloomWings = new WingCosmetic(
+                    "wings_twilight_bloom", "Twilight Bloom Wings", 580, Material.AZALEA,
+                    Arrays.asList("§7Petals glow softly", "§7in the fading light."),
+                    null, false, false,
+                    Particle.FALLING_SPORE_BLOSSOM, 6, 0.7, 1.4, 0.3, 0.11,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(twilightBloomWings);
+
+// Celestial Feather Wings
+            WingCosmetic celestialFeatherWings = new WingCosmetic(
+                    "wings_celestial_feather", "Celestial Feather Wings", 540, Material.FEATHER,
+                    Arrays.asList("§7Lightworked feathers", "§7with heavenly grace."),
+                    null, false, true,
+                    Particle.CLOUD, 7, 0.85, 1.6, 0.3, 0.12,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(celestialFeatherWings);
+
+// Inferno Drake Wings
+            WingCosmetic infernoDrakeWings = new WingCosmetic(
+                    "wings_inferno_drake", "Inferno Drake Wings", 720, Material.DRAGON_BREATH,
+                    Arrays.asList("§7Scales blazing", "§7with draconic fury."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.FLAME, 9, 0.9, 1.7, 0.35, 0.15,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(infernoDrakeWings);
+
+// Glacier Spirit Wings
+            WingCosmetic glacierSpiritWings = new WingCosmetic(
+                    "wings_glacier_spirit", "Glacier Spirit Wings", 560, Material.PACKED_ICE,
+                    Arrays.asList("§7Haunting icy spirit", "§7echoes with chill."),
+                    null, false, true,
+                    Particle.SNOWFLAKE, 7, 0.8, 1.5, 0.3, 0.11,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(glacierSpiritWings);
+
+// Arcane Prism Wings
+            WingCosmetic arcanePrismWings = new WingCosmetic(
+                    "wings_arcane_prism", "Arcane Prism Wings", 650, Material.ARROW,
+                    Arrays.asList("§7Wings shimmering", "§7with arcane hues."),
+                    null, false, true,
+                    Particle.CRIT, 8, 0.9, 1.6, 0.35, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(arcanePrismWings);
+
+// Thorned Rose Wings
+            WingCosmetic thornedRoseWings = new WingCosmetic(
+                    "wings_thorned_rose", "Thorned Rose Wings", 440, Material.RED_DYE,
+                    Arrays.asList("§7Petals and thorns", "§7in perfect bloom."),
+                    null, false, false,
+                    Particle.HEART, 6, 0.75, 1.4, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(thornedRoseWings);
+
+// Emberstorm Wings
+            WingCosmetic emberstormWings = new WingCosmetic(
+                    "wings_emberstorm", "Emberstorm Wings", 760, Material.FIRE_CHARGE,
+                    Arrays.asList("§7Sparks and embers swirl", "§7with each beat."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.FLAME, 10, 1.0, 1.8, 0.4, 0.2,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(emberstormWings);
+
+// Ocean Mist Wings
+            WingCosmetic oceanMistWings = new WingCosmetic(
+                    "wings_ocean_mist", "Ocean Mist Wings", 500, Material.PRISMARINE_CRYSTALS,
+                    Arrays.asList("§7Misty foam drifts", "§7on your ocean wings."),
+                    null, false, true,
+                    Particle.DRIPPING_WATER, 7, 0.8, 1.5, 0.3, 0.11,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(oceanMistWings);
+
+// Starfall Wings
+            WingCosmetic starfallWings = new WingCosmetic(
+                    "wings_starfal", "Starfall Wings", 780, Material.GLOWSTONE_DUST,
+                    Arrays.asList("§7Constellations sparkle", "§7as you glide."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.END_ROD, 9, 0.9, 1.7, 0.35, 0.15,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(starfallWings);
+
+// Abyssal Depths Wings
+            WingCosmetic abyssalDepthsWings = new WingCosmetic(
+                    "wings_abyssal_depths", "Abyssal Depths Wings", 700, Material.BLACK_CONCRETE,
+                    Arrays.asList("§7Echoes from the deep", "§7haunt your wings."),
+                    null, false, true,
+                    Particle.SMOKE, 8, 0.85, 1.6, 0.35, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(abyssalDepthsWings);
+
+// Solar Flare Wings
+            WingCosmetic solarFlareWings = new WingCosmetic(
+                    "wings_solar_flare", "Solar Flare Wings", 740, Material.GOLD_INGOT,
+                    Arrays.asList("§7Wings blazing bright", "§7with solar power."),
+                    null, false, true,
+                    Particle.FLAME, 9, 0.9, 1.7, 0.35, 0.15,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(solarFlareWings);
+
+// Jade Lotus Wings
+            WingCosmetic jadeLotusWings = new WingCosmetic(
+                    "wings_jade_lotus", "Jade Lotus Wings", 460, Material.EMERALD,
+                    Arrays.asList("§7Leaf and lotus petals", "§7blending in beauty."),
+                    null, false, false,
+                    Particle.LARGE_SMOKE, 7, 0.75, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(jadeLotusWings);
+
+// Stormbreaker Wings
+            WingCosmetic stormbreakerWings = new WingCosmetic(
+                    "wings_stormbreaker", "Stormbreaker Wings", 800, Material.LEATHER,
+                    Arrays.asList("§7Lightning arcs across", "§7your mighty wings."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.ELECTRIC_SPARK, 10, 1.0, 1.8, 0.4, 0.2,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(stormbreakerWings);
+
+// Moonshadow Wings
+            WingCosmetic moonshadowWings = new WingCosmetic(
+                    "wings_moonshadow", "Moonshadow Wings", 520, Material.SNOWBALL,
+                    Arrays.asList("§7Pale light glimmers", "§7on your quiet wings."),
+                    null, false, true,
+                    Particle.ITEM_SNOWBALL, 7, 0.8, 1.5, 0.3, 0.11,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(moonshadowWings);
+
+// Infernal Ember Wings
+            WingCosmetic infernalEmberWings = new WingCosmetic(
+                    "wings_infernal_ember", "Infernal Ember Wings", 780, Material.NETHER_BRICK,
+                    Arrays.asList("§7Molten cracks glow", "§7through your wings."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.LAVA, 10, 1.0, 1.8, 0.4, 0.2,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(infernalEmberWings);
+
+// Blossom Breeze Wings
+            WingCosmetic blossomBreezeWings = new WingCosmetic(
+                    "wings_blossom_breeze", "Blossom Breeze Wings", 480, Material.AZALEA,
+                    Arrays.asList("§7Soft petals drift", "§7on a gentle breeze."),
+                    null, false, false,
+                    Particle.FALLING_SPORE_BLOSSOM, 6, 0.7, 1.4, 0.3, 0.11,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(blossomBreezeWings);
+
+// Radiant Halo Wings
+            WingCosmetic radiantHaloWings = new WingCosmetic(
+                    "wings_radiant_halo", "Radiant Halo Wings", 720, Material.GLOWSTONE_DUST,
+                    Arrays.asList("§7Glowing halos swirl", "§7as light trails behind."),
+                    null, false, true,
+                    Particle.END_ROD, 9, 0.9, 1.7, 0.35, 0.15,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(radiantHaloWings);
+
+// Duskfire Wings
+            WingCosmetic duskfireWings = new WingCosmetic(
+                    "wings_duskfire", "Duskfire Wings", 680, Material.ORANGE_DYE,
+                    Arrays.asList("§7Ash and embers swirl", "§7at dusk’s last light."),
+                    null, false, true,
+                    Particle.LAVA, 9, 0.85, 1.6, 0.35, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(duskfireWings);
+
+// Serene Petal Wings
+            WingCosmetic serenePetalWings = new WingCosmetic(
+                    "wings_serene_petal", "Serene Petal Wings", 460, Material.PINK_DYE,
+                    Arrays.asList("§7Whispers of petals", "§7on peaceful wings."),
+                    null, false, false,
+                    Particle.HEART, 6, 0.7, 1.4, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(serenePetalWings);
+
+// Astral Mirage Wings
+            WingCosmetic astralMirageWings = new WingCosmetic(
+                    "wings_astral_mirage", "Astral Mirage Wings", 720, Material.ENDER_PEARL,
+                    Arrays.asList("§7Wings that shimmer", "§7like distant stars."),
+                    null, false, true,
+                    Particle.PORTAL, 8, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(astralMirageWings);
+
+// Bloodthorn Wings
+            WingCosmetic bloodthornWings = new WingCosmetic(
+                    "wings_bloodthorn", "Bloodthorn Wings", 690, Material.NETHER_WART,
+                    Arrays.asList("§7Crimson thorns wrap", "§7your sinister flight."),
+                    null, false, true,
+                    Particle.DRIPPING_LAVA, 7, 0.85, 1.5, 0.3, 0.12,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(bloodthornWings);
+
+// Verdant Bloom Wings
+            WingCosmetic verdantBloomWings = new WingCosmetic(
+                    "wings_verdant_bloom", "Verdant Bloom Wings", 510, Material.LILY_PAD,
+                    Arrays.asList("§7Nature blooms in", "§7every fluttering beat."),
+                    null, false, false,
+                    Particle.SPLASH, 5, 0.7, 1.3, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(verdantBloomWings);
+
+// Phantom Veil Wings
+            WingCosmetic phantomVeilWings = new WingCosmetic(
+                    "wings_phantom_veil", "Phantom Veil Wings", 640, Material.PHANTOM_MEMBRANE,
+                    Arrays.asList("§7Ethereal shadows cling", "§7as you vanish in air."),
+                    null, false, true,
+                    Particle.LARGE_SMOKE, 6, 0.85, 1.5, 0.3, 0.13,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(phantomVeilWings);
+
+// Luminous Reef Wings
+            WingCosmetic luminousReefWings = new WingCosmetic(
+                    "wings_luminous_reef", "Luminous Reef Wings", 600, Material.SEA_PICKLE,
+                    Arrays.asList("§7Bioluminescent glow", "§7from deep sea coral."),
+                    null, false, true,
+                    Particle.BUBBLE_COLUMN_UP, 6, 0.75, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(luminousReefWings);
+
+// Shadowmantle Wings
+            WingCosmetic shadowmantleWings = new WingCosmetic(
+                    "wings_shadowmantle", "Shadowmantle Wings", 710, Material.BLACK_DYE,
+                    Arrays.asList("§7Darkness flows", "§7like ink behind you."),
+                    null, true, true,
+                    Particle.ASH, 7, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(shadowmantleWings);
+
+// Honeydrip Wings
+            WingCosmetic honeydripWings = new WingCosmetic(
+                    "wings_honeydrip", "Honeydrip Wings", 460, Material.HONEYCOMB,
+                    Arrays.asList("§7Sticky and sweet", "§7as buzzing bees."),
+                    null, false, false,
+                    Particle.FALLING_HONEY, 5, 0.7, 1.3, 0.25, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(honeydripWings);
+
+// Cursed Ember Wings
+            WingCosmetic cursedEmberWings = new WingCosmetic(
+                    "wings_cursed_ember", "Cursed Ember Wings", 770, Material.MAGMA_CREAM,
+                    Arrays.asList("§7Burned by a curse", "§7and left to fly."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.DRIPPING_LAVA, 9, 0.95, 1.7, 0.35, 0.18,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(cursedEmberWings);
+
+// Aurora Dance Wings
+            WingCosmetic auroraDanceWings = new WingCosmetic(
+                    "wings_aurora_dance", "Aurora Dance Wings", 720, Material.LIGHT_BLUE_DYE,
+                    Arrays.asList("§7Light weaves colors", "§7in the night sky."),
+                    null, false, true,
+                    Particle.FIREWORK, 8, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(auroraDanceWings);
+
+// Serpent Scale Wings
+            WingCosmetic serpentScaleWings = new WingCosmetic(
+                    "wings_serpent_scale", "Serpent Scale Wings", 680, Material.SCAFFOLDING,
+                    Arrays.asList("§7Shed from ancient serpents", "§7in deep jungle tombs."),
+                    null, false, true,
+                    Particle.ITEM_SLIME, 7, 0.85, 1.6, 0.3, 0.13,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(serpentScaleWings);
+
+// Wispveil Wings
+            WingCosmetic wispveilWings = new WingCosmetic(
+                    "wings_wispveil", "Wispveil Wings", 630, Material.WHITE_DYE,
+                    Arrays.asList("§7Gliding phantoms", "§7follow in your trail."),
+                    null, false, true,
+                    Particle.SPLASH, 6, 0.75, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(wispveilWings);
+
+// Duskleaf Wings
+            WingCosmetic duskleafWings = new WingCosmetic(
+                    "wings_duskleaf", "Duskleaf Wings", 490, Material.JUNGLE_LEAVES,
+                    Arrays.asList("§7Faded leaves swirl", "§7in twilight wind."),
+                    null, false, false,
+                    Particle.FALLING_DUST, 5, 0.7, 1.3, 0.3, 0.1,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(duskleafWings);
+
+// Ironclad Wings
+            WingCosmetic ironcladWings = new WingCosmetic(
+                    "wings_ironclad", "Ironclad Wings", 800, Material.IRON_BLOCK,
+                    Arrays.asList("§7Heavy as steel", "§7but lift you just the same."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.CRIT, 10, 1.0, 1.8, 0.4, 0.2,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(ironcladWings);
+
+// Astral Mirage Wings
+            WingCosmetic astralMirageWing = new WingCosmetic(
+                    "wings_astral_mirage", "Astral Mirage Wings", 720, Material.ENDER_PEARL,
+                    Arrays.asList("§7Wings that shimmer", "§7like distant stars."),
+                    null, false, true,
+                    Particle.PORTAL, 8, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(astralMirageWings);
+
+// Bloodthorn Wings
+            WingCosmetic bloodthornWing = new WingCosmetic(
+                    "wings_bloodthorn", "Bloodthorn Wings", 690, Material.NETHER_WART,
+                    Arrays.asList("§7Crimson thorns wrap", "§7your sinister flight."),
+                    null, false, true,
+                    Particle.DRIPPING_LAVA, 7, 0.85, 1.5, 0.3, 0.12,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(bloodthornWings);
+
+// Verdant Bloom Wings
+            WingCosmetic verdantBloomWing = new WingCosmetic(
+                    "wings_verdant_bloom", "Verdant Bloom Wings", 510, Material.LILY_PAD,
+                    Arrays.asList("§7Nature blooms in", "§7every fluttering beat."),
+                    null, false, false,
+                    Particle.SPLASH, 5, 0.7, 1.3, 0.3, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(verdantBloomWings);
+
+// Phantom Veil Wings
+            WingCosmetic phantomVeilWing = new WingCosmetic(
+                    "wings_phantom_veil", "Phantom Veil Wings", 640, Material.PHANTOM_MEMBRANE,
+                    Arrays.asList("§7Ethereal shadows cling", "§7as you vanish in air."),
+                    null, false, true,
+                    Particle.LARGE_SMOKE, 6, 0.85, 1.5, 0.3, 0.13,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(phantomVeilWings);
+
+// Luminous Reef Wings
+            WingCosmetic Luminous = new WingCosmetic(
+                    "wings_luminous_reef", "Luminous Reef Wings", 600, Material.SEA_PICKLE,
+                    Arrays.asList("§7Bioluminescent glow", "§7from deep sea coral."),
+                    null, false, true,
+                    Particle.BUBBLE_COLUMN_UP, 6, 0.75, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(luminousReefWings);
+
+// Shadowmantle Wings
+            WingCosmetic shadowmantleWing = new WingCosmetic(
+                    "wings_shadowmantle", "Shadowmantle Wings", 710, Material.BLACK_DYE,
+                    Arrays.asList("§7Darkness flows", "§7like ink behind you."),
+                    null, true, true,
+                    Particle.ASH, 7, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(shadowmantleWings);
+
+// Honeydrip Wings
+            WingCosmetic honeydripWing = new WingCosmetic(
+                    "wings_honeydrip", "Honeydrip Wings", 460, Material.HONEYCOMB,
+                    Arrays.asList("§7Sticky and sweet", "§7as buzzing bees."),
+                    null, false, false,
+                    Particle.FALLING_HONEY, 5, 0.7, 1.3, 0.25, 0.1,
+                    WingCosmetic.WingType.BUTTERFLY, plugin
+            );
+            registerCosmetic(honeydripWings);
+
+// Cursed Ember Wings
+            WingCosmetic cursedEmberWing = new WingCosmetic(
+                    "wings_cursed_ember", "Cursed Ember Wings", 770, Material.MAGMA_CREAM,
+                    Arrays.asList("§7Burned by a curse", "§7and left to fly."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.DRIPPING_LAVA, 9, 0.95, 1.7, 0.35, 0.18,
+                    WingCosmetic.WingType.DEMON, plugin
+            );
+            registerCosmetic(cursedEmberWings);
+
+// Aurora Dance Wings
+            WingCosmetic auroraDanceWing = new WingCosmetic(
+                    "wings_aurora_dance", "Aurora Dance Wings", 720, Material.LIGHT_BLUE_DYE,
+                    Arrays.asList("§7Light weaves colors", "§7in the night sky."),
+                    null, false, true,
+                    Particle.SPLASH, 8, 0.9, 1.6, 0.3, 0.14,
+                    WingCosmetic.WingType.ANGEL, plugin
+            );
+            registerCosmetic(auroraDanceWings);
+
+// Serpent Scale Wings
+            WingCosmetic serpentScaleWing = new WingCosmetic(
+                    "wings_serpent_scale", "Serpent Scale Wings", 680, Material.SCAFFOLDING,
+                    Arrays.asList("§7Shed from ancient serpents", "§7in deep jungle tombs."),
+                    null, false, true,
+                    Particle.ITEM_SLIME, 7, 0.85, 1.6, 0.3, 0.13,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(serpentScaleWings);
+
+// Wispveil Wings
+            WingCosmetic wispveilWing = new WingCosmetic(
+                    "wings_wispveil", "Wispveil Wings", 630, Material.WHITE_DYE,
+                    Arrays.asList("§7Gliding phantoms", "§7follow in your trail."),
+                    null, false, true,
+                    Particle.INSTANT_EFFECT, 6, 0.75, 1.4, 0.3, 0.12,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(wispveilWings);
+
+// Duskleaf Wings
+            WingCosmetic duskleafWing = new WingCosmetic(
+                    "wings_duskleaf", "Duskleaf Wings", 490, Material.JUNGLE_LEAVES,
+                    Arrays.asList("§7Faded leaves swirl", "§7in twilight wind."),
+                    null, false, false,
+                    Particle.FALLING_DUST, 5, 0.7, 1.3, 0.3, 0.1,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(duskleafWings);
+
+// Ironclad Wings
+            WingCosmetic ironcladWing = new WingCosmetic(
+                    "wings_ironclad", "Ironclad Wings", 800, Material.IRON_BLOCK,
+                    Arrays.asList("§7Heavy as steel", "§7but lift you just the same."),
+                    "sneakycosmetics.premium", true, true,
+                    Particle.CRIT, 10, 1.0, 1.8, 0.4, 0.2,
+                    WingCosmetic.WingType.DRAGON, plugin
+            );
+            registerCosmetic(ironcladWings);
+
+
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register wing cosmetics: " + e.getMessage());
         }
