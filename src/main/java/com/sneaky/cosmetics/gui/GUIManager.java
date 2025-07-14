@@ -75,22 +75,22 @@ public class GUIManager implements Listener {
             ItemStack item = new ItemStack(type.getIcon());
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setDisplayName(color(type.getColorCode() + "&l✦ " + type.getDisplayName() + " ✦"));
+                meta.setDisplayName(color("&#FF8C00✦ &#FFD700" + type.getDisplayName() + " &#FF8C00✦"));
                 List<String> lore = new ArrayList<>();
-                lore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-                lore.add(color("&7" + type.getDescription()));
+                lore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                lore.add(color("&#808080" + type.getDescription()));
                 lore.add("");
                 int count = plugin.getCosmeticManager().getCosmeticCountByType(type);
                 int ownedCount = getOwnedCount(player, type);
-                lore.add(color("&7Available: &e" + count + " &7cosmetics"));
-                lore.add(color("&7Owned: &a" + ownedCount + "&7/&e" + count));
+                lore.add(color("&#808080Available: &#FFD700" + count + " &#808080cosmetics"));
+                lore.add(color("&#808080Owned: &#32CD32" + ownedCount + "&#808080/&#FFD700" + count));
                 lore.add("");
                 if (count > 0) {
-                    lore.add(color("&e&l❱ Click to browse " + type.getDisplayName().toLowerCase() + "!"));
+                    lore.add(color("&#FFA500❱ Click to browse " + type.getDisplayName().toLowerCase() + "!"));
                 } else {
-                    lore.add(color("&c&l✗ Coming soon!"));
+                    lore.add(color("&#FF4500✗ Coming soon!"));
                 }
-                lore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                lore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 meta.setLore(lore);
                 item.setItemMeta(meta);
             }
@@ -165,8 +165,8 @@ public class GUIManager implements Listener {
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
-            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeMeta.setDisplayName(color("&#FF0000✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&#808080Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(49, closeButton);
@@ -276,8 +276,8 @@ public class GUIManager implements Listener {
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
-            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeMeta.setDisplayName(color("&#FF0000✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&#808080Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(53, closeButton);
@@ -444,8 +444,8 @@ public class GUIManager implements Listener {
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
-            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeMeta.setDisplayName(color("&#FF0000✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&#808080Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(49, closeButton);
@@ -554,8 +554,8 @@ public class GUIManager implements Listener {
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
-            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeMeta.setDisplayName(color("&#FF0000✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&#808080Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(53, closeButton);
@@ -854,8 +854,8 @@ public class GUIManager implements Listener {
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
-            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeMeta.setDisplayName(color("&#FF0000✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&#808080Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(49, closeButton);
@@ -1287,30 +1287,30 @@ public class GUIManager implements Listener {
         
         if (dailyMeta != null) {
             if (canClaim) {
-                dailyMeta.setDisplayName(color("&6&l🎁 Daily Reward Available! 🎁"));
+                dailyMeta.setDisplayName(color("&#FFD700🎁 Daily Reward Available! 🎁"));
                 List<String> dailyLore = new ArrayList<>();
-                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-                dailyLore.add(color("&a&l✓ Ready to claim!"));
+                dailyLore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&#32CD32✓ Ready to claim!"));
                 dailyLore.add("");
-                dailyLore.add(color("&7Daily reward: &e+" + plugin.getConfig().getInt("credits.daily-reward", 100) + " credits"));
-                dailyLore.add(color("&7Streak bonus: &6+50% after 7 days"));
-                dailyLore.add(color("&7Current streak: &b" + getPlaceholder(player, "daily_streak") + " days"));
+                dailyLore.add(color("&#808080Daily reward: &#FFD700+" + plugin.getConfig().getInt("credits.daily-reward", 100) + " credits &#FFA500💰"));
+                dailyLore.add(color("&#808080Streak bonus: &#FFD700+50% after 7 days"));
+                dailyLore.add(color("&#808080Current streak: &#FF8C00" + getPlaceholder(player, "daily_streak") + " days"));
                 dailyLore.add("");
-                dailyLore.add(color("&e&l❱ Click to claim your daily reward!"));
-                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&#FFA500❱ Click to claim your daily reward!"));
+                dailyLore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 dailyMeta.setLore(dailyLore);
             } else {
-                dailyMeta.setDisplayName(color("&c&l⏰ Daily Reward Cooldown"));
+                dailyMeta.setDisplayName(color("&#FF4500⏰ Daily Reward Cooldown"));
                 List<String> dailyLore = new ArrayList<>();
-                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-                dailyLore.add(color("&c&l✗ Already claimed today"));
+                dailyLore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&#FF4500✗ Already claimed today"));
                 dailyLore.add("");
-                dailyLore.add(color("&7Next reward in: &e" + hoursUntilNext + " hours"));
-                dailyLore.add(color("&7Current streak: &b" + getPlaceholder(player, "daily_streak") + " days"));
-                dailyLore.add(color("&7Total claimed: &a" + getPlaceholder(player, "daily_total_claimed")));
+                dailyLore.add(color("&#808080Next reward in: &#FFA500" + hoursUntilNext + " hours"));
+                dailyLore.add(color("&#808080Current streak: &#FF8C00" + getPlaceholder(player, "daily_streak") + " days"));
+                dailyLore.add(color("&#808080Total claimed: &#32CD32" + getPlaceholder(player, "daily_total_claimed")));
                 dailyLore.add("");
-                dailyLore.add(color("&7Come back tomorrow for more credits!"));
-                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&#808080Come back tomorrow for more credits!"));
+                dailyLore.add(color("&#FF4500▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 dailyMeta.setLore(dailyLore);
             }
             dailyItem.setItemMeta(dailyMeta);
@@ -1364,11 +1364,15 @@ public class GUIManager implements Listener {
         // Award the achievement (this method handles credit rewards automatically)
         plugin.getAchievementManager().awardAchievement(player, achievement.getId());
         
-        // Show success message
-        plugin.getMessageManager().sendSuccess(player, 
-            "&a&l✓ Achievement Unlocked: &e" + achievement.getName() + "\n" +
-            "&7" + achievement.getDescription() + "\n" +
-            "&e&l💰 Reward: &f+" + achievement.getCreditReward() + " credits");
+        // Show success message using config
+        String message = plugin.getMessageManager().getMessage("achievements.unlocked-chat")
+            .replace("{name}", achievement.getName())
+            .replace("{description}", achievement.getDescription());
+        plugin.getMessageManager().sendMessage(player, message);
+        
+        String reward = plugin.getMessageManager().getMessage("achievements.reward-message")
+            .replace("{credits}", String.valueOf(achievement.getCreditReward()));
+        plugin.getMessageManager().sendMessage(player, reward);
         
         // Play success sound or particle effect here if desired
         

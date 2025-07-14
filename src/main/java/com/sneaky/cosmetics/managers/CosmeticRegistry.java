@@ -446,6 +446,217 @@ public class CosmeticRegistry {
             );
             registerCosmetic(netheriteHelm);
             
+            // Creative Hats - Unique Design Collection
+            
+            // Chef's Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic chefHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_chef", "Chef's Hat", 200, Material.WHITE_WOOL,
+                java.util.Arrays.asList("§7A tall white chef's hat", "§7for culinary adventures!"),
+                null, false, false,
+                Material.WHITE_WOOL, "§f👨‍🍳 Chef's Hat", java.util.Arrays.asList("§7Perfect for cooking!")
+            );
+            registerCosmetic(chefHat);
+            
+            // Pirate Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic pirateHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_pirate", "Pirate Hat", 250, Material.BLACK_WOOL,
+                java.util.Arrays.asList("§7Ahoy matey! A classic", "§7pirate tricorn hat!"),
+                null, false, false,
+                Material.BLACK_WOOL, "§8🏴‍☠️ Pirate Hat", java.util.Arrays.asList("§8Sail the seven seas!")
+            );
+            registerCosmetic(pirateHat);
+            
+            // Top Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic topHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_top", "Gentleman's Top Hat", 400, Material.BLACK_CARPET,
+                java.util.Arrays.asList("§7A sophisticated black top hat", "§7for the distinguished player!"),
+                null, false, false,
+                Material.BLACK_CARPET, "§8🎩 Top Hat", java.util.Arrays.asList("§8Quite distinguished!")
+            );
+            registerCosmetic(topHat);
+            
+            // Wizard Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic wizardHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_wizard", "Wizard Hat", 350, Material.PURPLE_WOOL,
+                java.util.Arrays.asList("§7A mystical pointed wizard hat", "§7filled with arcane power!"),
+                null, false, false,
+                Material.PURPLE_WOOL, "§5🧙‍♂️ Wizard Hat", java.util.Arrays.asList("§5✨ Magical powers! ✨")
+            );
+            registerCosmetic(wizardHat);
+            
+            // Santa Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic santaHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_santa", "Santa Hat", 300, Material.RED_WOOL,
+                java.util.Arrays.asList("§7Ho ho ho! A festive", "§7red Santa hat!"),
+                null, false, false,
+                Material.RED_WOOL, "§c🎅 Santa Hat", java.util.Arrays.asList("§cSpread Christmas cheer!")
+            );
+            registerCosmetic(santaHat);
+            
+            // Party Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic partyHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_party", "Party Hat", 180, Material.YELLOW_WOOL,
+                java.util.Arrays.asList("§7A colorful cone party hat", "§7for celebrations!"),
+                null, false, false,
+                Material.YELLOW_WOOL, "§e🎉 Party Hat", java.util.Arrays.asList("§eLet's celebrate!")
+            );
+            registerCosmetic(partyHat);
+            
+            // Crown of Thorns
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic thornCrown = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_thorns", "Crown of Thorns", 450, Material.DEAD_BUSH,
+                java.util.Arrays.asList("§7A dark crown made of", "§7twisted thorns and brambles!"),
+                null, true, false,
+                Material.DEAD_BUSH, "§8⚫ Crown of Thorns", java.util.Arrays.asList("§8Sharp and dangerous!")
+            );
+            registerCosmetic(thornCrown);
+            
+            // Ice Crown
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic iceCrown = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_ice", "Ice Crown", 380, Material.ICE,
+                java.util.Arrays.asList("§7A crystalline crown", "§7made of pure ice!"),
+                null, false, false,
+                Material.ICE, "§b❄️ Ice Crown", java.util.Arrays.asList("§bFrozen majesty!")
+            );
+            registerCosmetic(iceCrown);
+            
+            // Fire Crown
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic fireCrown = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_fire", "Crown of Flames", 420, Material.MAGMA_BLOCK,
+                java.util.Arrays.asList("§7A blazing crown that", "§7burns with eternal fire!"),
+                null, false, true,
+                Material.MAGMA_BLOCK, "§c🔥 Crown of Flames", java.util.Arrays.asList("§cBurning with power!")
+            );
+            registerCosmetic(fireCrown);
+            
+            // Nature Crown
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic natureCrown = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_nature", "Nature's Crown", 320, Material.OAK_LEAVES,
+                java.util.Arrays.asList("§7A living crown made", "§7of leaves and flowers!"),
+                null, false, false,
+                Material.OAK_LEAVES, "§a🌿 Nature's Crown", java.util.Arrays.asList("§aOne with nature!")
+            );
+            registerCosmetic(natureCrown);
+            
+            // Viking Helmet
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic vikingHelmet = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_viking", "Viking Helmet", 280, Material.IRON_HELMET,
+                java.util.Arrays.asList("§7A horned viking helmet", "§7for brave warriors!"),
+                null, false, false,
+                Material.IRON_HELMET, "§8⚔️ Viking Helmet", java.util.Arrays.asList("§8For Valhalla!")
+            );
+            registerCosmetic(vikingHelmet);
+            
+            // Pharaoh's Headdress
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic pharaohHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_pharaoh", "Pharaoh's Headdress", 500, Material.GOLD_BLOCK,
+                java.util.Arrays.asList("§7An ancient Egyptian headdress", "§7worn by pharaohs!"),
+                null, false, true,
+                Material.GOLD_BLOCK, "§6👑 Pharaoh's Headdress", java.util.Arrays.asList("§6Rule like a pharaoh!")
+            );
+            registerCosmetic(pharaohHat);
+            
+            // Space Helmet
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic spaceHelmet = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_space", "Space Helmet", 600, Material.GLASS,
+                java.util.Arrays.asList("§7A futuristic space helmet", "§7for cosmic adventures!"),
+                null, false, true,
+                Material.GLASS, "§f🚀 Space Helmet", java.util.Arrays.asList("§fTo infinity and beyond!")
+            );
+            registerCosmetic(spaceHelmet);
+            
+            // Samurai Helmet
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic samuraiHelmet = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_samurai", "Samurai Helmet", 450, Material.IRON_HELMET,
+                java.util.Arrays.asList("§7A traditional samurai kabuto", "§7for honorable warriors!"),
+                null, true, false,
+                Material.IRON_HELMET, "§8🗾 Samurai Helmet", java.util.Arrays.asList("§8Honor and duty!")
+            );
+            registerCosmetic(samuraiHelmet);
+            
+            // Jester Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic jesterHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_jester", "Jester's Hat", 220, Material.PURPLE_WOOL,
+                java.util.Arrays.asList("§7A colorful jester's cap", "§7with jingling bells!"),
+                null, false, false,
+                Material.PURPLE_WOOL, "§d🃏 Jester's Hat", java.util.Arrays.asList("§dEntertain the court!")
+            );
+            registerCosmetic(jesterHat);
+            
+            // Beret
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic beret = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_beret", "French Beret", 150, Material.BLACK_WOOL,
+                java.util.Arrays.asList("§7A stylish French beret", "§7très magnifique!"),
+                null, false, false,
+                Material.BLACK_WOOL, "§8🇫🇷 French Beret", java.util.Arrays.asList("§8Très chic!")
+            );
+            registerCosmetic(beret);
+            
+            // Cowboy Hat
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic cowboyHat = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_cowboy", "Cowboy Hat", 240, Material.BROWN_WOOL,
+                java.util.Arrays.asList("§7Yeehaw! A classic", "§7western cowboy hat!"),
+                null, false, false,
+                Material.BROWN_WOOL, "§6🤠 Cowboy Hat", java.util.Arrays.asList("§6Ride 'em cowboy!")
+            );
+            registerCosmetic(cowboyHat);
+            
+            // Fedora
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic fedora = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_fedora", "Classic Fedora", 190, Material.GRAY_WOOL,
+                java.util.Arrays.asList("§7A classy fedora hat", "§7for the sophisticated player!"),
+                null, false, false,
+                Material.GRAY_WOOL, "§8🕴️ Classic Fedora", java.util.Arrays.asList("§8Timeless style!")
+            );
+            registerCosmetic(fedora);
+            
+            // Baseball Cap
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic baseballCap = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_baseball", "Baseball Cap", 120, Material.BLUE_WOOL,
+                java.util.Arrays.asList("§7A casual baseball cap", "§7perfect for sports!"),
+                null, false, false,
+                Material.BLUE_WOOL, "§9⚾ Baseball Cap", java.util.Arrays.asList("§9Play ball!")
+            );
+            registerCosmetic(baseballCap);
+            
+            // Premium Exclusive Hats
+            
+            // Dragon Scale Helmet
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic dragonHelmet = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_dragon", "Dragon Scale Helmet", 800, Material.DRAGON_HEAD,
+                java.util.Arrays.asList("§7A helmet forged from", "§7ancient dragon scales!"),
+                "sneakycosmetics.premium", true, true,
+                Material.DRAGON_HEAD, "§4🐲 Dragon Scale Helmet", java.util.Arrays.asList("§4Legendary protection!")
+            );
+            registerCosmetic(dragonHelmet);
+            
+            // Angel Halo
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic angelHalo = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_halo", "Angel Halo", 750, Material.END_ROD,
+                java.util.Arrays.asList("§7A divine halo that", "§7radiates holy light!"),
+                "sneakycosmetics.premium", true, true,
+                Material.END_ROD, "§f😇 Angel Halo", java.util.Arrays.asList("§fDivine blessing!")
+            );
+            registerCosmetic(angelHalo);
+            
+            // Devil Horns
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic devilHorns = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_devil", "Devil Horns", 666, Material.BLACKSTONE,
+                java.util.Arrays.asList("§7Sinister horns that", "§7mark you as diabolical!"),
+                "sneakycosmetics.premium", true, true,
+                Material.BLACKSTONE, "§c😈 Devil Horns", java.util.Arrays.asList("§cEmbraced by darkness!")
+            );
+            registerCosmetic(devilHorns);
+            
+            // Crystal Tiara
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic crystalTiara = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                "hat_crystal", "Crystal Tiara", 900, Material.AMETHYST_CLUSTER,
+                java.util.Arrays.asList("§7A sparkling tiara made", "§7of pure crystal shards!"),
+                "sneakycosmetics.premium", true, true,
+                Material.AMETHYST_CLUSTER, "§d💎 Crystal Tiara", java.util.Arrays.asList("§dShimmering beauty!")
+            );
+            registerCosmetic(crystalTiara);
+            
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register hat cosmetics: " + e.getMessage());
         }
@@ -499,6 +710,265 @@ public class CosmeticRegistry {
                 Particle.PORTAL, 6, 0.4, 0.6, 0.4, 0.3, plugin
             );
             registerCosmetic(endTrail);
+            
+            // === ELEMENTAL TRAILS ===
+            
+            // Lightning Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic lightningTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_lightning", "Lightning Trail", 400, Material.LIGHTNING_ROD,
+                java.util.Arrays.asList("§7Electric sparks crackle", "§7behind your every move!"),
+                null, false, true,
+                Particle.ELECTRIC_SPARK, 4, 0.3, 0.3, 0.3, 0.1, plugin
+            );
+            registerCosmetic(lightningTrail);
+            
+            // Ice Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic iceTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_ice", "Frost Trail", 220, Material.ICE,
+                java.util.Arrays.asList("§7Crystalline ice particles", "§7freeze your path!"),
+                null, false, false,
+                Particle.SNOWFLAKE, 6, 0.4, 0.2, 0.4, 0.05, plugin
+            );
+            registerCosmetic(iceTrail);
+            
+            // Wind Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic windTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_wind", "Wind Current", 180, Material.FEATHER,
+                java.util.Arrays.asList("§7Gusts of wind swirl", "§7around your footsteps!"),
+                null, false, false,
+                Particle.SWEEP_ATTACK, 3, 0.5, 0.1, 0.5, 0.2, plugin
+            );
+            registerCosmetic(windTrail);
+            
+            // Earth Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic earthTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_earth", "Earth Shaker", 250, Material.DIRT,
+                java.util.Arrays.asList("§7Rocky debris follows", "§7your powerful steps!"),
+                null, false, false,
+                Particle.BLOCK, 5, 0.3, 0.1, 0.3, 0.1, plugin
+            );
+            registerCosmetic(earthTrail);
+            
+            // === MAGICAL TRAILS ===
+            
+            // Fairy Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic fairyTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_fairy", "Fairy Dust", 300, Material.GLOWSTONE_DUST,
+                java.util.Arrays.asList("§7Sparkling fairy dust", "§7dances behind you!"),
+                null, false, false,
+                Particle.ENCHANT, 8, 0.4, 0.4, 0.4, 0.3, plugin
+            );
+            registerCosmetic(fairyTrail);
+            
+            // Void Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic voidTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_void", "Void Walker", 500, Material.OBSIDIAN,
+                java.util.Arrays.asList("§7Dark void energy", "§7emanates from your path!"),
+                null, true, true,
+                Particle.WITCH, 4, 0.3, 0.3, 0.3, 0.2, plugin
+            );
+            registerCosmetic(voidTrail);
+            
+            // Cosmic Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic cosmicTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_cosmic", "Cosmic Energy", 450, Material.NETHER_STAR,
+                java.util.Arrays.asList("§7Stellar energy from", "§7distant galaxies!"),
+                null, false, true,
+                Particle.END_ROD, 3, 0.2, 0.5, 0.2, 0.1, plugin
+            );
+            registerCosmetic(cosmicTrail);
+            
+            // Soul Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic soulTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_soul", "Soul Walker", 320, Material.SOUL_SAND,
+                java.util.Arrays.asList("§7Ancient souls whisper", "§7as you pass by!"),
+                null, false, false,
+                Particle.SOUL, 5, 0.3, 0.3, 0.3, 0.15, plugin
+            );
+            registerCosmetic(soulTrail);
+            
+            // === NATURE TRAILS ===
+            
+            // Flower Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic flowerTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_flower", "Flower Petals", 200, Material.POPPY,
+                java.util.Arrays.asList("§7Beautiful flower petals", "§7bloom in your wake!"),
+                null, false, false,
+                Particle.CHERRY_LEAVES, 6, 0.4, 0.2, 0.4, 0.1, plugin
+            );
+            registerCosmetic(flowerTrail);
+            
+            // Autumn Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic autumnTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_autumn", "Autumn Leaves", 160, Material.OAK_LEAVES,
+                java.util.Arrays.asList("§7Golden autumn leaves", "§7drift behind you!"),
+                null, false, false,
+                Particle.FALLING_DUST, 7, 0.4, 0.3, 0.4, 0.05, plugin
+            );
+            registerCosmetic(autumnTrail);
+            
+            // Honey Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic honeyTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_honey", "Honey Drops", 240, Material.HONEY_BOTTLE,
+                java.util.Arrays.asList("§7Sweet honey droplets", "§7drip from your steps!"),
+                null, false, false,
+                Particle.DRIPPING_HONEY, 4, 0.3, 0.2, 0.3, 0.08, plugin
+            );
+            registerCosmetic(honeyTrail);
+            
+            // === SPECIAL EFFECTS TRAILS ===
+            
+            // Rainbow Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic rainbowTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_rainbow", "Rainbow Path", 380, Material.PRISMARINE_CRYSTALS,
+                java.util.Arrays.asList("§7A beautiful rainbow", "§7follows your journey!"),
+                null, false, true,
+                Particle.DUST, 10, 0.5, 0.4, 0.5, 0.2, plugin
+            );
+            registerCosmetic(rainbowTrail);
+            
+            // Music Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic musicTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_music", "Musical Notes", 280, Material.NOTE_BLOCK,
+                java.util.Arrays.asList("§7Musical notes dance", "§7to your rhythm!"),
+                null, false, false,
+                Particle.NOTE, 5, 0.4, 0.4, 0.4, 0.3, plugin
+            );
+            registerCosmetic(musicTrail);
+            
+            // Slime Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic slimeTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_slime", "Slime Trail", 150, Material.SLIME_BALL,
+                java.util.Arrays.asList("§7Bouncy slime drops", "§7mark your path!"),
+                null, false, false,
+                Particle.SLIME, 3, 0.3, 0.1, 0.3, 0.1, plugin
+            );
+            registerCosmetic(slimeTrail);
+            
+            // Smoke Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic smokeTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_smoke", "Smoke Cloud", 120, Material.CAMPFIRE,
+                java.util.Arrays.asList("§7Mysterious smoke", "§7billows behind you!"),
+                null, false, false,
+                Particle.CAMPFIRE_COSY_SMOKE, 4, 0.3, 0.3, 0.3, 0.1, plugin
+            );
+            registerCosmetic(smokeTrail);
+            
+            // === SEASONAL TRAILS ===
+            
+            // Snowflake Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic snowflakeTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_snowflake", "Winter Snowflakes", 200, Material.SNOW_BLOCK,
+                java.util.Arrays.asList("§7Delicate snowflakes", "§7fall in your wake!"),
+                null, false, false,
+                Particle.SNOWFLAKE, 8, 0.4, 0.4, 0.4, 0.05, plugin
+            );
+            registerCosmetic(snowflakeTrail);
+            
+            // Spring Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic springTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_spring", "Spring Bloom", 220, Material.CHERRY_SAPLING,
+                java.util.Arrays.asList("§7Fresh spring blossoms", "§7celebrate your presence!"),
+                null, false, false,
+                Particle.CHERRY_LEAVES, 6, 0.4, 0.3, 0.4, 0.1, plugin
+            );
+            registerCosmetic(springTrail);
+            
+            // Firework Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic fireworkTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_firework", "Celebration Trail", 350, Material.FIREWORK_ROCKET,
+                java.util.Arrays.asList("§7Colorful firework sparks", "§7celebrate every step!"),
+                null, false, true,
+                Particle.FIREWORK, 4, 0.3, 0.3, 0.3, 0.2, plugin
+            );
+            registerCosmetic(fireworkTrail);
+            
+            // === ANIMAL TRAILS ===
+            
+            // Paw Print Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic pawTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_paw", "Paw Prints", 140, Material.BONE,
+                java.util.Arrays.asList("§7Cute paw prints", "§7follow your path!"),
+                null, false, false,
+                Particle.FOOTSTEP, 2, 0.2, 0.1, 0.2, 0.05, plugin
+            );
+            registerCosmetic(pawTrail);
+            
+            // Butterfly Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic butterflyTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_butterfly", "Butterfly Flutter", 260, Material.FLOWER_POT,
+                java.util.Arrays.asList("§7Graceful butterflies", "§7flutter around you!"),
+                null, false, false,
+                Particle.ENCHANT, 5, 0.5, 0.4, 0.5, 0.2, plugin
+            );
+            registerCosmetic(butterflyTrail);
+            
+            // === OCEAN TRAILS ===
+            
+            // Bubble Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic bubbleTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_bubble", "Ocean Bubbles", 180, Material.WATER_BUCKET,
+                java.util.Arrays.asList("§7Refreshing bubbles", "§7rise from your steps!"),
+                null, false, false,
+                Particle.BUBBLE, 6, 0.3, 0.3, 0.3, 0.1, plugin
+            );
+            registerCosmetic(bubbleTrail);
+            
+            // Coral Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic coralTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_coral", "Coral Reef", 300, Material.BRAIN_CORAL,
+                java.util.Arrays.asList("§7Vibrant coral pieces", "§7follow your movement!"),
+                null, false, false,
+                Particle.FALLING_WATER, 4, 0.3, 0.2, 0.3, 0.1, plugin
+            );
+            registerCosmetic(coralTrail);
+            
+            // === PREMIUM EXCLUSIVE TRAILS ===
+            
+            // Dragon Breath Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic dragonBreathTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_dragon_breath", "Dragon's Breath", 700, Material.DRAGON_BREATH,
+                java.util.Arrays.asList("§7Mystical dragon breath", "§7swirls behind you!"),
+                "sneakycosmetics.premium", true, true,
+                Particle.DRAGON_BREATH, 5, 0.4, 0.4, 0.4, 0.2, plugin
+            );
+            registerCosmetic(dragonBreathTrail);
+            
+            // Phoenix Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic phoenixTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_phoenix", "Phoenix Fire", 800, Material.BLAZE_POWDER,
+                java.util.Arrays.asList("§7Legendary phoenix flames", "§7rise from your path!"),
+                "sneakycosmetics.premium", true, true,
+                Particle.FLAME, 8, 0.3, 0.5, 0.3, 0.3, plugin
+            );
+            registerCosmetic(phoenixTrail);
+            
+            // Ender Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic enderTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_ender", "Ender Magic", 650, Material.ENDER_PEARL,
+                java.util.Arrays.asList("§7Teleportation magic", "§7ripples behind you!"),
+                "sneakycosmetics.premium", true, true,
+                Particle.PORTAL, 7, 0.4, 0.4, 0.4, 0.25, plugin
+            );
+            registerCosmetic(enderTrail);
+            
+            // Galactic Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic galacticTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_galactic", "Galactic Stardust", 900, Material.END_CRYSTAL,
+                java.util.Arrays.asList("§7Cosmic stardust from", "§7distant galaxies!"),
+                "sneakycosmetics.premium", true, true,
+                Particle.END_ROD, 6, 0.5, 0.6, 0.5, 0.3, plugin
+            );
+            registerCosmetic(galacticTrail);
+            
+            // Divine Trail
+            com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic divineTrail = new com.sneaky.cosmetics.cosmetics.trails.TrailCosmetic(
+                "trail_divine", "Divine Light", 1000, Material.BEACON,
+                java.util.Arrays.asList("§7Holy divine light", "§7blesses your journey!"),
+                "sneakycosmetics.premium", true, true,
+                Particle.ENCHANT, 10, 0.4, 0.6, 0.4, 0.4, plugin
+            );
+            registerCosmetic(divineTrail);
             
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register trail cosmetics: " + e.getMessage());
