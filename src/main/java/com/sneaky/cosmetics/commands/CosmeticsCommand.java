@@ -88,6 +88,34 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                 handlePetNameCommand(sender, args);
                 break;
                 
+            case "permissions":
+                handlePermissionsCommand(sender, args);
+                break;
+                
+            case "daily":
+                if (sender instanceof Player) {
+                    plugin.getGUIManager().openDailyRewardsGUI((Player) sender);
+                } else {
+                    messageManager.sendError(sender, "This command can only be used by players.");
+                }
+                break;
+                
+            case "achievements":
+                if (sender instanceof Player) {
+                    plugin.getGUIManager().openAchievementsGUI((Player) sender);
+                } else {
+                    messageManager.sendError(sender, "This command can only be used by players.");
+                }
+                break;
+                
+            case "pets":
+                if (sender instanceof Player) {
+                    plugin.getGUIManager().openTypeGUI((Player) sender, com.sneaky.cosmetics.cosmetics.CosmeticType.PET);
+                } else {
+                    messageManager.sendError(sender, "This command can only be used by players.");
+                }
+                break;
+                
             default:
                 messageManager.sendError(sender, "Unknown subcommand. Use /cosmetics help for help.");
                 break;
@@ -97,7 +125,67 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
     }
     
     private void showHelp(CommandSender sender) {
-        messageManager.sendConfigMessages(sender, "help.cosmetics");
+        // Enhanced help menu with orange-black gradient theme
+        messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00╔══════════════════════════════════════════════════╗");
+        messageManager.sendInfo(sender, "&#FF8C00║            &#FFD700SneakyCosmetics Commands            &#FF8C00║");
+        messageManager.sendInfo(sender, "&#FF8C00╠══════════════════════════════════════════════════╣");
+        messageManager.sendInfo(sender, "");
+        
+        // Player Commands
+        messageManager.sendInfo(sender, "&#FF8C00🎮 &#FFD700Player Commands:");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics &#808080- Open main cosmetics menu");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics list &#808080- List all your cosmetics");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics toggle <cosmetic> &#808080- Toggle a cosmetic");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics daily &#808080- Open daily rewards menu");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics achievements &#808080- Open achievements menu");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics pets &#808080- Open pet management menu");
+        messageManager.sendInfo(sender, "   &#32CD32/cosmetics petname set <pet> <name> &#808080- Rename your pet");
+        messageManager.sendInfo(sender, "");
+        
+        // Quick Access Commands
+        messageManager.sendInfo(sender, "&#FF8C00⚡ &#FFD700Quick Access:");
+        messageManager.sendInfo(sender, "   &#32CD32/daily &#808080- Daily rewards system");
+        messageManager.sendInfo(sender, "   &#32CD32/achievements &#808080- Achievement system");
+        messageManager.sendInfo(sender, "   &#32CD32/pet &#808080- Pet management system");
+        messageManager.sendInfo(sender, "   &#32CD32/credits &#808080- Credit management");
+        messageManager.sendInfo(sender, "");
+        
+        // Admin Commands (only show if has permission)
+        if (sender.hasPermission("sneakycosmetics.admin")) {
+            messageManager.sendInfo(sender, "&#FF8C00👑 &#FFD700Admin Commands:");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics give <player> <cosmetic> &#808080- Give a cosmetic");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics remove <player> <cosmetic> &#808080- Remove a cosmetic");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics clear <player> &#808080- Clear all cosmetics");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics permissions list &#808080- List all permissions");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics reload &#808080- Reload configuration");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics update &#808080- Check for updates");
+            messageManager.sendInfo(sender, "   &#32CD32/cosmetics info &#808080- View plugin information");
+            messageManager.sendInfo(sender, "");
+        }
+        
+        // Feature Highlights
+        messageManager.sendInfo(sender, "&#FF8C00✨ &#FFD700Features:");
+        messageManager.sendInfo(sender, "   &#FFA500🎁 Daily Rewards &#808080- Claim credits daily with streak bonuses");
+        messageManager.sendInfo(sender, "   &#FFA500🏆 Achievements &#808080- Complete challenges for extra rewards");
+        messageManager.sendInfo(sender, "   &#FFA500🐾 Pet System &#808080- Level up pets through interactions");
+        messageManager.sendInfo(sender, "   &#FFA500🛒 Credit Shop &#808080- Purchase cosmetics with credits");
+        messageManager.sendInfo(sender, "   &#FFA500🎨 7 Cosmetic Types &#808080- Particles, Hats, Pets, Trails & more");
+        messageManager.sendInfo(sender, "   &#FFA500🔐 Unique Permissions &#808080- Per-cosmetic permission system");
+        messageManager.sendInfo(sender, "");
+        
+        // Support Information
+        messageManager.sendInfo(sender, "&#FF8C00🛠️ &#FFD700Need Help?");
+        messageManager.sendInfo(sender, "   &#FFA500Documentation: &#8A2BE2/cosmetics info");
+        messageManager.sendInfo(sender, "   &#FFA500Permissions: &#8A2BE2/cosmetics permissions list");
+        if (sender.hasPermission("sneakycosmetics.admin")) {
+            messageManager.sendInfo(sender, "   &#FFA500Discord: &#8A2BE2https://discord.gg/sneakycosmetics");
+            messageManager.sendInfo(sender, "   &#FFA500GitHub: &#8A2BE2https://github.com/sneaky/cosmetics");
+        }
+        
+        messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00╚══════════════════════════════════════════════════╝");
+        messageManager.sendInfo(sender, "");
     }
     
     private void handleListCommand(CommandSender sender, String[] args) {
@@ -138,12 +226,22 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                 
                 for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : typeCosmetics) {
                     boolean hasCosmetic = plugin.getCosmeticManager().hasCosmetic(target, cosmetic.getId());
+                    boolean hasUniquePermission = cosmetic.hasUniquePermission(target);
                     boolean isActive = plugin.getCosmeticManager().isCosmeticActive(target, cosmetic.getId());
                     
-                    String status = isActive ? "§a[ACTIVE]" : hasCosmetic ? "§e[OWNED]" : "§c[LOCKED]";
-                    String price = cosmetic.getPrice() == 0 ? "§aFree" : "§e" + cosmetic.getPrice() + " credits";
+                    String status;
+                    if (isActive) {
+                        status = "§a[ACTIVE]";
+                    } else if (hasCosmetic || hasUniquePermission) {
+                        status = hasUniquePermission ? "§b[PERM]" : "§e[OWNED]";
+                    } else {
+                        status = "§c[LOCKED]";
+                    }
                     
-                    messageManager.sendInfo(sender, "  " + status + " §f" + cosmetic.getDisplayName() + " §7(" + price + ")");
+                    String price = cosmetic.getPrice() == 0 ? "§aFree" : "§e" + cosmetic.getPrice() + " credits";
+                    String permission = "§7(" + cosmetic.getUniquePermission() + ")";
+                    
+                    messageManager.sendInfo(sender, "  " + status + " §f" + cosmetic.getDisplayName() + " §7(" + price + ") " + permission);
                 }
             } else {
                 messageManager.sendInfo(sender, type.getColorCode() + type.getDisplayName() + ": §7No cosmetics available");
@@ -178,15 +276,18 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // Check if player can access the cosmetic
-        if (!cosmetic.canPlayerAccess(player)) {
-            messageManager.sendError(player, "You cannot access this cosmetic: " + cosmetic.getAccessDeniedReason(player));
+        // Check if player can use the cosmetic (includes permission checks)
+        if (!cosmetic.canPlayerUse(player)) {
+            messageManager.sendError(player, "You cannot use this cosmetic: " + cosmetic.getAccessDeniedReason(player));
             return;
         }
         
-        // Check if player owns the cosmetic (unless it's free)
-        if (!cosmetic.isFree() && !plugin.getCosmeticManager().hasCosmetic(player, cosmeticId)) {
-            messageManager.sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits.");
+        // Check if player owns the cosmetic (unless it's free, has free access, or unique permission)
+        boolean hasFreeAccess = player.hasPermission("sneakycosmetics.free");
+        boolean hasUniquePermission = cosmetic.hasUniquePermission(player);
+        
+        if (!cosmetic.isFree() && !hasFreeAccess && !hasUniquePermission && !plugin.getCosmeticManager().hasCosmetic(player, cosmeticId)) {
+            messageManager.sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits, or get permission: " + cosmetic.getUniquePermission());
             return;
         }
         
@@ -368,29 +469,117 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        messageManager.sendInfo(sender, "=== SneakyCosmetics Info ===");
-        messageManager.sendInfo(sender, "Version: " + plugin.getDescription().getVersion());
-        messageManager.sendInfo(sender, "Server: " + (plugin.getSchedulerAdapter().isFolia() ? "Folia" : "Paper/Spigot"));
-        messageManager.sendInfo(sender, "Total Cosmetics: " + plugin.getCosmeticManager().getTotalCosmetics());
-        messageManager.sendInfo(sender, "Online Players: " + Bukkit.getOnlinePlayers().size());
+        // Get plugin information
+        String version = plugin.getDescription().getVersion();
+        String serverType = plugin.getSchedulerAdapter().isFolia() ? "Folia" : "Paper/Spigot";
+        int totalCosmetics = plugin.getCosmeticManager().getTotalCosmetics();
+        int onlinePlayers = Bukkit.getOnlinePlayers().size();
+        int maxPlayers = Bukkit.getMaxPlayers();
         
+        // Count cosmetics by type
+        int particleCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PARTICLE);
+        int hatCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.HAT);
+        int petCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PET);
+        int trailCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.TRAIL);
+        int gadgetCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.GADGET);
+        int wingCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.WING);
+        int auraCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.AURA);
+        
+        // Display enhanced info with orange-black gradient theme
+        messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00╔══════════════════════════════════════════════════╗");
+        messageManager.sendInfo(sender, "&#FF8C00║              &#FFD700SneakyCosmetics Info              &#FF8C00║");
+        messageManager.sendInfo(sender, "&#FF8C00╠══════════════════════════════════════════════════╣");
+        messageManager.sendInfo(sender, "");
+        
+        // Core Information
+        messageManager.sendInfo(sender, "&#FF8C00📦 &#FFD700Core Information:");
+        messageManager.sendInfo(sender, "   &#FFA500Version: &#FFFFFF" + version);
+        messageManager.sendInfo(sender, "   &#FFA500Server: &#FFFFFF" + serverType);
+        messageManager.sendInfo(sender, "   &#FFA500Players: &#FFD700" + onlinePlayers + "&#808080/&#FFD700" + maxPlayers);
+        messageManager.sendInfo(sender, "   &#FFA500Total Cosmetics: &#FFD700" + totalCosmetics);
+        messageManager.sendInfo(sender, "");
+        
+        // Cosmetic Breakdown
+        messageManager.sendInfo(sender, "&#FF8C00🎨 &#FFD700Cosmetic Breakdown:");
+        messageManager.sendInfo(sender, "   &#FF6347✨ Particles: &#FFD700" + particleCount);
+        messageManager.sendInfo(sender, "   &#FFD700👑 Hats: &#FFD700" + hatCount);
+        messageManager.sendInfo(sender, "   &#FF8C00🐾 Pets: &#FFD700" + petCount);
+        messageManager.sendInfo(sender, "   &#FF4500💫 Trails: &#FFD700" + trailCount);
+        messageManager.sendInfo(sender, "   &#FF6347🎮 Gadgets: &#FFD700" + gadgetCount);
+        messageManager.sendInfo(sender, "   &#FFD700🕊️ Wings: &#FFD700" + wingCount);
+        messageManager.sendInfo(sender, "   &#FF8C00🌟 Auras: &#FFD700" + auraCount);
+        messageManager.sendInfo(sender, "");
+        
+        // Integration Status
+        messageManager.sendInfo(sender, "&#FF8C00🔗 &#FFD700Integration Status:");
+        
+        // Vault Integration
         if (plugin.getVaultIntegration() != null && plugin.getVaultIntegration().isEnabled()) {
-            messageManager.sendInfo(sender, "Vault: Enabled (" + plugin.getVaultIntegration().getEconomy().getName() + ")");
+            String economyName = plugin.getVaultIntegration().getEconomy().getName();
+            messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500Vault: &#FFFFFF" + economyName);
         } else {
-            messageManager.sendInfo(sender, "Vault: Disabled");
+            messageManager.sendInfo(sender, "   &#FF4500✗ &#FFA500Vault: &#808080Disabled");
         }
         
+        // LuckPerms Integration
         if (plugin.getLuckPermsIntegration() != null && plugin.getLuckPermsIntegration().isEnabled()) {
-            messageManager.sendInfo(sender, "LuckPerms: Enabled");
+            messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500LuckPerms: &#FFFFFF Enabled");
         } else {
-            messageManager.sendInfo(sender, "LuckPerms: Disabled");
+            messageManager.sendInfo(sender, "   &#FF4500✗ &#FFA500LuckPerms: &#808080Disabled");
         }
         
+        // EssentialsX Integration
         if (plugin.getEssentialsXIntegration() != null && plugin.getEssentialsXIntegration().isEnabled()) {
-            messageManager.sendInfo(sender, "EssentialsX: Enabled");
+            messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500EssentialsX: &#FFFFFF Enabled");
         } else {
-            messageManager.sendInfo(sender, "EssentialsX: Disabled");
+            messageManager.sendInfo(sender, "   &#FF4500✗ &#FFA500EssentialsX: &#808080Disabled");
         }
+        
+        // PlaceholderAPI Integration
+        if (plugin.getPlaceholderAPIIntegration() != null) {
+            messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500PlaceholderAPI: &#FFFFFF Enabled");
+        } else {
+            messageManager.sendInfo(sender, "   &#FF4500✗ &#FFA500PlaceholderAPI: &#808080Disabled");
+        }
+        
+        messageManager.sendInfo(sender, "");
+        
+        // Database Information
+        messageManager.sendInfo(sender, "&#FF8C00💾 &#FFD700Database Information:");
+        messageManager.sendInfo(sender, "   &#FFA500Type: &#FFFFFF" + plugin.getConfig().getString("database.type", "SQLite"));
+        messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500Status: &#FFFFFF Connected");
+        
+        // Performance Statistics
+        messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00⚡ &#FFD700Performance Statistics:");
+        
+        try {
+            int totalAchievements = plugin.getAchievementManager().getAllAchievements().size();
+            messageManager.sendInfo(sender, "   &#FFA500Total Achievements: &#FFD700" + totalAchievements);
+        } catch (Exception e) {
+            messageManager.sendInfo(sender, "   &#FFA500Total Achievements: &#808080N/A");
+        }
+        
+        try {
+            long totalCreditsInCirculation = plugin.getStatisticsManager().getTotalCreditsEarned();
+            messageManager.sendInfo(sender, "   &#FFA500Credits in Circulation: &#FFD700" + totalCreditsInCirculation);
+        } catch (Exception e) {
+            messageManager.sendInfo(sender, "   &#FFA500Credits in Circulation: &#808080N/A");
+        }
+        
+        messageManager.sendInfo(sender, "");
+        
+        // Support Information
+        messageManager.sendInfo(sender, "&#FF8C00🛠️ &#FFD700Support & Links:");
+        messageManager.sendInfo(sender, "   &#FFA500Documentation: &#8A2BE2https://docs.sneakycosmetics.com");
+        messageManager.sendInfo(sender, "   &#FFA500Discord: &#8A2BE2https://discord.gg/sneakycosmetics");
+        messageManager.sendInfo(sender, "   &#FFA500GitHub: &#8A2BE2https://github.com/sneaky/cosmetics");
+        messageManager.sendInfo(sender, "   &#FFA500Bug Reports: &#8A2BE2https://github.com/sneaky/cosmetics/issues");
+        
+        messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00╚══════════════════════════════════════════════════╝");
+        messageManager.sendInfo(sender, "");
     }
     
     private void handlePetNameCommand(CommandSender sender, String[] args) {
@@ -517,19 +706,89 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         }
     }
     
+    private void handlePermissionsCommand(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("sneakycosmetics.admin")) {
+            messageManager.sendConfigMessage(sender, "general.no-permission");
+            return;
+        }
+        
+        if (args.length < 2) {
+            messageManager.sendError(sender, "Usage: /cosmetics permissions <list|cosmetic>");
+            messageManager.sendInfo(sender, "  list - List all cosmetic permissions");
+            messageManager.sendInfo(sender, "  cosmetic <id> - Show permissions for specific cosmetic");
+            return;
+        }
+        
+        String action = args[1].toLowerCase();
+        
+        if (action.equals("list")) {
+            messageManager.sendInfo(sender, "§6=== All Cosmetic Permissions ===");
+            messageManager.sendInfo(sender, "§7Base permissions:");
+            messageManager.sendInfo(sender, "  §esneakycosmetics.use §7- Basic cosmetics access");
+            messageManager.sendInfo(sender, "  §esneakycosmetics.free §7- Free access to all cosmetics");
+            messageManager.sendInfo(sender, "  §esneakycosmetics.premium §7- Premium cosmetics access");
+            messageManager.sendInfo(sender, "  §esneakycosmetics.vip §7- VIP cosmetics access");
+            messageManager.sendInfo(sender, "  §esneakycosmetics.admin §7- Admin commands");
+            messageManager.sendInfo(sender, "");
+            
+            for (com.sneaky.cosmetics.cosmetics.CosmeticType type : com.sneaky.cosmetics.cosmetics.CosmeticType.values()) {
+                java.util.List<com.sneaky.cosmetics.cosmetics.Cosmetic> typeCosmetics = plugin.getCosmeticManager().getCosmeticsByType(type);
+                if (!typeCosmetics.isEmpty()) {
+                    messageManager.sendInfo(sender, type.getColorCode() + "§l" + type.getDisplayName() + " Permissions:");
+                    
+                    for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : typeCosmetics) {
+                        messageManager.sendInfo(sender, "  §e" + cosmetic.getUniquePermission() + " §7- " + cosmetic.getDisplayName());
+                    }
+                    messageManager.sendInfo(sender, "");
+                }
+            }
+            
+        } else if (action.equals("cosmetic")) {
+            if (args.length < 3) {
+                messageManager.sendError(sender, "Usage: /cosmetics permissions cosmetic <cosmetic_id>");
+                return;
+            }
+            
+            String cosmeticId = args[2];
+            com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic = plugin.getCosmeticManager().getCosmetic(cosmeticId);
+            
+            if (cosmetic == null) {
+                messageManager.sendError(sender, "Cosmetic not found: " + cosmeticId);
+                return;
+            }
+            
+            messageManager.sendInfo(sender, "§6=== Permissions for " + cosmetic.getDisplayName() + " ===");
+            messageManager.sendInfo(sender, "§7Unique Permission: §e" + cosmetic.getUniquePermission());
+            
+            java.util.List<String> allPerms = cosmetic.getAllPermissions();
+            messageManager.sendInfo(sender, "§7All Applicable Permissions:");
+            for (String perm : allPerms) {
+                messageManager.sendInfo(sender, "  §e" + perm);
+            }
+            
+            if (cosmetic.getPermission() != null && !cosmetic.getPermission().isEmpty()) {
+                messageManager.sendInfo(sender, "§7Legacy Permission: §e" + cosmetic.getPermission());
+            }
+            
+        } else {
+            messageManager.sendError(sender, "Unknown action: " + action);
+            messageManager.sendInfo(sender, "Use 'list' or 'cosmetic'");
+        }
+    }
+    
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
         
         if (args.length == 1) {
-            List<String> subCommands = Arrays.asList("help", "list", "toggle", "give", "remove", "clear", "reload", "update", "info", "petname");
+            List<String> subCommands = Arrays.asList("help", "list", "toggle", "give", "remove", "clear", "reload", "update", "info", "petname", "permissions", "daily", "achievements", "pets");
             String partial = args[0].toLowerCase();
             
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
                     // Check permissions
                     if (subCommand.equals("give") || subCommand.equals("remove") || subCommand.equals("clear") || 
-                        subCommand.equals("reload") || subCommand.equals("update") || subCommand.equals("info")) {
+                        subCommand.equals("reload") || subCommand.equals("update") || subCommand.equals("info") || subCommand.equals("permissions")) {
                         if (sender.hasPermission("sneakycosmetics.admin")) {
                             completions.add(subCommand);
                         }
@@ -568,6 +827,13 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                     if ("set".startsWith(partial)) completions.add("set");
                     if ("get".startsWith(partial)) completions.add("get");
                 }
+            } else if (subCommand.equals("permissions")) {
+                if (sender.hasPermission("sneakycosmetics.admin")) {
+                    // Complete with list/cosmetic actions
+                    String partial = args[1].toLowerCase();
+                    if ("list".startsWith(partial)) completions.add("list");
+                    if ("cosmetic".startsWith(partial)) completions.add("cosmetic");
+                }
             }
         } else if (args.length == 3) {
             String subCommand = args[0].toLowerCase();
@@ -588,6 +854,17 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                     for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
                         if (cosmetic.getType() == com.sneaky.cosmetics.cosmetics.CosmeticType.PET && 
                             cosmetic.getId().toLowerCase().startsWith(partial)) {
+                            completions.add(cosmetic.getId());
+                        }
+                    }
+                }
+            } else if (subCommand.equals("permissions") && sender.hasPermission("sneakycosmetics.admin")) {
+                String action = args[1].toLowerCase();
+                if (action.equals("cosmetic")) {
+                    // Complete with cosmetic IDs
+                    String partial = args[2].toLowerCase();
+                    for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                        if (cosmetic.getId().toLowerCase().startsWith(partial)) {
                             completions.add(cosmetic.getId());
                         }
                     }

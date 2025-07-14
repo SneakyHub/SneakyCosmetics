@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -146,7 +148,7 @@ public class GUIManager implements Listener {
         gui.setItem(45, statsItem);
         
         // Add daily reward area
-        addDailyRewardButton(gui, player, 47);
+        addDailyRewardButton(gui, player, 48);
         
         // Add achievements button
         ItemStack achievementsButton = new ItemStack(Material.GOLDEN_APPLE);
@@ -168,7 +170,35 @@ public class GUIManager implements Listener {
             ));
             achievementsButton.setItemMeta(achievementsMeta);
         }
-        gui.setItem(47, achievementsButton);
+        gui.setItem(46, achievementsButton);
+        
+        // Add pet management button
+        ItemStack petButton = new ItemStack(Material.BONE);
+        ItemMeta petMeta = petButton.getItemMeta();
+        if (petMeta != null) {
+            // Find active pet
+            String activePetName = "None";
+            for (com.sneaky.cosmetics.cosmetics.Cosmetic cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                if (cosmetic.getType() == com.sneaky.cosmetics.cosmetics.CosmeticType.PET && 
+                    plugin.getCosmeticManager().isCosmeticActive(player, cosmetic.getId())) {
+                    String customName = plugin.getDatabaseManager().getPetCustomName(player.getUniqueId(), cosmetic.getId());
+                    activePetName = (customName != null && !customName.isEmpty()) ? customName : cosmetic.getDisplayName();
+                    break;
+                }
+            }
+            
+            petMeta.setDisplayName(color("&d&l🐾 Pet Management"));
+            petMeta.setLore(List.of(
+                color("&7Manage and interact with your pets!"),
+                color("&7Level up pets through interactions."),
+                "",
+                color("&7Active Pet: &e" + activePetName),
+                "",
+                color("&e&l❱ Click to manage pets!")
+            ));
+            petButton.setItemMeta(petMeta);
+        }
+        gui.setItem(47, petButton);
         
         // Add close button
         ItemStack closeButton = new ItemStack(Material.BARRIER);
@@ -964,7 +994,8 @@ public class GUIManager implements Listener {
             if (meta != null) {
                 // Check if player has special access
                 boolean hasFreeAccess = player.hasPermission("sneakycosmetics.free");
-                boolean hasCosmetic = cosmetic.isFree() || hasFreeAccess || plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId());
+                boolean hasUniquePermission = cosmetic.hasUniquePermission(player);
+                boolean hasCosmetic = cosmetic.isFree() || hasFreeAccess || hasUniquePermission || plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId());
                 boolean isActive = plugin.getCosmeticManager().isCosmeticActive(player, cosmetic.getId());
                 
                 // Set display name with status
@@ -982,7 +1013,7 @@ public class GUIManager implements Listener {
                     lore.add("");
                 }
                 
-                // Add price
+                // Add price and permission info
                 if (cosmetic.getPrice() == 0 || hasFreeAccess) {
                     if (hasFreeAccess && cosmetic.getPrice() > 0) {
                         lore.add(color("&6&l⭐ FREE ACCESS ⭐"));
@@ -991,6 +1022,15 @@ public class GUIManager implements Listener {
                     }
                 } else {
                     lore.add(color("&e&l💰 Price: &f" + cosmetic.getPrice() + " credits"));
+                }
+                
+                // Add permission information
+                if (hasUniquePermission) {
+                    lore.add(color("&a&l✓ PERMISSION GRANTED"));
+                    lore.add(color("&7Permission: &e" + cosmetic.getUniquePermission()));
+                } else if (!hasCosmetic && !hasFreeAccess) {
+                    lore.add(color("&c&l✗ PERMISSION REQUIRED"));
+                    lore.add(color("&7Need: &e" + cosmetic.getUniquePermission()));
                 }
                 
                 // Add status
@@ -1095,6 +1135,203 @@ public class GUIManager implements Listener {
         player.openInventory(gui);
     }
     
+    /**
+     * Open the daily rewards GUI for a player
+     */
+    public void openDailyRewardsGUI(Player player) {
+        Inventory gui = Bukkit.createInventory(null, 54, color("&6&l🎁 Daily Rewards 🎁"));
+        
+        // Add decorative border
+        addBorder(gui, Material.YELLOW_STAINED_GLASS_PANE);
+        
+        // Get daily reward data
+        boolean canClaim = plugin.getCreditManager().canClaimDailyBonus(player.getUniqueId());
+        int streak = plugin.getCreditManager().getDailyStreak(player.getUniqueId());
+        int totalClaimed = plugin.getCreditManager().getTotalDailyClaimed(player.getUniqueId());
+        long hoursUntil = plugin.getCreditManager().getHoursUntilNextClaim(player.getUniqueId());
+        int dailyReward = plugin.getConfig().getInt("credits.daily-reward", 100);
+        
+        // Add header
+        ItemStack headerItem = new ItemStack(Material.GOLDEN_APPLE);
+        ItemMeta headerMeta = headerItem.getItemMeta();
+        if (headerMeta != null) {
+            headerMeta.setDisplayName(color("&6&l🎁 Daily Rewards 🎁"));
+            List<String> headerLore = new ArrayList<>();
+            headerLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headerLore.add(color("&7Claim your daily credits reward!"));
+            headerLore.add(color("&7Build up streaks for bonus rewards."));
+            headerLore.add("");
+            headerLore.add(color("&e&l⭐ Daily Reward: &f" + dailyReward + " credits"));
+            headerLore.add(color("&6&l🔥 Current Streak: &f" + streak + " days"));
+            headerLore.add(color("&b&l📊 Total Claimed: &f" + totalClaimed + " rewards"));
+            headerLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headerMeta.setLore(headerLore);
+            headerItem.setItemMeta(headerMeta);
+        }
+        gui.setItem(4, headerItem);
+        
+        // Add claim button
+        Material claimMaterial = canClaim ? Material.EMERALD : Material.REDSTONE;
+        ItemStack claimItem = new ItemStack(claimMaterial);
+        ItemMeta claimMeta = claimItem.getItemMeta();
+        if (claimMeta != null) {
+            if (canClaim) {
+                claimMeta.setDisplayName(color("&a&l✓ CLAIM DAILY REWARD"));
+                List<String> claimLore = new ArrayList<>();
+                claimLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                claimLore.add(color("&a✓ Ready to claim!"));
+                claimLore.add("");
+                claimLore.add(color("&e&l⭐ Base Reward: &f" + dailyReward + " credits"));
+                
+                // Calculate streak bonus
+                int bonus = 0;
+                if (streak >= 30) {
+                    bonus = 100; // +100% for 30+ days
+                } else if (streak >= 7) {
+                    bonus = 50; // +50% for 7+ days
+                }
+                
+                if (bonus > 0) {
+                    int bonusAmount = dailyReward * bonus / 100;
+                    int totalReward = dailyReward + bonusAmount;
+                    claimLore.add(color("&6&l🔥 Streak Bonus: &f+" + bonus + "% (+") + bonusAmount + " credits)");
+                    claimLore.add(color("&a&l🎉 Total Reward: &f" + totalReward + " credits"));
+                }
+                
+                claimLore.add("");
+                claimLore.add(color("&e&l❱ Click to claim your reward!"));
+                claimLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                claimMeta.setLore(claimLore);
+            } else {
+                claimMeta.setDisplayName(color("&c&l✗ ALREADY CLAIMED"));
+                List<String> claimLore = new ArrayList<>();
+                claimLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                claimLore.add(color("&c✗ Already claimed today"));
+                claimLore.add("");
+                claimLore.add(color("&7Next reward in: &e" + hoursUntil + " hours"));
+                claimLore.add(color("&7Current streak: &6" + streak + " days"));
+                claimLore.add("");
+                claimLore.add(color("&7Come back tomorrow for your next reward!"));
+                claimLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                claimMeta.setLore(claimLore);
+            }
+            claimItem.setItemMeta(claimMeta);
+        }
+        gui.setItem(22, claimItem);
+        
+        // Add streak display
+        ItemStack streakItem = new ItemStack(Material.FIRE_CHARGE);
+        ItemMeta streakMeta = streakItem.getItemMeta();
+        if (streakMeta != null) {
+            streakMeta.setDisplayName(color("&6&l🔥 Daily Streak"));
+            List<String> streakLore = new ArrayList<>();
+            streakLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            streakLore.add(color("&7Current streak: &6" + streak + " days"));
+            streakLore.add("");
+            streakLore.add(color("&7Streak Bonuses:"));
+            
+            if (streak >= 30) {
+                streakLore.add(color("&a✓ &77+ days: &e+50% bonus"));
+                streakLore.add(color("&a✓ &730+ days: &6+100% bonus &l(ACTIVE!)"));
+            } else if (streak >= 7) {
+                streakLore.add(color("&a✓ &77+ days: &e+50% bonus &l(ACTIVE!)"));
+                streakLore.add(color("&c✗ &730+ days: &6+100% bonus &7(" + (30 - streak) + " days to go)"));
+            } else {
+                streakLore.add(color("&c✗ &77+ days: &e+50% bonus &7(" + (7 - streak) + " days to go)"));
+                streakLore.add(color("&c✗ &730+ days: &6+100% bonus &7(" + (30 - streak) + " days to go)"));
+            }
+            
+            streakLore.add("");
+            streakLore.add(color("&7Keep claiming daily to build your streak!"));
+            streakLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            streakMeta.setLore(streakLore);
+            streakItem.setItemMeta(streakMeta);
+        }
+        gui.setItem(20, streakItem);
+        
+        // Add statistics
+        ItemStack statsItem = new ItemStack(Material.BOOK);
+        ItemMeta statsMeta = statsItem.getItemMeta();
+        if (statsMeta != null) {
+            statsMeta.setDisplayName(color("&b&l📊 Reward Statistics"));
+            List<String> statsLore = new ArrayList<>();
+            statsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            statsLore.add(color("&7Total rewards claimed: &b" + totalClaimed));
+            statsLore.add(color("&7Current streak: &6" + streak + " days"));
+            statsLore.add(color("&7Credits earned today: &e" + (canClaim ? "0" : dailyReward) + " credits"));
+            
+            // Calculate total credits earned from daily rewards
+            int totalEarned = totalClaimed * dailyReward; // Simplified calculation
+            statsLore.add(color("&7Total from dailies: &a" + totalEarned + " credits"));
+            
+            statsLore.add("");
+            statsLore.add(color("&7Keep up the daily habit!"));
+            statsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            statsMeta.setLore(statsLore);
+            statsItem.setItemMeta(statsMeta);
+        }
+        gui.setItem(24, statsItem);
+        
+        // Add achievements related to daily rewards
+        ItemStack achievementItem = new ItemStack(Material.GOLDEN_APPLE);
+        ItemMeta achievementMeta = achievementItem.getItemMeta();
+        if (achievementMeta != null) {
+            achievementMeta.setDisplayName(color("&6&l🏆 Related Achievements"));
+            List<String> achievementLore = new ArrayList<>();
+            achievementLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            
+            boolean hasWeekly = plugin.getAchievementManager().hasAchievement(player, "weekly_login");
+            boolean hasMonthly = plugin.getAchievementManager().hasAchievement(player, "monthly_login");
+            
+            String weeklyStatus = hasWeekly ? "&a✓" : (streak >= 7 ? "&e⚡" : "&c✗");
+            String monthlyStatus = hasMonthly ? "&a✓" : (streak >= 30 ? "&e⚡" : "&c✗");
+            
+            achievementLore.add(color(weeklyStatus + " &7Weekly Warrior (7 day streak)"));
+            achievementLore.add(color(monthlyStatus + " &7Monthly Master (30 day streak)"));
+            achievementLore.add("");
+            achievementLore.add(color("&e&l❱ Click to view all achievements!"));
+            achievementLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            achievementMeta.setLore(achievementLore);
+            achievementItem.setItemMeta(achievementMeta);
+        }
+        gui.setItem(31, achievementItem);
+        
+        // Add back button
+        ItemStack backButton = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = backButton.getItemMeta();
+        if (backMeta != null) {
+            backMeta.setDisplayName(color("&e&l← Back to Menu"));
+            backMeta.setLore(List.of(color("&7Return to the main cosmetics menu")));
+            backButton.setItemMeta(backMeta);
+        }
+        gui.setItem(45, backButton);
+        
+        // Add close button
+        ItemStack closeButton = new ItemStack(Material.BARRIER);
+        ItemMeta closeMeta = closeButton.getItemMeta();
+        if (closeMeta != null) {
+            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeButton.setItemMeta(closeMeta);
+        }
+        gui.setItem(49, closeButton);
+        
+        // Add refresh button
+        ItemStack refreshButton = new ItemStack(Material.LIME_DYE);
+        ItemMeta refreshMeta = refreshButton.getItemMeta();
+        if (refreshMeta != null) {
+            refreshMeta.setDisplayName(color("&a&l🔄 Refresh"));
+            refreshMeta.setLore(List.of(
+                color("&7Click to refresh the display"),
+                color("&7and check for updates!")
+            ));
+            refreshButton.setItemMeta(refreshMeta);
+        }
+        gui.setItem(53, refreshButton);
+        
+        player.openInventory(gui);
+    }
+    
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
@@ -1110,11 +1347,12 @@ public class GUIManager implements Listener {
         if (!cleanTitle.contains("Cosmetics") && !cleanTitle.contains("Particles") && !cleanTitle.contains("Hats") && 
             !cleanTitle.contains("Pets") && !cleanTitle.contains("Trails") && !cleanTitle.contains("Gadgets") && 
             !cleanTitle.contains("Wings") && !cleanTitle.contains("Auras") && !cleanTitle.contains("Shop") && 
-            !cleanTitle.contains("Achievement")) {
+            !cleanTitle.contains("Achievement") && !cleanTitle.contains("Daily Rewards")) {
             plugin.getLogger().info("GUI Click Debug - Title not matching, clean title: '" + cleanTitle + "'");
             return;
         }
         
+        // SECURITY FIX: Cancel ALL inventory events in cosmetics GUIs immediately to prevent item theft
         event.setCancelled(true);
         
         ItemStack clickedItem = event.getCurrentItem();
@@ -1146,21 +1384,22 @@ public class GUIManager implements Listener {
                 return;
             }
             
-            // Check for daily reward button (slot 47)
-            if (slot == 47 && (clickedItem.getType() == Material.CHEST || clickedItem.getType() == Material.CLOCK)) {
-                if (plugin.getCreditManager().canClaimDailyBonus(player.getUniqueId())) {
-                    plugin.getCreditManager().claimDailyBonus(player);
-                    // Refresh the GUI to show updated status
-                    openMainGUI(player);
-                } else {
-                    plugin.getMessageManager().sendError(player, "You have already claimed your daily reward! Come back tomorrow.");
-                }
+            // Check for daily reward button (slot 48)
+            if (slot == 48 && (clickedItem.getType() == Material.CHEST || clickedItem.getType() == Material.CLOCK)) {
+                // Open daily rewards GUI instead of claiming directly
+                openDailyRewardsGUI(player);
                 return;
             }
             
-            // Check for achievements button (slot 47) 
-            if (slot == 47 && clickedItem.getType() == Material.GOLDEN_APPLE) {
+            // Check for achievements button (slot 46) 
+            if (slot == 46 && clickedItem.getType() == Material.GOLDEN_APPLE) {
                 openAchievementsGUI(player);
+                return;
+            }
+            
+            // Check for pet management button (slot 47)
+            if (slot == 47 && clickedItem.getType() == Material.BONE) {
+                plugin.getGUIManager().openTypeGUI(player, com.sneaky.cosmetics.cosmetics.CosmeticType.PET);
                 return;
             }
             
@@ -1349,6 +1588,43 @@ public class GUIManager implements Listener {
             }
         }
         
+        // Handle daily rewards GUI clicks
+        else if (title.contains("Daily Rewards")) {
+            if (clickedItem.getType() == Material.BARRIER) {
+                player.closeInventory();
+                return;
+            }
+            
+            if (clickedItem.getType() == Material.ARROW) {
+                openMainGUI(player);
+                return;
+            }
+            
+            // Handle refresh button
+            if (clickedItem.getType() == Material.LIME_DYE) {
+                openDailyRewardsGUI(player);
+                return;
+            }
+            
+            // Handle claim button
+            if (clickedItem.getType() == Material.EMERALD && event.getSlot() == 22) {
+                if (plugin.getCreditManager().canClaimDailyBonus(player.getUniqueId())) {
+                    plugin.getCreditManager().claimDailyBonus(player);
+                    // Refresh the GUI after claiming
+                    openDailyRewardsGUI(player);
+                } else {
+                    plugin.getMessageManager().sendError(player, "You have already claimed your daily reward! Come back tomorrow.");
+                }
+                return;
+            }
+            
+            // Handle achievements button click
+            if (clickedItem.getType() == Material.GOLDEN_APPLE && event.getSlot() == 31) {
+                openAchievementsGUI(player);
+                return;
+            }
+        }
+        
         // Handle type-specific menu clicks
         else {
             if (clickedItem.getType() == Material.BARRIER) {
@@ -1480,16 +1756,18 @@ public class GUIManager implements Listener {
     }
     
     private void handleCosmeticClick(Player player, Cosmetic cosmetic) {
-        // Check if player can access the cosmetic
-        if (!cosmetic.canPlayerAccess(player)) {
-            plugin.getMessageManager().sendError(player, "You cannot access this cosmetic: " + cosmetic.getAccessDeniedReason(player));
+        // Check if player can use the cosmetic (includes permission checks)
+        if (!cosmetic.canPlayerUse(player)) {
+            plugin.getMessageManager().sendError(player, "You cannot use this cosmetic: " + cosmetic.getAccessDeniedReason(player));
             return;
         }
         
-        // Check if player owns the cosmetic (unless it's free or they have free access)
+        // Check if player owns the cosmetic (unless it's free, they have free access, or unique permission)
         boolean hasFreeAccess = player.hasPermission("sneakycosmetics.free");
-        if (!cosmetic.isFree() && !hasFreeAccess && !plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
-            plugin.getMessageManager().sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits.");
+        boolean hasUniquePermission = cosmetic.hasUniquePermission(player);
+        
+        if (!cosmetic.isFree() && !hasFreeAccess && !hasUniquePermission && !plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
+            plugin.getMessageManager().sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits, or get permission: " + cosmetic.getUniquePermission());
             return;
         }
         
@@ -1711,5 +1989,45 @@ public class GUIManager implements Listener {
         plugin.getSchedulerAdapter().runTask(() -> {
             openAchievementsGUI(player);
         });
+    }
+    
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        
+        String title = event.getView().getTitle();
+        String cleanTitle = org.bukkit.ChatColor.stripColor(title);
+        
+        // Prevent dragging items in cosmetics GUIs
+        if (cleanTitle.contains("Cosmetics") || cleanTitle.contains("Particles") || cleanTitle.contains("Hats") || 
+            cleanTitle.contains("Pets") || cleanTitle.contains("Trails") || cleanTitle.contains("Gadgets") || 
+            cleanTitle.contains("Wings") || cleanTitle.contains("Auras") || cleanTitle.contains("Shop") || 
+            cleanTitle.contains("Achievement") || cleanTitle.contains("Daily Rewards")) {
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onInventoryMoveItem(InventoryMoveItemEvent event) {
+        // Prevent automated item movement to/from cosmetics GUIs
+        String sourceTitle = "";
+        String destTitle = "";
+        
+        try {
+            if (event.getSource().getViewers().size() > 0) {
+                sourceTitle = org.bukkit.ChatColor.stripColor(event.getSource().getViewers().get(0).getOpenInventory().getTitle());
+            }
+            if (event.getDestination().getViewers().size() > 0) {
+                destTitle = org.bukkit.ChatColor.stripColor(event.getDestination().getViewers().get(0).getOpenInventory().getTitle());
+            }
+        } catch (Exception e) {
+            // Ignore title extraction errors
+        }
+        
+        // Cancel if either source or destination is a cosmetics GUI
+        if ((sourceTitle.contains("Cosmetics") || sourceTitle.contains("Shop") || sourceTitle.contains("Achievement") || sourceTitle.contains("Daily Rewards")) ||
+            (destTitle.contains("Cosmetics") || destTitle.contains("Shop") || destTitle.contains("Achievement") || destTitle.contains("Daily Rewards"))) {
+            event.setCancelled(true);
+        }
     }
 }

@@ -18,6 +18,7 @@ public abstract class Cosmetic {
     protected final Material iconMaterial;
     protected final List<String> description;
     protected final String permission;
+    protected final String uniquePermission; // Auto-generated unique permission per cosmetic
     protected final boolean requiresVIP;
     protected final boolean requiresPremium;
     
@@ -31,6 +32,7 @@ public abstract class Cosmetic {
         this.iconMaterial = iconMaterial;
         this.description = description;
         this.permission = permission;
+        this.uniquePermission = generateUniquePermission(type, id);
         this.requiresVIP = requiresVIP;
         this.requiresPremium = requiresPremium;
     }
@@ -85,6 +87,24 @@ public abstract class Cosmetic {
     }
     
     /**
+     * Get the unique permission for this specific cosmetic
+     * Format: sneakycosmetics.cosmetic.<type>.<id>
+     */
+    public String getUniquePermission() {
+        return uniquePermission;
+    }
+    
+    /**
+     * Generate a unique permission string for a cosmetic
+     * Format: sneakycosmetics.cosmetic.<type>.<id>
+     */
+    private static String generateUniquePermission(CosmeticType type, String id) {
+        String typeString = type.name().toLowerCase();
+        String cleanId = id.toLowerCase().replaceAll("[^a-z0-9_]", "_");
+        return "sneakycosmetics.cosmetic." + typeString + "." + cleanId;
+    }
+    
+    /**
      * Check if this cosmetic requires VIP status
      */
     public boolean requiresVIP() {
@@ -109,6 +129,11 @@ public abstract class Cosmetic {
      * Check if a player can access this cosmetic
      */
     public boolean canPlayerAccess(Player player) {
+        // Check if player has free access to all cosmetics
+        if (player.hasPermission("sneakycosmetics.free")) {
+            return true;
+        }
+        
         // Check VIP requirement
         if (requiresVIP && !player.hasPermission("sneakycosmetics.vip")) {
             return false;
@@ -119,7 +144,12 @@ public abstract class Cosmetic {
             return false;
         }
         
-        // Check specific permission
+        // Check unique cosmetic permission (highest priority)
+        if (player.hasPermission(uniquePermission)) {
+            return true;
+        }
+        
+        // Check legacy specific permission
         if (permission != null && !permission.isEmpty() && !player.hasPermission(permission)) {
             return false;
         }
@@ -139,8 +169,12 @@ public abstract class Cosmetic {
             return "Requires VIP";
         }
         
+        if (!player.hasPermission(uniquePermission)) {
+            return "Missing Permission: " + uniquePermission;
+        }
+        
         if (permission != null && !permission.isEmpty() && !player.hasPermission(permission)) {
-            return "Missing Permission";
+            return "Missing Permission: " + permission;
         }
         
         return "Unknown";
@@ -185,12 +219,62 @@ public abstract class Cosmetic {
     }
     
     /**
+     * Check if a player has the unique permission for this cosmetic
+     */
+    public boolean hasUniquePermission(Player player) {
+        return player.hasPermission(uniquePermission);
+    }
+    
+    /**
+     * Check if a player can use this cosmetic (combines access check with ownership)
+     */
+    public boolean canPlayerUse(Player player) {
+        // Players with free access can use any cosmetic
+        if (player.hasPermission("sneakycosmetics.free")) {
+            return true;
+        }
+        
+        // Check if player has unique permission for this cosmetic
+        if (hasUniquePermission(player)) {
+            return true;
+        }
+        
+        // Otherwise, they need to own it and meet access requirements
+        return canPlayerAccess(player);
+    }
+    
+    /**
+     * Get all applicable permissions for this cosmetic
+     */
+    public List<String> getAllPermissions() {
+        List<String> permissions = new java.util.ArrayList<>();
+        permissions.add(uniquePermission);
+        
+        if (permission != null && !permission.isEmpty()) {
+            permissions.add(permission);
+        }
+        
+        if (requiresVIP) {
+            permissions.add("sneakycosmetics.vip");
+        }
+        
+        if (requiresPremium) {
+            permissions.add("sneakycosmetics.premium");
+        }
+        
+        permissions.add("sneakycosmetics.free"); // Ultimate bypass permission
+        
+        return permissions;
+    }
+    
+    /**
      * Get formatted display information for this cosmetic
      */
     public String getFormattedInfo() {
         StringBuilder info = new StringBuilder();
         info.append("§6").append(displayName).append(" §7(").append(type.getDisplayName()).append(")\n");
         info.append("§7Price: ").append(price == 0 ? "§aFree" : "§e" + price + " credits").append("\n");
+        info.append("§7Permission: §e").append(uniquePermission).append("\n");
         
         if (requiresPremium) {
             info.append("§5Premium Required\n");
