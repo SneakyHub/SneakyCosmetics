@@ -1,6 +1,7 @@
 package com.sneaky.cosmetics.commands;
 
 import com.sneaky.cosmetics.SneakyCosmetics;
+import com.sneaky.cosmetics.cosmetics.CosmeticType;
 import com.sneaky.cosmetics.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -477,13 +478,13 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         int maxPlayers = Bukkit.getMaxPlayers();
         
         // Count cosmetics by type
-        int particleCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PARTICLE);
-        int hatCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.HAT);
-        int petCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PET);
-        int trailCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.TRAIL);
-        int gadgetCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.GADGET);
-        int wingCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.WING);
-        int auraCount = plugin.getCosmeticManager().getCosmeticCountByType(com.sneaky.cosmetics.cosmetics.CosmeticType.AURA);
+        int particleCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.PARTICLE);
+        int hatCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.HAT);
+        int petCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.PET);
+        int trailCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.TRAIL);
+        int gadgetCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.GADGET);
+        int wingCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.WINGS);
+        int auraCount = plugin.getCosmeticManager().getCosmeticCountByType(CosmeticType.AURA);
         
         // Display enhanced info with orange-black gradient theme
         messageManager.sendInfo(sender, "");
