@@ -446,6 +446,15 @@ public class CosmeticRegistry {
             );
             registerCosmetic(netheriteHelm);
             
+            // Pumpkin Head
+            com.sneaky.cosmetics.cosmetics.hats.HatCosmetic pumpkin = new com.sneaky.cosmetics.cosmetics.hats.HatCosmetic(
+                    "hat_pumpkin", "Pumpkin Head", 300, Material.PUMPKIN,
+                    java.util.Arrays.asList("§7A tasty pumpkin", "§7A snowman died for this!"),
+                    null, false, false,
+                    Material.PUMPKIN, "§6Pumpkin Head", java.util.Arrays.asList("§7Simple and comfortable")
+            );
+            registerCosmetic(pumpkin);
+
             // Creative Hats - Unique Design Collection
             
             // Chef's Hat
