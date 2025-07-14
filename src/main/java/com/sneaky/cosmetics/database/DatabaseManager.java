@@ -171,6 +171,18 @@ public class DatabaseManager {
                 ")"
             );
             
+            // Global statistics table
+            connection.createStatement().execute(
+                "CREATE TABLE IF NOT EXISTS global_statistics (" +
+                "id INTEGER PRIMARY KEY, " +
+                "credits_earned BIGINT DEFAULT 0, " +
+                "credits_spent BIGINT DEFAULT 0, " +
+                "cosmetics_activated BIGINT DEFAULT 0, " +
+                "achievements_unlocked BIGINT DEFAULT 0, " +
+                "updated_at BIGINT DEFAULT " + System.currentTimeMillis() +
+                ")"
+            );
+            
             // Create indexes for better performance
             if (databaseType.equals("mysql")) {
                 connection.createStatement().execute("CREATE INDEX IF NOT EXISTS idx_cosmetic_ownership_player ON cosmetic_ownership(player_uuid)");
@@ -537,18 +549,21 @@ public class DatabaseManager {
         plugin.getSchedulerAdapter().runTaskAsynchronously(() -> {
             try (Connection conn = dataSource.getConnection()) {
                 // First clear existing active cosmetics
-                String deleteSql = "DELETE FROM player_active_cosmetics WHERE player_id = ?";
+                String deleteSql = "DELETE FROM active_cosmetics WHERE player_uuid = ?";
                 try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                     deleteStmt.setString(1, playerId.toString());
                     deleteStmt.executeUpdate();
                 }
                 
-                // Insert new active cosmetics
-                String insertSql = "INSERT INTO player_active_cosmetics (player_id, cosmetic_id) VALUES (?, ?)";
+                // Insert new active cosmetics (determine cosmetic type and set properly)
+                String insertSql = "INSERT INTO active_cosmetics (player_uuid, cosmetic_id, cosmetic_type) VALUES (?, ?, ?)";
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                     for (String cosmeticId : activeCosmetics) {
+                        // Determine cosmetic type from ID (basic implementation)
+                        String cosmeticType = determineCosmeticType(cosmeticId);
                         insertStmt.setString(1, playerId.toString());
                         insertStmt.setString(2, cosmeticId);
+                        insertStmt.setString(3, cosmeticType);
                         insertStmt.addBatch();
                     }
                     insertStmt.executeBatch();
@@ -559,21 +574,17 @@ public class DatabaseManager {
         });
     }
     
-    public String getPetCustomName2(UUID playerId, String petId) {
-        try (Connection conn = dataSource.getConnection()) {
-            String sql = "SELECT custom_name FROM pet_custom_names WHERE player_id = ? AND pet_id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, playerId.toString());
-                stmt.setString(2, petId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getString("custom_name");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            plugin.getLogger().log(Level.WARNING, "Failed to get pet custom name", e);
-        }
-        return null;
+    /**
+     * Helper method to determine cosmetic type from cosmetic ID
+     */
+    private String determineCosmeticType(String cosmeticId) {
+        if (cosmeticId.startsWith("particle_")) return "PARTICLE";
+        if (cosmeticId.startsWith("hat_")) return "HAT";
+        if (cosmeticId.startsWith("pet_")) return "PET";
+        if (cosmeticId.startsWith("trail_")) return "TRAIL";
+        if (cosmeticId.startsWith("gadget_")) return "GADGET";
+        if (cosmeticId.startsWith("wing_")) return "WING";
+        if (cosmeticId.startsWith("aura_")) return "AURA";
+        return "UNKNOWN";
     }
 }

@@ -151,6 +151,11 @@ public class SneakyCosmetics extends JavaPlugin {
             creditManager.saveAllPlayerData();
         }
         
+        // Shutdown cosmetic manager
+        if (cosmeticManager != null) {
+            cosmeticManager.shutdown();
+        }
+        
         // Stop all background tasks
         if (particleManager != null) particleManager.stopAllTasks();
         if (trailManager != null) trailManager.stopAllTasks();
@@ -260,8 +265,8 @@ public class SneakyCosmetics extends JavaPlugin {
         this.wingManager = new WingManager(this);
         this.auraManager = new AuraManager(this);
         
-        // Register cosmetics
-        cosmeticManager.registerCosmetics();
+        // Initialize cosmetics
+        cosmeticManager.initialize();
         
         // Initialize public API
         SneakyCosmeticsAPI.initialize(this);
@@ -289,7 +294,8 @@ public class SneakyCosmetics extends JavaPlugin {
     }
     
     private void startBackgroundTasks() {
-        // Start cosmetic effect tasks
+        // Cosmetic effect tasks are now handled by CosmeticCleanupManager
+        // Start individual manager tasks for backward compatibility
         particleManager.startParticleTask();
         trailManager.startTrailTask();
         petManager.startPetTask();
@@ -306,13 +312,8 @@ public class SneakyCosmetics extends JavaPlugin {
             }, saveInterval, saveInterval);
         }
         
-        // Start cleanup task
-        long cleanupInterval = getConfig().getLong("performance.cleanup-interval", 30) * 60 * 20L; // Convert minutes to ticks
-        if (cleanupInterval > 0) {
-            schedulerAdapter.runTaskTimer(() -> {
-                cosmeticManager.cleanupInactiveCosmetics();
-            }, cleanupInterval, cleanupInterval);
-        }
+        // Cleanup task is now handled by CosmeticCleanupManager automatically
+        // No need for separate cleanup task scheduling
     }
     
     private void setupMetrics() {

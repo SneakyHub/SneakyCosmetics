@@ -26,7 +26,8 @@
       "Bash(call build-wrapper.bat)",
       "Bash(\"tools/apache-maven-3.9.6/bin/mvn.cmd\" clean package -DskipTests)",
       "Bash(.mvnw.cmd compile:*)",
-      "Bash(build.bat)"
+      "Bash(build.bat)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
