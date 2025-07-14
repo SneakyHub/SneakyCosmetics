@@ -392,6 +392,14 @@ public class StatisticsManager {
     public Map<String, AtomicLong> getAchievementUnlockCount() { return achievementUnlockCount; }
     
     /**
+     * Get total cosmetics activated by a player
+     */
+    public long getCosmeticsActivated(UUID uuid) {
+        PlayerStatistics stats = playerStats.get(uuid);
+        return stats != null ? stats.cosmeticsActivated.get() : 0;
+    }
+    
+    /**
      * Inner class to hold per-player statistics
      */
     public static class PlayerStatistics {

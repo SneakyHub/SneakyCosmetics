@@ -30,7 +30,10 @@ public class GUIManager implements Listener {
     }
     
     private String color(String text) {
-        return plugin.getMessageManager().formatMessage(text);
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
     
     /**
@@ -39,20 +42,26 @@ public class GUIManager implements Listener {
     public void openMainGUI(Player player) {
         Inventory gui = Bukkit.createInventory(null, 54, color("&6&l✦ Cosmetics Menu ✦"));
         
-        // Add decorative border
-        addBorder(gui, Material.BLACK_STAINED_GLASS_PANE);
+        // Add decorative animated border
+        addAnimatedBorder(gui, Material.PURPLE_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE);
         
-        // Add title item
+        // Add enhanced title item with placeholders
         ItemStack titleItem = new ItemStack(Material.NETHER_STAR);
         ItemMeta titleMeta = titleItem.getItemMeta();
         if (titleMeta != null) {
-            titleMeta.setDisplayName(color("&6&l✦ SneakyCosmetics ✦"));
-            titleMeta.setLore(List.of(
-                color("&7Welcome to the cosmetics menu!"),
-                color("&7Choose a category below to get started."),
-                "",
-                color("&e&l⭐ Credits: &f" + plugin.getCreditManager().getCreditsSync(player.getUniqueId()) + " &e⭐")
-            ));
+            titleMeta.setDisplayName(color("&6&l✦ &d&lSneaky&6&lCosmetics &6&l✦"));
+            List<String> titleLore = new ArrayList<>();
+            titleLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            titleLore.add(color("&7Welcome back, &f" + getPlaceholder(player, "player_name") + "&7!"));
+            titleLore.add(color("&7Choose a category below to get started."));
+            titleLore.add("");
+            titleLore.add(color("&e&l⭐ Credits: &f" + getPlaceholder(player, "credits") + " &e⭐"));
+            titleLore.add(color("&a&l♦ Rank: &f" + getPlaceholder(player, "player_rank")));
+            titleLore.add(color("&b&l⚡ Online: &f" + getPlaceholder(player, "server_players_online") + "&7/&f" + getPlaceholder(player, "server_players_max")));
+            titleLore.add("");
+            titleLore.add(color("&d&l✨ Total Cosmetics: &f" + plugin.getCosmeticManager().getTotalCosmetics()));
+            titleLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            titleMeta.setLore(titleLore);
             titleItem.setItemMeta(titleMeta);
         }
         gui.setItem(4, titleItem);
@@ -88,15 +97,18 @@ public class GUIManager implements Listener {
             gui.setItem(slots[i], item);
         }
         
-        // Add player stats
+        // Add enhanced player stats with placeholders
         ItemStack statsItem = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta statsMeta = statsItem.getItemMeta();
         if (statsMeta != null) {
-            statsMeta.setDisplayName(color("&b&l⚡ Your Stats ⚡"));
+            statsMeta.setDisplayName(color("&b&l⚡ &f" + player.getName() + "'s &b&lStats ⚡"));
             List<String> statsLore = new ArrayList<>();
             statsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
-            statsLore.add(color("&7Player: &f" + player.getName()));
-            statsLore.add(color("&7Credits: &e" + plugin.getCreditManager().getCreditsSync(player.getUniqueId())));
+            statsLore.add(color("&7Player: &f" + getPlaceholder(player, "player_name")));
+            statsLore.add(color("&7Rank: &a" + getPlaceholder(player, "player_rank")));
+            statsLore.add(color("&7Credits: &e" + getPlaceholder(player, "credits")));
+            statsLore.add(color("&7Playtime: &b" + getPlaceholder(player, "player_hours_played") + " hours"));
+            statsLore.add("");
             
             int totalOwned = 0;
             int totalActive = 0;
@@ -105,12 +117,17 @@ public class GUIManager implements Listener {
                 totalActive += getActiveCount(player, type);
             }
             
-            statsLore.add(color("&7Total Owned: &a" + totalOwned));
+            statsLore.add(color("&7Total Owned: &a" + totalOwned + "&7/&e" + plugin.getCosmeticManager().getTotalCosmetics()));
             statsLore.add(color("&7Currently Active: &d" + totalActive));
+            statsLore.add(color("&7Achievements: &6" + getPlaceholder(player, "achievements_completed") + "&7/&e" + getPlaceholder(player, "achievements_total")));
+            statsLore.add(color("&7Cosmetics Used: &9" + getPlaceholder(player, "stats_cosmetics_activated")));
             
             if (player.hasPermission("sneakycosmetics.free")) {
                 statsLore.add("");
-                statsLore.add(color("&6&l⭐ FREE ACCESS ⭐"));
+                statsLore.add(color("&6&l⭐ FREE ACCESS MEMBER ⭐"));
+            } else if (player.hasPermission("sneakycosmetics.premium")) {
+                statsLore.add("");
+                statsLore.add(color("&5&l✦ PREMIUM MEMBER ✦"));
             }
             
             statsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
@@ -118,6 +135,9 @@ public class GUIManager implements Listener {
             statsItem.setItemMeta(statsMeta);
         }
         gui.setItem(45, statsItem);
+        
+        // Add daily reward area
+        addDailyRewardButton(gui, player, 47);
         
         // Add achievements button
         ItemStack achievementsButton = new ItemStack(Material.GOLDEN_APPLE);
@@ -266,22 +286,48 @@ public class GUIManager implements Listener {
     }
     
     /**
-     * Open a shop category for purchasing cosmetics
+     * Open a shop category for purchasing cosmetics with pagination
      */
     public void openShopCategory(Player player, CosmeticType type) {
-        List<Cosmetic> cosmetics = plugin.getCosmeticManager().getCosmeticsByType(type);
+        openShopCategory(player, type, 0);
+    }
+    
+    /**
+     * Open a shop category for purchasing cosmetics with pagination (page-specific)
+     */
+    public void openShopCategory(Player player, CosmeticType type, int page) {
+        List<Cosmetic> allCosmetics = plugin.getCosmeticManager().getCosmeticsByType(type);
+        
+        // Filter to only show purchasable cosmetics
+        List<Cosmetic> cosmetics = new ArrayList<>();
+        for (Cosmetic cosmetic : allCosmetics) {
+            boolean hasCosmetic = plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId());
+            boolean canAccess = cosmetic.canPlayerAccess(player);
+            boolean hasFreeAccess = player.hasPermission("sneakycosmetics.free");
+            
+            // Only include cosmetics that can be purchased
+            if (!hasCosmetic && !cosmetic.isFree() && !hasFreeAccess && canAccess) {
+                cosmetics.add(cosmetic);
+            }
+        }
         
         if (cosmetics.isEmpty()) {
             plugin.getMessageManager().sendError(player, "No " + type.getDisplayName().toLowerCase() + " available for purchase!");
             return;
         }
         
-        Inventory gui = Bukkit.createInventory(null, 54, color(type.getColorCode() + "&l" + type.getDisplayName() + " Shop"));
+        // Calculate pagination
+        int itemsPerPage = 28; // 4 rows × 7 columns
+        int totalPages = (int) Math.ceil((double) cosmetics.size() / itemsPerPage);
+        page = Math.max(0, Math.min(page, totalPages - 1)); // Clamp page
+        
+        String title = color(type.getColorCode() + "&l" + type.getDisplayName() + " Shop " + (page + 1) + "/" + totalPages);
+        Inventory gui = Bukkit.createInventory(null, 54, title);
         
         // Add decorative border
         addBorder(gui, Material.YELLOW_STAINED_GLASS_PANE);
         
-        // Add category info header
+        // Add category info header with pagination info
         ItemStack headerItem = new ItemStack(type.getIcon());
         ItemMeta headerMeta = headerItem.getItemMeta();
         if (headerMeta != null) {
@@ -291,13 +337,15 @@ public class GUIManager implements Listener {
             headerLore.add(color("&7Purchase " + type.getDisplayName().toLowerCase() + " with credits"));
             headerLore.add("");
             headerLore.add(color("&e&l⭐ Your Credits: &f" + plugin.getCreditManager().getCreditsSync(player.getUniqueId()) + " &e⭐"));
+            headerLore.add(color("&7Available for purchase: &6" + cosmetics.size() + " cosmetics"));
+            headerLore.add(color("&7Page: &b" + (page + 1) + "&7/&b" + totalPages + " &7| Showing: &e" + Math.min(itemsPerPage, cosmetics.size() - (page * itemsPerPage))));
             headerLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
             headerMeta.setLore(headerLore);
             headerItem.setItemMeta(headerMeta);
         }
         gui.setItem(4, headerItem);
         
-        // Add cosmetics in organized slots (only show unowned, purchasable ones)
+        // Add cosmetics in organized slots with pagination
         int[] cosmeticSlots = {
             10, 11, 12, 13, 14, 15, 16,
             19, 20, 21, 22, 23, 24, 25,
@@ -305,24 +353,12 @@ public class GUIManager implements Listener {
             37, 38, 39, 40, 41, 42, 43
         };
         
-        int slotIndex = 0;
-        for (Cosmetic cosmetic : cosmetics) {
-            if (slotIndex >= cosmeticSlots.length) break;
-            
-            // Only show cosmetics that can be purchased
-            boolean hasCosmetic = plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId());
-            boolean canAccess = cosmetic.canPlayerAccess(player);
-            boolean hasFreeAccess = player.hasPermission("sneakycosmetics.free");
-            
-            // Skip if already owned or free
-            if (hasCosmetic || cosmetic.isFree() || hasFreeAccess) {
-                continue;
-            }
-            
-            // Skip if player can't access due to permissions
-            if (!canAccess) {
-                continue;
-            }
+        int startIndex = page * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, cosmetics.size());
+        
+        for (int i = startIndex; i < endIndex; i++) {
+            Cosmetic cosmetic = cosmetics.get(i);
+            int slotIndex = i - startIndex;
             
             ItemStack item = new ItemStack(cosmetic.getIconMaterial());
             ItemMeta meta = item.getItemMeta();
@@ -357,11 +393,29 @@ public class GUIManager implements Listener {
                 meta.setLore(lore);
                 item.setItemMeta(meta);
             }
-            gui.setItem(cosmeticSlots[slotIndex], item);
-            slotIndex++;
+            if (slotIndex < cosmeticSlots.length) {
+                gui.setItem(cosmeticSlots[slotIndex], item);
+            }
         }
         
-        // Add back button
+        // Add navigation buttons
+        
+        // Previous page button
+        if (page > 0) {
+            ItemStack prevButton = new ItemStack(Material.SPECTRAL_ARROW);
+            ItemMeta prevMeta = prevButton.getItemMeta();
+            if (prevMeta != null) {
+                prevMeta.setDisplayName(color("&e&l← Previous Page"));
+                prevMeta.setLore(List.of(
+                    color("&7Go to page " + page),
+                    color("&7Click to view previous items")
+                ));
+                prevButton.setItemMeta(prevMeta);
+            }
+            gui.setItem(45, prevButton);
+        }
+        
+        // Back to shop button
         ItemStack backButton = new ItemStack(Material.ARROW);
         ItemMeta backMeta = backButton.getItemMeta();
         if (backMeta != null) {
@@ -369,7 +423,22 @@ public class GUIManager implements Listener {
             backMeta.setLore(List.of(color("&7Return to the credits shop")));
             backButton.setItemMeta(backMeta);
         }
-        gui.setItem(45, backButton);
+        gui.setItem(46, backButton);
+        
+        // Next page button
+        if (page < totalPages - 1) {
+            ItemStack nextButton = new ItemStack(Material.SPECTRAL_ARROW);
+            ItemMeta nextMeta = nextButton.getItemMeta();
+            if (nextMeta != null) {
+                nextMeta.setDisplayName(color("&a&l→ Next Page"));
+                nextMeta.setLore(List.of(
+                    color("&7Go to page " + (page + 2)),
+                    color("&7Click to view more items")
+                ));
+                nextButton.setItemMeta(nextMeta);
+            }
+            gui.setItem(53, nextButton);
+        }
         
         // Add close button
         ItemStack closeButton = new ItemStack(Material.BARRIER);
@@ -379,7 +448,7 @@ public class GUIManager implements Listener {
             closeMeta.setLore(List.of(color("&7Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
-        gui.setItem(53, closeButton);
+        gui.setItem(49, closeButton);
         
         player.openInventory(gui);
     }
@@ -528,9 +597,24 @@ public class GUIManager implements Listener {
                     plugin.getAchievementManager().checkAchievements(player);
                 });
                 
-                // Refresh the shop category
+                // Refresh the shop category (stay on current page)
                 plugin.getSchedulerAdapter().runTask(() -> {
-                    openShopCategory(player, cosmetic.getType());
+                    // Determine current page from GUI title if possible
+                    String guiTitle = player.getOpenInventory().getTitle();
+                    String cleanTitle = org.bukkit.ChatColor.stripColor(guiTitle);
+                    int currentPage = 0;
+                    try {
+                        String[] parts = cleanTitle.split(" ");
+                        for (String part : parts) {
+                            if (part.contains("/")) {
+                                currentPage = Integer.parseInt(part.split("/")[0]) - 1;
+                                break;
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        currentPage = 0;
+                    }
+                    openShopCategory(player, cosmetic.getType(), currentPage);
                 });
             } else {
                 plugin.getMessageManager().sendError(player, "Purchase failed! Please try again.");
@@ -581,9 +665,16 @@ public class GUIManager implements Listener {
     }
     
     /**
-     * Open a specific cosmetic type GUI
+     * Open a specific cosmetic type GUI with pagination
      */
     public void openTypeGUI(Player player, CosmeticType type) {
+        openTypeGUI(player, type, 0);
+    }
+    
+    /**
+     * Open a specific cosmetic type GUI with pagination (page-specific)
+     */
+    public void openTypeGUI(Player player, CosmeticType type, int page) {
         List<Cosmetic> cosmetics = plugin.getCosmeticManager().getCosmeticsByType(type);
         
         if (cosmetics.isEmpty()) {
@@ -591,12 +682,18 @@ public class GUIManager implements Listener {
             return;
         }
         
-        Inventory gui = Bukkit.createInventory(null, 54, color(type.getColorCode() + "&l✦ " + type.getDisplayName() + " ✦"));
+        // Calculate pagination
+        int itemsPerPage = 28; // 4 rows × 7 columns
+        int totalPages = (int) Math.ceil((double) cosmetics.size() / itemsPerPage);
+        page = Math.max(0, Math.min(page, totalPages - 1)); // Clamp page
+        
+        String title = color(type.getColorCode() + "&l✦ " + type.getDisplayName() + " " + (page + 1) + "/" + totalPages + " ✦");
+        Inventory gui = Bukkit.createInventory(null, 54, title);
         
         // Add decorative border
         addBorder(gui, Material.GRAY_STAINED_GLASS_PANE);
         
-        // Add category info header
+        // Add category info header with pagination info
         ItemStack headerItem = new ItemStack(type.getIcon());
         ItemMeta headerMeta = headerItem.getItemMeta();
         if (headerMeta != null) {
@@ -609,13 +706,14 @@ public class GUIManager implements Listener {
             int owned = getOwnedCount(player, type);
             int active = getActiveCount(player, type);
             headerLore.add(color("&7Total: &e" + total + " &7| Owned: &a" + owned + " &7| Active: &d" + active));
+            headerLore.add(color("&7Page: &b" + (page + 1) + "&7/&b" + totalPages + " &7| Showing: &e" + Math.min(itemsPerPage, cosmetics.size() - (page * itemsPerPage))));
             headerLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
             headerMeta.setLore(headerLore);
             headerItem.setItemMeta(headerMeta);
         }
         gui.setItem(4, headerItem);
         
-        // Add cosmetics in organized slots
+        // Add cosmetics in organized slots with pagination
         int[] cosmeticSlots = {
             10, 11, 12, 13, 14, 15, 16,
             19, 20, 21, 22, 23, 24, 25,
@@ -623,8 +721,12 @@ public class GUIManager implements Listener {
             37, 38, 39, 40, 41, 42, 43
         };
         
-        for (int i = 0; i < Math.min(cosmetics.size(), cosmeticSlots.length); i++) {
+        int startIndex = page * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, cosmetics.size());
+        
+        for (int i = startIndex; i < endIndex; i++) {
             Cosmetic cosmetic = cosmetics.get(i);
+            int slotIndex = i - startIndex;
             ItemStack item = new ItemStack(cosmetic.getIconMaterial());
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -635,15 +737,15 @@ public class GUIManager implements Listener {
                 
                 // Set display name with status
                 String statusIcon = isActive ? "&a✓" : hasCosmetic ? "&e★" : "&c✗";
-                meta.setDisplayName(statusIcon + " " + type.getColorCode() + "&l" + cosmetic.getDisplayName());
+                meta.setDisplayName(color(statusIcon + " " + type.getColorCode() + "&l" + cosmetic.getDisplayName()));
                 
                 List<String> lore = new ArrayList<>();
-                lore.add("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                lore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 
                 // Add description
                 if (cosmetic.getDescription() != null) {
                     for (String line : cosmetic.getDescription()) {
-                        lore.add("&7" + line);
+                        lore.add(color("&7" + line));
                     }
                     lore.add("");
                 }
@@ -651,75 +753,109 @@ public class GUIManager implements Listener {
                 // Add price
                 if (cosmetic.getPrice() == 0 || hasFreeAccess) {
                     if (hasFreeAccess && cosmetic.getPrice() > 0) {
-                        lore.add("&6&l⭐ FREE ACCESS ⭐");
+                        lore.add(color("&6&l⭐ FREE ACCESS ⭐"));
                     } else {
-                        lore.add("&a&l✦ FREE ✦");
+                        lore.add(color("&a&l✦ FREE ✦"));
                     }
                 } else {
-                    lore.add("&e&l💰 Price: &f" + cosmetic.getPrice() + " credits");
+                    lore.add(color("&e&l💰 Price: &f" + cosmetic.getPrice() + " credits"));
                 }
                 
                 // Add status
                 if (isActive) {
-                    lore.add("&a&l✓ CURRENTLY ACTIVE");
-                    lore.add("&7▶ Click to &cdeactivate&7!");
+                    lore.add(color("&a&l✓ CURRENTLY ACTIVE"));
+                    lore.add(color("&7▶ Click to &cdeactivate&7!"));
                 } else if (hasCosmetic) {
-                    lore.add("&e&l★ OWNED");
-                    lore.add("&7▶ Click to &aactivate&7!");
+                    lore.add(color("&e&l★ OWNED"));
+                    lore.add(color("&7▶ Click to &aactivate&7!"));
                 } else {
-                    lore.add("&c&l✗ LOCKED");
+                    lore.add(color("&c&l✗ LOCKED"));
                     if (cosmetic.getPrice() > 0) {
-                        lore.add("&7▶ Purchase to unlock!");
+                        lore.add(color("&7▶ Purchase to unlock!"));
                     }
                 }
                 
                 // Add requirements
                 if (cosmetic.requiresPremium()) {
                     lore.add("");
-                    lore.add("&5&l👑 Premium Required");
+                    lore.add(color("&5&l👑 Premium Required"));
                 } else if (cosmetic.requiresVIP()) {
                     lore.add("");
-                    lore.add("&6&l⭐ VIP Required");
+                    lore.add(color("&6&l⭐ VIP Required"));
                 }
                 
-                lore.add("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                lore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
                 meta.setLore(lore);
                 item.setItemMeta(meta);
             }
-            gui.setItem(cosmeticSlots[i], item);
+            if (slotIndex < cosmeticSlots.length) {
+                gui.setItem(cosmeticSlots[slotIndex], item);
+            }
         }
         
-        // Add back button
+        // Add navigation buttons
+        
+        // Previous page button
+        if (page > 0) {
+            ItemStack prevButton = new ItemStack(Material.SPECTRAL_ARROW);
+            ItemMeta prevMeta = prevButton.getItemMeta();
+            if (prevMeta != null) {
+                prevMeta.setDisplayName(color("&e&l← Previous Page"));
+                prevMeta.setLore(List.of(
+                    color("&7Go to page " + page),
+                    color("&7Click to view previous cosmetics")
+                ));
+                prevButton.setItemMeta(prevMeta);
+            }
+            gui.setItem(45, prevButton);
+        }
+        
+        // Back to menu button
         ItemStack backButton = new ItemStack(Material.ARROW);
         ItemMeta backMeta = backButton.getItemMeta();
         if (backMeta != null) {
-            backMeta.setDisplayName("&e&l← Back to Menu");
-            backMeta.setLore(List.of("&7Return to the main cosmetics menu"));
+            backMeta.setDisplayName(color("&e&l← Back to Menu"));
+            backMeta.setLore(List.of(color("&7Return to the main cosmetics menu")));
             backButton.setItemMeta(backMeta);
         }
-        gui.setItem(45, backButton);
+        gui.setItem(46, backButton);
+        
+        // Next page button
+        if (page < totalPages - 1) {
+            ItemStack nextButton = new ItemStack(Material.SPECTRAL_ARROW);
+            ItemMeta nextMeta = nextButton.getItemMeta();
+            if (nextMeta != null) {
+                nextMeta.setDisplayName(color("&a&l→ Next Page"));
+                nextMeta.setLore(List.of(
+                    color("&7Go to page " + (page + 2)),
+                    color("&7Click to view more cosmetics")
+                ));
+                nextButton.setItemMeta(nextMeta);
+            }
+            gui.setItem(53, nextButton);
+        }
         
         // Add clear all button
         ItemStack clearButton = new ItemStack(Material.TNT);
         ItemMeta clearMeta = clearButton.getItemMeta();
         if (clearMeta != null) {
-            clearMeta.setDisplayName("&c&l🗑 Clear All Active");
+            clearMeta.setDisplayName(color("&c&l🗑 Clear All Active"));
             clearMeta.setLore(List.of(
-                "&7Clear all active cosmetics",
-                "&7of this type.",
-                "",
-                "&c&l⚠ Click to clear!"
+                color("&7Clear all active cosmetics"),
+                color("&7of this type."),
+                color(""),
+                color("&c&l⚠ Click to clear!")
             ));
             clearButton.setItemMeta(clearMeta);
         }
-        gui.setItem(46, clearButton);
+        gui.setItem(47, clearButton);
         
         // Add close button
         ItemStack closeButton = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = closeButton.getItemMeta();
         if (closeMeta != null) {
-            closeMeta.setDisplayName("&c&l✗ Close Menu");
-            closeMeta.setLore(List.of("&7Click to close this menu"));
+            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&7Click to close this menu")));
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(49, closeButton);
@@ -778,6 +914,24 @@ public class GUIManager implements Listener {
                 return;
             }
             
+            // Check for daily reward button (slot 47)
+            if (slot == 47 && (clickedItem.getType() == Material.CHEST || clickedItem.getType() == Material.CLOCK)) {
+                if (plugin.getCreditManager().canClaimDailyBonus(player.getUniqueId())) {
+                    plugin.getCreditManager().claimDailyBonus(player);
+                    // Refresh the GUI to show updated status
+                    openMainGUI(player);
+                } else {
+                    plugin.getMessageManager().sendError(player, "You have already claimed your daily reward! Come back tomorrow.");
+                }
+                return;
+            }
+            
+            // Check for achievements button (slot 47) 
+            if (slot == 47 && clickedItem.getType() == Material.GOLDEN_APPLE) {
+                openAchievementsGUI(player);
+                return;
+            }
+            
             // Check specific slots for cosmetic types (more reliable than material matching)
             int[] slots = {19, 21, 23, 25, 28, 30, 32};
             CosmeticType[] types = CosmeticType.values();
@@ -824,6 +978,43 @@ public class GUIManager implements Listener {
                 return;
             }
             
+            // Handle pagination buttons for shop categories
+            if (clickedItem.getType() == Material.SPECTRAL_ARROW) {
+                ItemMeta meta = clickedItem.getItemMeta();
+                if (meta != null && meta.hasDisplayName()) {
+                    String displayName = meta.getDisplayName();
+                    
+                    // Extract current page and type from title
+                    String shopCleanTitle = org.bukkit.ChatColor.stripColor(title);
+                    for (CosmeticType type : CosmeticType.values()) {
+                        if (shopCleanTitle.contains(type.getDisplayName() + " Shop")) {
+                            // Extract current page from title
+                            int currentPage = 0;
+                            try {
+                                String[] parts = shopCleanTitle.split(" ");
+                                for (String part : parts) {
+                                    if (part.contains("/")) {
+                                        currentPage = Integer.parseInt(part.split("/")[0]) - 1;
+                                        break;
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                currentPage = 0;
+                            }
+                            
+                            // Navigate to appropriate page
+                            if (displayName.contains("Previous")) {
+                                openShopCategory(player, type, currentPage - 1);
+                            } else if (displayName.contains("Next")) {
+                                openShopCategory(player, type, currentPage + 1);
+                            }
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+            
             // Handle daily reward button (slot 49)
             int slot = event.getSlot();
             if (slot == 49 && clickedItem.getType() == Material.CLOCK) {
@@ -865,6 +1056,33 @@ public class GUIManager implements Listener {
             }
         }
         
+        // Handle achievements GUI clicks
+        else if (title.contains("Achievement")) {
+            if (clickedItem.getType() == Material.BARRIER) {
+                player.closeInventory();
+                return;
+            }
+            
+            if (clickedItem.getType() == Material.ARROW) {
+                openMainGUI(player);
+                return;
+            }
+            
+            // Handle achievement clicks
+            ItemMeta meta = clickedItem.getItemMeta();
+            if (meta != null && meta.hasDisplayName()) {
+                String displayName = meta.getDisplayName();
+                
+                // Find the achievement by display name
+                for (com.sneaky.cosmetics.achievements.Achievement achievement : plugin.getAchievementManager().getAllAchievements()) {
+                    if (displayName.contains(achievement.getName())) {
+                        handleAchievementClick(player, achievement);
+                        return;
+                    }
+                }
+            }
+        }
+        
         // Handle type-specific menu clicks
         else {
             if (clickedItem.getType() == Material.BARRIER) {
@@ -877,13 +1095,59 @@ public class GUIManager implements Listener {
                 return;
             }
             
+            // Handle pagination buttons for cosmetic type menus
+            if (clickedItem.getType() == Material.SPECTRAL_ARROW) {
+                ItemMeta meta = clickedItem.getItemMeta();
+                if (meta != null && meta.hasDisplayName()) {
+                    String displayName = meta.getDisplayName();
+                    
+                    // Extract current page and type from title
+                    String typeCleanTitle = org.bukkit.ChatColor.stripColor(title);
+                    for (CosmeticType type : CosmeticType.values()) {
+                        if (typeCleanTitle.contains(type.getDisplayName())) {
+                            // Extract current page from title
+                            int currentPage = 0;
+                            try {
+                                String[] parts = typeCleanTitle.split(" ");
+                                for (String part : parts) {
+                                    if (part.contains("/")) {
+                                        currentPage = Integer.parseInt(part.split("/")[0]) - 1;
+                                        break;
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                currentPage = 0;
+                            }
+                            
+                            // Navigate to appropriate page
+                            if (displayName.contains("Previous")) {
+                                if (typeCleanTitle.contains("Shop")) {
+                                    openShopCategory(player, type, currentPage - 1);
+                                } else {
+                                    openTypeGUI(player, type, currentPage - 1);
+                                }
+                            } else if (displayName.contains("Next")) {
+                                if (typeCleanTitle.contains("Shop")) {
+                                    openShopCategory(player, type, currentPage + 1);
+                                } else {
+                                    openTypeGUI(player, type, currentPage + 1);
+                                }
+                            }
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+            
             if (clickedItem.getType() == Material.TNT) {
                 // Clear all active cosmetics of this type
                 ItemMeta meta = clickedItem.getItemMeta();
                 if (meta != null && meta.getDisplayName().contains("Clear All Active")) {
                     // Determine which type from the GUI title
+                    String clearCleanTitle = org.bukkit.ChatColor.stripColor(title);
                     for (CosmeticType type : CosmeticType.values()) {
-                        if (title.contains(type.getDisplayName())) {
+                        if (clearCleanTitle.contains(type.getDisplayName())) {
                             // Clear all active cosmetics of this type
                             for (Cosmetic cosmetic : plugin.getCosmeticManager().getCosmeticsByType(type)) {
                                 if (plugin.getCosmeticManager().isCosmeticActive(player, cosmetic.getId())) {
@@ -891,7 +1155,21 @@ public class GUIManager implements Listener {
                                 }
                             }
                             plugin.getMessageManager().sendSuccess(player, "&7⊘ Cleared all active " + type.getDisplayName().toLowerCase());
-                            openTypeGUI(player, type);
+                            
+                            // Stay on current page
+                            int currentPage = 0;
+                            try {
+                                String[] parts = clearCleanTitle.split(" ");
+                                for (String part : parts) {
+                                    if (part.contains("/")) {
+                                        currentPage = Integer.parseInt(part.split("/")[0]) - 1;
+                                        break;
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                currentPage = 0;
+                            }
+                            openTypeGUI(player, type, currentPage);
                             return;
                         }
                     }
@@ -913,8 +1191,21 @@ public class GUIManager implements Listener {
                     if (cleanName.contains(cosmeticName)) {
                         handleCosmeticClick(player, cosmetic);
                         
-                        // Refresh the GUI
-                        openTypeGUI(player, cosmetic.getType());
+                        // Refresh the GUI (stay on current page)
+                        String refreshCleanTitle = org.bukkit.ChatColor.stripColor(title);
+                        int currentPage = 0;
+                        try {
+                            String[] parts = refreshCleanTitle.split(" ");
+                            for (String part : parts) {
+                                if (part.contains("/")) {
+                                    currentPage = Integer.parseInt(part.split("/")[0]) - 1;
+                                    break;
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            currentPage = 0;
+                        }
+                        openTypeGUI(player, cosmetic.getType(), currentPage);
                         return;
                     }
                 }
@@ -948,5 +1239,142 @@ public class GUIManager implements Listener {
         } else {
             plugin.getMessageManager().sendError(player, "Failed to toggle cosmetic: " + cosmetic.getDisplayName());
         }
+    }
+    
+    /**
+     * Add an animated border with alternating colors
+     */
+    private void addAnimatedBorder(Inventory gui, Material primary, Material secondary) {
+        ItemStack primaryItem = new ItemStack(primary);
+        ItemStack secondaryItem = new ItemStack(secondary);
+        
+        ItemMeta primaryMeta = primaryItem.getItemMeta();
+        ItemMeta secondaryMeta = secondaryItem.getItemMeta();
+        
+        if (primaryMeta != null) {
+            primaryMeta.setDisplayName(color("&0"));
+            primaryItem.setItemMeta(primaryMeta);
+        }
+        
+        if (secondaryMeta != null) {
+            secondaryMeta.setDisplayName(color("&0"));
+            secondaryItem.setItemMeta(secondaryMeta);
+        }
+        
+        // Create animated pattern
+        for (int i = 0; i < 9; i++) {
+            gui.setItem(i, (i % 2 == 0) ? primaryItem : secondaryItem);
+        }
+        for (int i = 45; i < 54; i++) {
+            gui.setItem(i, (i % 2 == 0) ? secondaryItem : primaryItem);
+        }
+        for (int i = 9; i < 45; i += 9) {
+            gui.setItem(i, primaryItem);
+            gui.setItem(i + 8, secondaryItem);
+        }
+    }
+    
+    /**
+     * Add daily reward button with dynamic status
+     */
+    private void addDailyRewardButton(Inventory gui, Player player, int slot) {
+        boolean canClaim = plugin.getCreditManager().canClaimDailyBonus(player.getUniqueId());
+        long hoursUntilNext = plugin.getCreditManager().getHoursUntilNextClaim(player.getUniqueId());
+        
+        Material material = canClaim ? Material.CHEST : Material.CLOCK;
+        ItemStack dailyItem = new ItemStack(material);
+        ItemMeta dailyMeta = dailyItem.getItemMeta();
+        
+        if (dailyMeta != null) {
+            if (canClaim) {
+                dailyMeta.setDisplayName(color("&6&l🎁 Daily Reward Available! 🎁"));
+                List<String> dailyLore = new ArrayList<>();
+                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&a&l✓ Ready to claim!"));
+                dailyLore.add("");
+                dailyLore.add(color("&7Daily reward: &e+" + plugin.getConfig().getInt("credits.daily-reward", 100) + " credits"));
+                dailyLore.add(color("&7Streak bonus: &6+50% after 7 days"));
+                dailyLore.add(color("&7Current streak: &b" + getPlaceholder(player, "daily_streak") + " days"));
+                dailyLore.add("");
+                dailyLore.add(color("&e&l❱ Click to claim your daily reward!"));
+                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyMeta.setLore(dailyLore);
+            } else {
+                dailyMeta.setDisplayName(color("&c&l⏰ Daily Reward Cooldown"));
+                List<String> dailyLore = new ArrayList<>();
+                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyLore.add(color("&c&l✗ Already claimed today"));
+                dailyLore.add("");
+                dailyLore.add(color("&7Next reward in: &e" + hoursUntilNext + " hours"));
+                dailyLore.add(color("&7Current streak: &b" + getPlaceholder(player, "daily_streak") + " days"));
+                dailyLore.add(color("&7Total claimed: &a" + getPlaceholder(player, "daily_total_claimed")));
+                dailyLore.add("");
+                dailyLore.add(color("&7Come back tomorrow for more credits!"));
+                dailyLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                dailyMeta.setLore(dailyLore);
+            }
+            dailyItem.setItemMeta(dailyMeta);
+        }
+        
+        gui.setItem(slot, dailyItem);
+    }
+    
+    /**
+     * Get placeholder value with fallback
+     */
+    private String getPlaceholder(Player player, String placeholder) {
+        if (plugin.getPlaceholderAPIIntegration() != null) {
+            String value = plugin.getPlaceholderAPIIntegration().onRequest(player, placeholder);
+            return value != null ? value : "N/A";
+        }
+        
+        // Fallback values when PlaceholderAPI is not available
+        switch (placeholder) {
+            case "player_name": return player.getName();
+            case "credits": return String.valueOf(plugin.getCreditManager().getCreditsSync(player.getUniqueId()));
+            case "player_rank": return "Player";
+            case "server_players_online": return String.valueOf(plugin.getServer().getOnlinePlayers().size());
+            case "server_players_max": return String.valueOf(plugin.getServer().getMaxPlayers());
+            case "player_hours_played": return "0";
+            case "achievements_completed": return String.valueOf(plugin.getAchievementManager().getPlayerAchievements(player).size());
+            case "achievements_total": return String.valueOf(plugin.getAchievementManager().getAllAchievements().size());
+            case "stats_cosmetics_activated": return String.valueOf(plugin.getStatisticsManager().getCosmeticsActivated(player.getUniqueId()));
+            case "daily_streak": return String.valueOf(plugin.getCreditManager().getDailyStreak(player.getUniqueId()));
+            case "daily_total_claimed": return String.valueOf(plugin.getCreditManager().getTotalDailyClaimed(player.getUniqueId()));
+            default: return "N/A";
+        }
+    }
+    
+    /**
+     * Handle achievement click (claim if ready)
+     */
+    private void handleAchievementClick(Player player, com.sneaky.cosmetics.achievements.Achievement achievement) {
+        // Check if player already has this achievement
+        if (plugin.getAchievementManager().hasAchievement(player, achievement.getId())) {
+            plugin.getMessageManager().sendError(player, "You already have this achievement!");
+            return;
+        }
+        
+        // Check if achievement can be claimed
+        if (!achievement.isCompleted(player, plugin)) {
+            plugin.getMessageManager().sendError(player, "You haven't completed the requirements for this achievement yet!");
+            return;
+        }
+        
+        // Award the achievement (this method handles credit rewards automatically)
+        plugin.getAchievementManager().awardAchievement(player, achievement.getId());
+        
+        // Show success message
+        plugin.getMessageManager().sendSuccess(player, 
+            "&a&l✓ Achievement Unlocked: &e" + achievement.getName() + "\n" +
+            "&7" + achievement.getDescription() + "\n" +
+            "&e&l💰 Reward: &f+" + achievement.getCreditReward() + " credits");
+        
+        // Play success sound or particle effect here if desired
+        
+        // Refresh the achievements GUI
+        plugin.getSchedulerAdapter().runTask(() -> {
+            openAchievementsGUI(player);
+        });
     }
 }

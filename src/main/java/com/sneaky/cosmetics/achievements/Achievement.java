@@ -26,7 +26,18 @@ public class Achievement {
         DAILY_LOGIN("Log in for consecutive days"),
         TYPE_COLLECTOR("Own all cosmetics of a specific type"),
         PREMIUM_USER("Become a premium player"),
-        VIP_USER("Become a VIP player");
+        VIP_USER("Become a VIP player"),
+        CREDITS_EARNED("Earn a total amount of credits"),
+        CREDITS_SPENT("Spend a total amount of credits"),
+        DAILY_STREAK("Log in for consecutive days"),
+        DAILY_CLAIMS("Claim daily rewards multiple times"),
+        COSMETICS_ACTIVATED("Activate cosmetics multiple times"),
+        BABY_PETS("Collect baby pet variants"),
+        LEGENDARY_PET("Own a legendary tier pet"),
+        PARTICLE_COUNT("Own multiple particle effects"),
+        SIMULTANEOUS_COSMETICS("Have multiple cosmetics active"),
+        EARLY_ADOPTER("Be an early user of the system"),
+        COMPLETIONIST("Own every cosmetic available");
         
         private final String description;
         
@@ -93,6 +104,82 @@ public class Achievement {
                     }
                 }
                 return !typeCosmetics.isEmpty();
+                
+            case CREDITS_EARNED:
+                // Check if player has earned enough credits total
+                long targetCredits = (Integer) targetValue;
+                return plugin.getStatisticsManager().getPlayerStatistics(player.getUniqueId()).creditsEarned.get() >= targetCredits;
+                
+            case CREDITS_SPENT:
+                // Check if player has spent enough credits total
+                long targetSpent = (Integer) targetValue;
+                return plugin.getStatisticsManager().getPlayerStatistics(player.getUniqueId()).creditsSpent.get() >= targetSpent;
+                
+            case DAILY_STREAK:
+                // Check if player has maintained daily login streak
+                int targetStreak = (Integer) targetValue;
+                return plugin.getCreditManager().getDailyStreak(player.getUniqueId()) >= targetStreak;
+                
+            case DAILY_CLAIMS:
+                // Check if player has claimed daily rewards enough times
+                int targetClaims = (Integer) targetValue;
+                return plugin.getCreditManager().getTotalDailyClaimed(player.getUniqueId()) >= targetClaims;
+                
+            case COSMETICS_ACTIVATED:
+                // Check if player has activated cosmetics enough times
+                long targetActivations = (Integer) targetValue;
+                return plugin.getStatisticsManager().getCosmeticsActivated(player.getUniqueId()) >= targetActivations;
+                
+            case BABY_PETS:
+                // Check if player owns enough baby pets
+                int targetBabyPets = (Integer) targetValue;
+                int babyPetCount = 0;
+                for (var cosmetic : plugin.getCosmeticManager().getCosmeticsByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PET)) {
+                    if (cosmetic.getId().contains("baby") && plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
+                        babyPetCount++;
+                    }
+                }
+                return babyPetCount >= targetBabyPets;
+                
+            case LEGENDARY_PET:
+                // Check if player owns any legendary pet
+                String[] legendaryPets = {"pet_ender_dragon", "pet_wither", "pet_warden"};
+                for (String legendaryId : legendaryPets) {
+                    if (plugin.getCosmeticManager().hasCosmetic(player, legendaryId)) {
+                        return true;
+                    }
+                }
+                return false;
+                
+            case PARTICLE_COUNT:
+                // Check if player owns enough particle effects
+                int targetParticles = (Integer) targetValue;
+                int particleCount = 0;
+                for (var cosmetic : plugin.getCosmeticManager().getCosmeticsByType(com.sneaky.cosmetics.cosmetics.CosmeticType.PARTICLE)) {
+                    if (plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
+                        particleCount++;
+                    }
+                }
+                return particleCount >= targetParticles;
+                
+            case SIMULTANEOUS_COSMETICS:
+                // Check if player has enough cosmetics active at once
+                int targetSimultaneous = (Integer) targetValue;
+                return plugin.getCosmeticManager().getActiveCosmetics(player).size() >= targetSimultaneous;
+                
+            case EARLY_ADOPTER:
+                // This would need to be tracked separately when the plugin first launches
+                // For now, always return false (would be awarded manually or via special logic)
+                return false;
+                
+            case COMPLETIONIST:
+                // Check if player owns every single cosmetic
+                for (var cosmetic : plugin.getCosmeticManager().getAllCosmetics()) {
+                    if (!plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
+                        return false;
+                    }
+                }
+                return true;
                 
             default:
                 return false;

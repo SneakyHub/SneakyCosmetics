@@ -1,408 +1,319 @@
 # SneakyCosmetics Messages Configuration
-# Use Minecraft color codes (&c, &a, etc.) or hex colors (&#FF5555)
+# Orange-to-Black Gradient Theme 🧡🖤
+# Uses hex gradients and legacy colors for maximum compatibility
 
-prefix: "&8[&bSneaky&fCosmetics&8] "
+prefix: "&#FF8C00[&#FF7518S&#FF5E30n&#FF4748e&#FF3060a&#FF1978k&#FF0290y&#EB00A8C&#D400C0o&#BD00D8s&#A600F0m&#8F00FFe&#7800FFt&#6100FFi&#4A00FFc&#3300FFs&#1C00FF]&#0500FF "
 
 # General Messages
 general:
-  no-permission: "&cYou do not have permission to use this command!"
-  player-not-found: "&cPlayer &e{player} &cnot found or is not online!"
-  cosmetic-not-found: "&cCosmetic &e{cosmetic} &cnot found!"
-  insufficient-credits: "&cYou do not have enough credits! Required: &e{required}&c, You have: &e{current}"
-  invalid-amount: "&cInvalid amount! Please enter a valid number."
-  command-disabled: "&cThis command is currently disabled!"
-  reload-success: "&aConfiguration reloaded successfully!"
-  reload-error: "&cError occurred while reloading configuration!"
+  no-permission: "&#FF4500You do not have permission to use this command!"
+  player-not-found: "&#FF4500Player &#FFA500{player} &#FF4500not found or is not online!"
+  cosmetic-not-found: "&#FF4500Cosmetic &#FFA500{cosmetic} &#FF4500not found!"
+  insufficient-credits: "&#FF4500You do not have enough credits! Required: &#FFA500{required}&#FF4500, You have: &#FFA500{current}"
+  invalid-amount: "&#FF4500Invalid amount! Please enter a valid number."
+  command-disabled: "&#FF4500This command is currently disabled!"
+  reload-success: "&#32CD32Configuration reloaded successfully!"
+  reload-error: "&#FF4500Error occurred while reloading configuration!"
 
 # Success Messages
 success:
-  cosmetic-purchased: "&aSuccessfully purchased &e{cosmetic} &afor &e{price} &acredits!"
-  cosmetic-activated: "&aActivated &e{cosmetic}&a!"
-  cosmetic-deactivated: "&cDeactivated &e{cosmetic}&c!"
-  cosmetic-given: "&aYou received the &e{cosmetic} &acosmetic!"
-  cosmetic-removed: "&cRemoved &e{cosmetic} &cfrom &e{player}&c!"
-  all-cosmetics-cleared: "&cCleared all cosmetics for &e{player}&c!"
+  cosmetic-purchased: "&#32CD32Successfully purchased &#FFD700{cosmetic} &#32CD32for &#FFD700{price} &#32CD32credits!"
+  cosmetic-activated: "&#FF8C00✓ Activated &#FFD700{cosmetic}&#FF8C00!"
+  cosmetic-deactivated: "&#FF4500⊘ Deactivated &#FFA500{cosmetic}&#FF4500!"
+  cosmetic-given: "&#32CD32You received the &#FFD700{cosmetic} &#32CD32cosmetic!"
+  cosmetic-removed: "&#FF4500Removed &#FFA500{cosmetic} &#FF4500from &#FFA500{player}&#FF4500!"
+  all-cosmetics-cleared: "&#FF4500Cleared all cosmetics for &#FFA500{player}&#FF4500!"
 
 # Credits Messages
 credits:
-  balance: "&aYour Credits: &e{credits}"
-  balance-other: "&a{player}'s Credits: &e{credits}"
-  purchased: "&aPurchased &e{amount} &acredits for &e${cost}&a!"
-  given: "&aYou received &e{amount} &acredits!"
-  given-other: "&aGave &e{amount} &acredits to &e{player}&a!"
-  removed: "&cRemoved &e{amount} &ccredits!"
-  removed-other: "&cRemoved &e{amount} &ccredits from &e{player}&c!"
-  set: "&aSet credits to &e{amount}&a!"
-  set-other: "&aSet &e{player}'s &acredits to &e{amount}&a!"
-  insufficient-funds: "&cInsufficient funds! You need &e${amount} &cmore!"
+  balance: "&#FF8C00Your Credits: &#FFD700{credits} &#FFA500💰"
+  balance-other: "&#FF8C00{player}'s Credits: &#FFD700{credits} &#FFA500💰"
+  purchased: "&#32CD32Purchased &#FFD700{amount} &#32CD32credits for &#FFD700${cost}&#32CD32!"
+  given: "&#FF8C00You received &#FFD700{amount} &#FF8C00credits! &#FFA500💰"
+  given-other: "&#32CD32Gave &#FFD700{amount} &#32CD32credits to &#FFD700{player}&#32CD32!"
+  removed: "&#FF4500Removed &#FFA500{amount} &#FF4500credits!"
+  removed-other: "&#FF4500Removed &#FFA500{amount} &#FF4500credits from &#FFA500{player}&#FF4500!"
+  set: "&#32CD32Set credits to &#FFD700{amount}&#32CD32!"
+  set-other: "&#32CD32Set &#FFD700{player}'s &#32CD32credits to &#FFD700{amount}&#32CD32!"
+  insufficient-funds: "&#FF4500Insufficient funds! You need &#FFA500${amount} &#FF4500more!"
 
 # Welcome and Daily Messages
 daily:
-  welcome-credits: "&aWelcome to the server! You received &e{amount} &acredits to get started!"
-  daily-reward: "&a&#FFD700Daily Reward Claimed! &aYou received &e{amount} &acredits!"
-  daily-already-claimed: "&cYou have already claimed your daily reward! Try again in &e{time}&c."
-  playtime-reward: "&aPlaytime Reward! You received &e{amount} &acredits for playing &e{hours} &ahours!"
+  welcome-credits: "&#32CD32Welcome to the server! You received &#FFD700{amount} &#32CD32credits to get started! &#FFA500🎉"
+  daily-reward: "&#FF8C00🎁 &#FFD700Daily Reward Claimed! &#FF8C00You received &#FFD700{amount} &#FF8C00credits!"
+  daily-already-claimed: "&#FF4500You have already claimed your daily reward! Try again in &#FFA500{time}&#FF4500."
+  playtime-reward: "&#FF8C00⏰ Playtime Reward! You received &#FFD700{amount} &#FF8C00credits for playing &#FFD700{hours} &#FF8C00hours!"
 
 # Update Messages
 updates:
-  checking: "&eChecking for updates..."
-  available: "&a&#32CD32Update Available! &eCurrent: &f{current} &e-> Latest: &f{latest}"
-  download-started: "&aStarting download of version &e{version}&a..."
-  download-success: "&aUpdate downloaded successfully! Plugin will be updated on next restart."
-  download-failed: "&cFailed to download update: &e{error}"
-  no-updates: "&aYou are already running the latest version!"
-  auto-update-disabled: "&cAuto-update is disabled in config!"
+  checking: "&#FFA500Checking for updates..."
+  available: "&#32CD32Update Available! &#FFD700Current: &#FFFFFF{current} &#FFD700-> Latest: &#FFFFFF{latest}"
+  download-started: "&#32CD32Starting download of version &#FFD700{version}&#32CD32..."
+  download-success: "&#32CD32Update downloaded successfully! Plugin will be updated on next restart."
+  download-failed: "&#FF4500Failed to download update: &#FFA500{error}"
+  no-updates: "&#32CD32You are already running the latest version!"
+  auto-update-disabled: "&#FF4500Auto-update is disabled in config!"
 
 # Error Messages
 errors:
-  database-error: "&cDatabase error occurred! Please contact an administrator."
-  file-error: "&cFile system error occurred!"
-  network-error: "&cNetwork error occurred while checking for updates!"
-  cosmetic-conflict: "&cYou cannot have multiple cosmetics of the same type active!"
-  world-disabled: "&cCosmetics are disabled in this world!"
-  cooldown: "&cPlease wait &e{time} &cbefore using this again!"
+  database-error: "&#FF4500Database error occurred! Please contact an administrator."
+  file-error: "&#FF4500File system error occurred!"
+  network-error: "&#FF4500Network error occurred while checking for updates!"
+  cosmetic-conflict: "&#FF4500You cannot have multiple cosmetics of the same type active!"
+  world-disabled: "&#FF4500Cosmetics are disabled in this world!"
+  cooldown: "&#FF4500Please wait &#FFA500{time} &#FF4500before using this again!"
+  vault-not-available: "&#FF4500Economy system is not available!"
 
 # GUI Messages
 gui:
   titles:
-    main: "&#FFD700Sneaky Cosmetics"
-    particles: "&#9370DBParticle Effects"
-    hats: "&#FFD700Hat Collection"
-    pets: "&#32CD32Pet Companions"
-    trails: "&#1E90FFMovement Trails"
-    gadgets: "&#FF6347Fun Gadgets"
-    wings: "&#F0F8FFWing Collection"
-    auras: "&#8A2BE2Mystic Auras"
-    active: "&#FFA500Active Cosmetics"
-    credits: "&#32CD32Buy Credits"
-    confirm: "&#FF4500Confirm Purchase"
+    main: "&#FF8C00✦ &#FFD700Sneaky&#FF8C00Cosmetics &#FF8C00✦"
+    particles: "&#FF6347✨ &#FFA500Particle Effects &#FF6347✨"
+    hats: "&#FFD700👑 &#FFA500Hat Collection &#FFD700👑"
+    pets: "&#FF8C00🐾 &#FFA500Pet Companions &#FF8C00🐾"
+    trails: "&#FF4500💫 &#FFA500Movement Trails &#FF4500💫"
+    gadgets: "&#FF6347🎮 &#FFA500Fun Gadgets &#FF6347🎮"
+    wings: "&#FFD700🕊️ &#FFA500Wing Collection &#FFD700🕊️"
+    auras: "&#FF8C00🌟 &#FFA500Mystic Auras &#FF8C00🌟"
+    active: "&#FFA500⚡ &#FFD700Active Cosmetics &#FFA500⚡"
+    credits: "&#FFD700💰 &#FF8C00Buy Credits &#FFD700💰"
+    confirm: "&#FF4500⚠️ &#FFA500Confirm Purchase &#FF4500⚠️"
+    achievements: "&#FFD700🏆 &#FF8C00Achievements &#FFD700🏆"
   
   buttons:
-    previous-page: "&e← Previous Page"
-    next-page: "&eNext Page →"
-    back: "&c← Back"
-    close: "&cClose Menu"
-    confirm-purchase: "&aConfirm Purchase"
-    cancel-purchase: "&cCancel"
-    toggle-on: "&aClick to Activate"
-    toggle-off: "&cClick to Deactivate"
-    purchase: "&eClick to Purchase"
-    already-owned: "&aYou own this!"
-    insufficient-credits: "&cNot enough credits!"
-    vip-required: "&6VIP Required"
-    premium-required: "&5Premium Required"
+    previous-page: "&#FFA500← Previous Page"
+    next-page: "&#FFA500Next Page →"
+    back: "&#FF4500← Back"
+    close: "&#FF0000✗ Close Menu"
+    confirm-purchase: "&#32CD32✓ Confirm Purchase"
+    cancel-purchase: "&#FF4500✗ Cancel"
+    toggle-on: "&#32CD32▶ Click to Activate"
+    toggle-off: "&#FF4500⊘ Click to Deactivate"
+    purchase: "&#FFD700💰 Click to Purchase"
+    already-owned: "&#32CD32★ You own this!"
+    insufficient-credits: "&#FF4500✗ Not enough credits!"
+    vip-required: "&#FFD700⭐ VIP Required"
+    premium-required: "&#8A2BE2👑 Premium Required"
   
   items:
     credits:
-      name: "&e&#FFD700Your Credits"
+      name: "&#FFD700⭐ &#FF8C00Your Credits &#FFD700⭐"
       lore:
-        - "&7Current Credits: &e{credits}"
+        - "&#808080Current Credits: &#FFD700{credits} &#FFA500💰"
         - ""
-        - "&eClick to buy more credits!"
+        - "&#FFA500▶ Click to buy more credits!"
     
     particles:
-      name: "&d&#9370DBParticles"
+      name: "&#FF6347✨ &#FFA500Particles &#FF6347✨"
       lore:
-        - "&7Click to browse"
-        - "&7particle effects!"
+        - "&#808080Click to browse magical"
+        - "&#808080particle effects!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     hats:
-      name: "&6&#FFD700Hats"
+      name: "&#FFD700👑 &#FFA500Hats &#FFD700👑"
       lore:
-        - "&7Click to browse"
-        - "&7hat cosmetics!"
+        - "&#808080Click to browse stylish"
+        - "&#808080hat cosmetics!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     pets:
-      name: "&a&#32CD32Pets"
+      name: "&#FF8C00🐾 &#FFA500Pets &#FF8C00🐾"
       lore:
-        - "&7Click to browse"
-        - "&7pet companions!"
+        - "&#808080Click to browse adorable"
+        - "&#808080pet companions!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     trails:
-      name: "&b&#1E90FFTrails"
+      name: "&#FF4500💫 &#FFA500Trails &#FF4500💫"
       lore:
-        - "&7Click to browse"
-        - "&7movement trails!"
+        - "&#808080Click to browse epic"
+        - "&#808080movement trails!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     gadgets:
-      name: "&c&#FF6347Gadgets"
+      name: "&#FF6347🎮 &#FFA500Gadgets &#FF6347🎮"
       lore:
-        - "&7Click to browse"
-        - "&7fun gadgets!"
+        - "&#808080Click to browse exciting"
+        - "&#808080fun gadgets!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     wings:
-      name: "&f&#F0F8FFWings"
+      name: "&#FFD700🕊️ &#FFA500Wings &#FFD700🕊️"
       lore:
-        - "&7Click to browse"
-        - "&7wing cosmetics!"
+        - "&#808080Click to browse majestic"
+        - "&#808080wing cosmetics!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
     
     auras:
-      name: "&5&#8A2BE2Auras"
+      name: "&#FF8C00🌟 &#FFA500Auras &#FF8C00🌟"
       lore:
-        - "&7Click to browse"
-        - "&7mystic auras!"
+        - "&#808080Click to browse mystical"
+        - "&#808080aura effects!"
         - ""
-        - "&7Owned: &e{owned}&7/&e{total}"
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
 
 # Achievement Messages
 achievements:
-  unlocked-title: "&6&l🏆 Achievement Unlocked!"
-  unlocked-subtitle: "&e{name}"
-  unlocked-chat: "&6&l🏆 Achievement Unlocked! &e{name} &7- &f{description}"
-  reward-message: "&7Reward: &e+{credits} credits"
-  progress: "&7Progress: &e{current}&7/&e{total}"
-  completed: "&a✓ Completed"
-  not-completed: "&c✗ Not Completed"
-  completion-percentage: "&7Achievement Progress: &e{percentage}%"
-  total-credits-earned: "&7Total Credits from Achievements: &e{credits}"
-  
-  # Individual achievement names and descriptions
-  names:
-    first_cosmetic: "First Steps"
-    collector_5: "Collector"
-    collector_10: "Enthusiast" 
-    collector_25: "Cosmetic Master"
-    particle_master: "Particle Master"
-    hat_collector: "Hat Collector"
-    pet_lover: "Pet Lover"
-    trail_master: "Trail Master"
-    gadgeteer: "Gadgeteer"
-    angelic_being: "Angelic Being"
-    aura_master: "Aura Master"
-    vip_member: "VIP Member"
-    premium_member: "Premium Member"
-  
-  descriptions:
-    first_cosmetic: "Purchase your very first cosmetic!"
-    collector_5: "Own 5 different cosmetics"
-    collector_10: "Own 10 different cosmetics"
-    collector_25: "Own 25 different cosmetics"
-    particle_master: "Own all particle cosmetics"
-    hat_collector: "Own all hat cosmetics"
-    pet_lover: "Own all pet cosmetics"
-    trail_master: "Own all trail cosmetics"
-    gadgeteer: "Own all gadget cosmetics"
-    angelic_being: "Own all wing cosmetics"
-    aura_master: "Own all aura cosmetics"
-    vip_member: "Become a VIP player"
-    premium_member: "Become a Premium player"
+  unlocked-title: "&#FFD700🏆 &#FF8C00Achievement Unlocked! &#FFD700🏆"
+  unlocked-subtitle: "&#FFD700{name}"
+  unlocked-chat: "&#FFD700🏆 &#FF8C00Achievement Unlocked! &#FFD700{name} &#808080- &#FFA500{description}"
+  reward-message: "&#808080Reward: &#FFD700+{credits} &#FF8C00credits &#FFA500💰"
+  progress: "&#808080Progress: &#FFD700{current}&#808080/&#FFD700{total}"
+  completed: "&#32CD32✓ Completed"
+  not-completed: "&#FF4500✗ Not Completed"
+  ready-to-claim: "&#FFD700⚡ Ready to Claim!"
+  completion-percentage: "&#808080Achievement Progress: &#FFD700{percentage}%"
+  total-credits-earned: "&#808080Total Credits from Achievements: &#FFD700{credits} &#FFA500💰"
 
 # Shop Messages
 shop:
-  opened: "&aOpened credits shop!"
-  category-opened: "&aViewing &e{category} &acosmetics"
-  purchase-success: "&a✓ Purchased &e{cosmetic} &afor &e{price} &acredits!"
-  purchase-failed: "&cPurchase failed! Please try again."
-  already-owned: "&cYou already own this cosmetic!"
-  insufficient-credits: "&cYou don't have enough credits! Need &e{needed} &cmore."
-  access-denied: "&cYou cannot access this cosmetic: &e{reason}"
-  confirmation-required: "&eClick again to confirm purchase of &a{cosmetic} &efor &a{price} &ecredits!"
+  opened: "&#FF8C00Opened credits shop! &#FFD700💰"
+  category-opened: "&#FF8C00Viewing &#FFD700{category} &#FF8C00cosmetics"
+  purchase-success: "&#32CD32✓ Purchased &#FFD700{cosmetic} &#32CD32for &#FFD700{price} &#32CD32credits!"
+  purchase-failed: "&#FF4500Purchase failed! Please try again."
+  already-owned: "&#FF4500You already own this cosmetic!"
+  insufficient-credits: "&#FF4500You don't have enough credits! Need &#FFA500{needed} &#FF4500more."
+  access-denied: "&#FF4500You cannot access this cosmetic: &#FFA500{reason}"
+  confirmation-required: "&#FFA500Click again to confirm purchase of &#FFD700{cosmetic} &#FFA500for &#FFD700{price} &#FFA500credits!"
   
-  # Shop GUI items
   gui:
-    credits-shop-title: "&e&l⭐ Credits Shop ⭐"
-    back-to-main: "&c← Back to Main Menu"
-    purchase-button: "&e💰 Click to Purchase for {price} credits"
-    owned-indicator: "&a✓ You own this cosmetic!"
-    insufficient-indicator: "&c✗ Not enough credits ({needed} more)"
-    vip-required: "&6⭐ VIP Required"
-    premium-required: "&5👑 Premium Required"
+    credits-shop-title: "&#FFD700⭐ &#FF8C00Credits Shop &#FFD700⭐"
+    back-to-main: "&#FF4500← Back to Main Menu"
+    purchase-button: "&#FFD700💰 Click to Purchase for {price} credits"
+    owned-indicator: "&#32CD32✓ You own this cosmetic!"
+    insufficient-indicator: "&#FF4500✗ Not enough credits ({needed} more)"
+    vip-required: "&#FFD700⭐ VIP Required"
+    premium-required: "&#8A2BE2👑 Premium Required"
 
 # Daily Rewards Messages  
 daily-rewards:
-  claimed: "&a✓ Daily reward claimed! You received &e{amount} &acredits!"
-  already-claimed: "&cYou have already claimed your daily reward!"
-  time-remaining: "&cNext reward available in: &e{time}"
-  streak-bonus: "&6🔥 {days} day streak! Bonus: &e+{bonus} &6credits!"
-  streak-lost: "&cYour daily reward streak was reset."
+  claimed: "&#32CD32✓ Daily reward claimed! You received &#FFD700{amount} &#32CD32credits! &#FFA500💰"
+  already-claimed: "&#FF4500You have already claimed your daily reward!"
+  time-remaining: "&#FF4500Next reward available in: &#FFA500{time}"
+  streak-bonus: "&#FFD700🔥 {days} day streak! Bonus: &#FFD700+{bonus} &#FF8C00credits!"
+  streak-lost: "&#FF4500Your daily reward streak was reset."
   
   gui:
-    title: "&6&l📅 Daily Rewards 📅"
-    claim-button: "&a&lClaim Daily Reward"
+    title: "&#FFD700🎁 &#FF8C00Daily Rewards &#FFD700🎁"
+    claim-button: "&#32CD32🎁 Claim Daily Reward"
     claim-lore:
-      - "&7Base reward: &e{base} credits"
-      - "&7Streak bonus: &e{bonus} credits"
-      - "&7Total: &e{total} credits"
+      - "&#808080Base reward: &#FFD700{base} credits"
+      - "&#808080Streak bonus: &#FFA500{bonus} credits"
+      - "&#808080Total: &#FFD700{total} credits &#FFA500💰"
       - ""
-      - "&a▶ Click to claim!"
-    claimed-button: "&2&l✓ Already Claimed"
+      - "&#32CD32▶ Click to claim!"
+    claimed-button: "&#696969✓ Already Claimed"
     claimed-lore:
-      - "&7You've already claimed"
-      - "&7your daily reward!"
+      - "&#808080You've already claimed"
+      - "&#808080your daily reward!"
       - ""
-      - "&7Next reward: &e{time}"
-    streak-display: "&6🔥 Current Streak: &e{days} days"
+      - "&#808080Next reward: &#FFA500{time}"
+    streak-display: "&#FFD700🔥 Current Streak: &#FF8C00{days} days"
 
 # Cosmetic Type Specific Messages
 cosmetics:
-  activated: "&aActivated &e{cosmetic}&a!"
-  deactivated: "&cDeactivated &e{cosmetic}&c!"
-  not-owned: "&cYou don't own this cosmetic! Purchase it first for &e{price} &ccredits."
-  max-active: "&cYou can only have &e{max} &c{type} cosmetics active at once!"
-  world-disabled: "&cCosmetics are disabled in this world!"
-  combat-disabled: "&cCosmetics are disabled during combat!"
+  activated: "&#32CD32✓ Activated &#FFD700{cosmetic}&#32CD32!"
+  deactivated: "&#FF4500⊘ Deactivated &#FFA500{cosmetic}&#FF4500!"
+  not-owned: "&#FF4500You don't own this cosmetic! Purchase it first for &#FFA500{price} &#FF4500credits."
+  max-active: "&#FF4500You can only have &#FFA500{max} &#FF4500{type} cosmetics active at once!"
+  world-disabled: "&#FF4500Cosmetics are disabled in this world!"
+  combat-disabled: "&#FF4500Cosmetics are disabled during combat!"
   
   particles:
-    spawned: "&aParticle effect &e{particle} &aactivated!"
-    stopped: "&cParticle effect &e{particle} &cstopped!"
+    spawned: "&#FF6347✨ Particle effect &#FFD700{particle} &#FF6347activated!"
+    stopped: "&#FF4500✨ Particle effect &#FFA500{particle} &#FF4500stopped!"
   
   hats:
-    equipped: "&aEquipped hat: &e{hat}"
-    removed: "&cRemoved hat: &e{hat}"
+    equipped: "&#FFD700👑 Equipped hat: &#FF8C00{hat}"
+    removed: "&#FF4500👑 Removed hat: &#FFA500{hat}"
   
   pets:
-    summoned: "&aSummoned pet: &e{pet}"
-    dismissed: "&cDismissed pet: &e{pet}"
+    summoned: "&#FF8C00🐾 Summoned pet: &#FFD700{pet}"
+    dismissed: "&#FF4500🐾 Dismissed pet: &#FFA500{pet}"
   
   trails:
-    activated: "&aTrail effect &e{trail} &aactivated!"
-    deactivated: "&cTrail effect &e{trail} &cdeactivated!"
+    activated: "&#FF4500💫 Trail effect &#FFD700{trail} &#FF4500activated!"
+    deactivated: "&#808080💫 Trail effect &#FFA500{trail} &#808080deactivated!"
   
   gadgets:
-    received: "&aReceived gadget: &e{gadget}"
-    used: "&aUsed gadget: &e{gadget}"
-    expired: "&cGadget &e{gadget} &chas expired!"
+    received: "&#FF6347🎮 Received gadget: &#FFD700{gadget}"
+    used: "&#FF8C00🎮 Used gadget: &#FFD700{gadget}"
+    expired: "&#FF4500🎮 Gadget &#FFA500{gadget} &#FF4500has expired!"
   
   wings:
-    equipped: "&aWings &e{wings} &aequipped!"
-    removed: "&cWings &e{wings} &cremoved!"
+    equipped: "&#FFD700🕊️ Wings &#FF8C00{wings} &#FFD700equipped!"
+    removed: "&#FF4500🕊️ Wings &#FFA500{wings} &#FF4500removed!"
   
   auras:
-    activated: "&aAura &e{aura} &aactivated!"
-    deactivated: "&cAura &e{aura} &cdeactivated!"
+    activated: "&#FF8C00🌟 Aura &#FFD700{aura} &#FF8C00activated!"
+    deactivated: "&#FF4500🌟 Aura &#FFA500{aura} &#FF4500deactivated!"
 
 # Random Rewards
 random-rewards:
-  received: "&a🎁 Lucky Find! You received the &e{cosmetic} &acosmetic!"
-  duplicate: "&e🎁 Lucky Find! You received &e{credits} &ecredits instead of a duplicate cosmetic!"
+  received: "&#FFD700🎁 Lucky Find! You received the &#FF8C00{cosmetic} &#FFD700cosmetic!"
+  duplicate: "&#FFA500🎁 Lucky Find! You received &#FFD700{credits} &#FFA500credits instead of a duplicate cosmetic!"
 
 # Command Help Messages
 help:
   cosmetics:
-    - "&e&#FFD700╔══════════════════════════════════════╗"
-    - "&e&#FFD700║           SneakyCosmetics Commands           ║"
-    - "&e&#FFD700╠══════════════════════════════════════╣"
-    - "&a/cosmetics &7- Open cosmetics menu"
-    - "&a/cosmetics list &7- List all cosmetics"
-    - "&a/cosmetics toggle <cosmetic> &7- Toggle a cosmetic"
-    - "&a/cosmetics give <player> <cosmetic> &7- Give a cosmetic"
-    - "&a/cosmetics remove <player> <cosmetic> &7- Remove a cosmetic"
-    - "&a/cosmetics clear <player> &7- Clear all cosmetics"
-    - "&a/cosmetics reload &7- Reload configuration"
-    - "&a/cosmetics update &7- Check for updates"
-    - "&a/cosmetics debug &7- Toggle debug mode"
-    - "&e&#FFD700╚══════════════════════════════════════╝"
+    - "&#FF8C00╔════════════════════════════════════════╗"
+    - "&#FF8C00║          &#FFD700SneakyCosmetics Commands          &#FF8C00║"
+    - "&#FF8C00╠════════════════════════════════════════╣"
+    - "&#32CD32/cosmetics &#808080- Open cosmetics menu"
+    - "&#32CD32/cosmetics list &#808080- List all cosmetics"
+    - "&#32CD32/cosmetics toggle <cosmetic> &#808080- Toggle a cosmetic"
+    - "&#32CD32/cosmetics give <player> <cosmetic> &#808080- Give a cosmetic"
+    - "&#32CD32/cosmetics remove <player> <cosmetic> &#808080- Remove a cosmetic"
+    - "&#32CD32/cosmetics clear <player> &#808080- Clear all cosmetics"
+    - "&#32CD32/cosmetics reload &#808080- Reload configuration"
+    - "&#32CD32/cosmetics update &#808080- Check for updates"
+    - "&#32CD32/cosmetics debug &#808080- Toggle debug mode"
+    - "&#FF8C00╚════════════════════════════════════════╝"
   
   credits:
-    - "&e&#32CD32╔══════════════════════════════════════╗"
-    - "&e&#32CD32║             Credits Commands             ║"
-    - "&e&#32CD32╠══════════════════════════════════════╣"
-    - "&a/credits &7- Check your credit balance"
-    - "&a/credits balance [player] &7- Check credit balance"
-    - "&a/credits buy <amount> &7- Buy credits with money"
-    - "&a/credits give <player> <amount> &7- Give credits"
-    - "&a/credits remove <player> <amount> &7- Remove credits"
-    - "&a/credits set <player> <amount> &7- Set credits"
-    - "&a/credits daily &7- Claim daily reward"
-    - "&a/credits top &7- View credit leaderboard"
-    - "&e&#32CD32╚══════════════════════════════════════╝"
+    - "&#FFD700╔════════════════════════════════════════╗"
+    - "&#FFD700║             &#FF8C00Credits Commands             &#FFD700║"
+    - "&#FFD700╠════════════════════════════════════════╣"
+    - "&#32CD32/credits &#808080- Check your credit balance"
+    - "&#32CD32/credits balance [player] &#808080- Check credit balance"
+    - "&#32CD32/credits buy <amount> &#808080- Buy credits with money"
+    - "&#32CD32/credits give <player> <amount> &#808080- Give credits"
+    - "&#32CD32/credits remove <player> <amount> &#808080- Remove credits"
+    - "&#32CD32/credits set <player> <amount> &#808080- Set credits"
+    - "&#32CD32/credits daily &#808080- Claim daily reward"
+    - "&#32CD32/credits top &#808080- View credit leaderboard"
+    - "&#FFD700╚════════════════════════════════════════╝"
 
 # Debug Messages
 debug:
-  enabled: "&aDebug mode enabled!"
-  disabled: "&cDebug mode disabled!"
-  cosmetic-info: "&7Cosmetic: &e{id} &7| Type: &e{type} &7| Price: &e{price} &7| Owner: &e{owned}"
-  player-info: "&7Player: &e{player} &7| Credits: &e{credits} &7| Active: &e{active}"
-  database-info: "&7Database: &e{type} &7| Connected: &e{connected} &7| Pool: &e{pool}"
+  enabled: "&#32CD32Debug mode enabled!"
+  disabled: "&#FF4500Debug mode disabled!"
+  cosmetic-info: "&#808080Cosmetic: &#FFD700{id} &#808080| Type: &#FFA500{type} &#808080| Price: &#FFD700{price} &#808080| Owner: &#FF8C00{owned}"
+  player-info: "&#808080Player: &#FFD700{player} &#808080| Credits: &#FFD700{credits} &#808080| Active: &#FFA500{active}"
+  database-info: "&#808080Database: &#FFD700{type} &#808080| Connected: &#32CD32{connected} &#808080| Pool: &#FFA500{pool}"
 
 # API Messages (for developers)
 api:
-  cosmetic-given: "&7API: Gave &e{cosmetic} &7to &e{player}"
-  cosmetic-removed: "&7API: Removed &e{cosmetic} &7from &e{player}"
-  credits-modified: "&7API: Modified &e{player}'s &7credits by &e{amount}"
-
-# CMI Integration Messages
-cmi:
-  economy:
-    used-cmi-economy: "&aUsing CMI economy system"
-    fallback-to-vault: "&eUsing Vault economy (CMI economy not available)"
-    balance-cmi: "&aYour CMI Balance: &e{currency}{balance}"
-    purchased-with-cmi: "&aPurchased &e{item} &afor &e{currency}{cost} &afrom CMI economy!"
-  
-  status:
-    vanished-disabled: "&cCosmetics disabled while vanished"
-    afk-disabled: "&cCosmetics disabled while AFK"
-    god-disabled: "&cCosmetics disabled while in god mode"
-  
-  user:
-    nickname-display: "&7Player: &e{nickname} &7({username})"
-    playtime-cmi: "&7CMI Playtime: &e{time}"
-    
-  integration:
-    enabled: "&aSuccessfully integrated with CMI v{version}"
-    disabled: "&cCMI integration is disabled"
-    error: "&cError connecting to CMI: {error}"
+  cosmetic-given: "&#808080API: Gave &#FFD700{cosmetic} &#808080to &#FFA500{player}"
+  cosmetic-removed: "&#808080API: Removed &#FFD700{cosmetic} &#808080from &#FFA500{player}"
+  credits-modified: "&#808080API: Modified &#FFA500{player}'s &#808080credits by &#FFD700{amount}"
 
 # Placeholder Messages (for PlaceholderAPI)
-# All placeholders use the format: %sneakycosmetics_<placeholder>%
 placeholders:
-  # Basic placeholders
-  credits: "{credits}"
-  cosmetics-owned: "{owned}"
-  cosmetics-total: "{total}"
-  active-cosmetics: "{active}"
-  achievement-progress: "{progress}%"
+  credits: "&#FFD700{credits} &#FFA500💰"
+  cosmetics-owned: "&#FF8C00{owned}&#808080/&#FFD700{total}"
+  cosmetics-total: "&#FFD700{total}"
+  active-cosmetics: "&#FFA500{active}"
+  achievement-progress: "&#FFD700{progress}%"
   
-  # Statistics placeholders (per-player)
-  stats-cosmetics-activated: "Total cosmetics activated by player"
-  stats-achievements-unlocked: "Total achievements unlocked by player"
-  stats-credits-earned: "Total credits earned by player"
-  stats-credits-spent: "Total credits spent by player"
-  stats-total-usage-time: "Total time using cosmetics (formatted)"
-  stats-favorite-cosmetic: "Player's most used cosmetic"
-  stats-favorite-type: "Player's most used cosmetic type"
-  stats-last-cosmetic: "Last cosmetic activated"
-  stats-last-achievement: "Last achievement unlocked"
-  stats-last-purchase: "Last item purchased"
-  
-  # Individual cosmetic/type statistics
-  usage-count-<cosmetic_id>: "Times specific cosmetic was activated"
-  usage-time-<cosmetic_id>: "Time using specific cosmetic"
-  type-usage-<type>: "Times specific type was activated"
-  type-time-<type>: "Time using specific cosmetic type"
-  credit-source-<source>: "Credits earned from specific source"
-  
-  # Server-wide statistics
-  server-total-credits-earned: "Total credits earned server-wide"
-  server-total-credits-spent: "Total credits spent server-wide"
-  server-total-cosmetics-activated: "Total cosmetics activated server-wide"
-  server-total-achievements-unlocked: "Total achievements unlocked server-wide"
-  server-most-popular-cosmetic: "Most popular cosmetic server-wide"
-  server-most-used-type: "Most used cosmetic type server-wide"
-  
-  # Leaderboard placeholders
-  top-player-<stat>-<position>: "Player name at position in leaderboard"
-  top-value-<stat>-<position>: "Value at position in leaderboard"
-  # Available stats: cosmetics_activated, achievements_unlocked, credits_earned, credits_spent, total_usage_time
-  # Example: %sneakycosmetics_top_player_credits_earned_1% = Top credit earner's name
-  # Example: %sneakycosmetics_top_value_credits_earned_1% = Top credit earner's amount
-  
-  # CMI Integration placeholders
-  cmi-balance: "{cmi_balance}"
-  cmi-nickname: "{cmi_nickname}"
-  cmi-playtime: "{cmi_playtime}"
-  cmi-vanished: "true/false if player is vanished"
-  cmi-afk: "true/false if player is AFK"
-  cmi-god: "true/false if player is in god mode"
+  # Error placeholders
+  no-data: "&#808080No Data"
+  loading: "&#FFA500Loading..."
+  error: "&#FF4500Error"

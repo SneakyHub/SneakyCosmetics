@@ -199,6 +199,56 @@ public class CreditManager {
     }
     
     /**
+     * Check if a player can claim daily bonus
+     */
+    public boolean canClaimDailyBonus(UUID uuid) {
+        if (!plugin.getConfig().getBoolean("credits.daily-bonus.enabled", true)) {
+            return false;
+        }
+        
+        long currentTime = System.currentTimeMillis();
+        long lastClaim = dailyBonusCache.getOrDefault(uuid, 0L);
+        
+        // Check if 24 hours have passed
+        return currentTime - lastClaim >= 86400000L; // 24 hours in milliseconds
+    }
+    
+    /**
+     * Get hours until next daily bonus claim
+     */
+    public long getHoursUntilNextClaim(UUID uuid) {
+        if (!plugin.getConfig().getBoolean("credits.daily-bonus.enabled", true)) {
+            return 0;
+        }
+        
+        long currentTime = System.currentTimeMillis();
+        long lastClaim = dailyBonusCache.getOrDefault(uuid, 0L);
+        long timeLeft = 86400000L - (currentTime - lastClaim);
+        
+        if (timeLeft <= 0) {
+            return 0;
+        }
+        
+        return timeLeft / 3600000L; // Convert to hours
+    }
+    
+    /**
+     * Get daily streak for a player
+     */
+    public int getDailyStreak(UUID uuid) {
+        // TODO: Implement proper streak tracking in database
+        return 1; // Placeholder
+    }
+    
+    /**
+     * Get total daily rewards claimed by a player
+     */
+    public int getTotalDailyClaimed(UUID uuid) {
+        // TODO: Implement proper tracking in database
+        return 5; // Placeholder
+    }
+    
+    /**
      * Claim daily bonus credits
      */
     public CompletableFuture<Boolean> claimDailyBonus(Player player) {

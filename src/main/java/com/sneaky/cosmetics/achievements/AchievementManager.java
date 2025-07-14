@@ -183,6 +183,193 @@ public class AchievementManager {
         );
         registerAchievement(premiumMember);
         
+        // Credit achievements
+        Achievement creditEarner = new Achievement(
+            "credit_earner",
+            "Credit Earner",
+            "Earn your first 1,000 credits",
+            Material.GOLD_NUGGET,
+            Arrays.asList("Accumulate 1,000 credits total"),
+            150,
+            Achievement.AchievementType.CREDITS_EARNED,
+            1000
+        );
+        registerAchievement(creditEarner);
+        
+        Achievement bigSpender = new Achievement(
+            "big_spender",
+            "Big Spender",
+            "Spend 2,500 credits on cosmetics",
+            Material.EMERALD,
+            Arrays.asList("Spend 2,500 credits total"),
+            300,
+            Achievement.AchievementType.CREDITS_SPENT,
+            2500
+        );
+        registerAchievement(bigSpender);
+        
+        Achievement creditMillionaire = new Achievement(
+            "credit_millionaire",
+            "Credit Millionaire",
+            "Earn 10,000 credits total",
+            Material.DIAMOND,
+            Arrays.asList("Accumulate 10,000 credits total"),
+            750,
+            Achievement.AchievementType.CREDITS_EARNED,
+            10000
+        );
+        registerAchievement(creditMillionaire);
+        
+        // Daily login achievements
+        Achievement dailyStreak7 = new Achievement(
+            "daily_streak_7",
+            "Weekly Warrior",
+            "Log in for 7 consecutive days",
+            Material.CLOCK,
+            Arrays.asList("Claim daily rewards for 7 days straight"),
+            200,
+            Achievement.AchievementType.DAILY_STREAK,
+            7
+        );
+        registerAchievement(dailyStreak7);
+        
+        Achievement dailyStreak30 = new Achievement(
+            "daily_streak_30",
+            "Monthly Master",
+            "Log in for 30 consecutive days",
+            Material.GOLDEN_APPLE,
+            Arrays.asList("Claim daily rewards for 30 days straight"),
+            1000,
+            Achievement.AchievementType.DAILY_STREAK,
+            30
+        );
+        registerAchievement(dailyStreak30);
+        
+        Achievement dailyClaimer = new Achievement(
+            "daily_claimer",
+            "Daily Claimer",
+            "Claim 50 daily rewards total",
+            Material.CHEST,
+            Arrays.asList("Claim your daily reward 50 times"),
+            400,
+            Achievement.AchievementType.DAILY_CLAIMS,
+            50
+        );
+        registerAchievement(dailyClaimer);
+        
+        // Usage achievements
+        Achievement cosmeticActivator = new Achievement(
+            "cosmetic_activator",
+            "Cosmetic Activator",
+            "Activate cosmetics 100 times",
+            Material.REDSTONE,
+            Arrays.asList("Toggle cosmetics on/off 100 times"),
+            250,
+            Achievement.AchievementType.COSMETICS_ACTIVATED,
+            100
+        );
+        registerAchievement(cosmeticActivator);
+        
+        Achievement styleChanger = new Achievement(
+            "style_changer",
+            "Style Changer",
+            "Activate cosmetics 500 times",
+            Material.COMPARATOR,
+            Arrays.asList("Toggle cosmetics on/off 500 times"),
+            500,
+            Achievement.AchievementType.COSMETICS_ACTIVATED,
+            500
+        );
+        registerAchievement(styleChanger);
+        
+        // Pet specific achievements
+        Achievement petCollector = new Achievement(
+            "pet_collector_baby",
+            "Baby Pet Collector",
+            "Own 10 baby pet variants",
+            Material.EGG,
+            Arrays.asList("Collect 10 different baby pets"),
+            300,
+            Achievement.AchievementType.BABY_PETS,
+            10
+        );
+        registerAchievement(petCollector);
+        
+        Achievement legendaryPetOwner = new Achievement(
+            "legendary_pet_owner",
+            "Legendary Pet Owner",
+            "Own a legendary pet (Dragon, Wither, or Warden)",
+            Material.DRAGON_EGG,
+            Arrays.asList("Purchase any legendary tier pet"),
+            600,
+            Achievement.AchievementType.LEGENDARY_PET,
+            null
+        );
+        registerAchievement(legendaryPetOwner);
+        
+        // Particle achievements
+        Achievement particleShowoff = new Achievement(
+            "particle_showoff",
+            "Particle Showoff",
+            "Own 15 different particle effects",
+            Material.BLAZE_POWDER,
+            Arrays.asList("Collect 15 particle cosmetics"),
+            400,
+            Achievement.AchievementType.PARTICLE_COUNT,
+            15
+        );
+        registerAchievement(particleShowoff);
+        
+        // Social achievements
+        Achievement trendsetter = new Achievement(
+            "trendsetter",
+            "Trendsetter",
+            "Have 3 cosmetics active simultaneously",
+            Material.BEACON,
+            Arrays.asList("Activate 3 different cosmetics at once"),
+            200,
+            Achievement.AchievementType.SIMULTANEOUS_COSMETICS,
+            3
+        );
+        registerAchievement(trendsetter);
+        
+        Achievement cosmicBeing = new Achievement(
+            "cosmic_being",
+            "Cosmic Being",
+            "Have 5 cosmetics active simultaneously",
+            Material.END_CRYSTAL,
+            Arrays.asList("Activate 5 different cosmetics at once"),
+            500,
+            Achievement.AchievementType.SIMULTANEOUS_COSMETICS,
+            5
+        );
+        registerAchievement(cosmicBeing);
+        
+        // Special achievements
+        Achievement earlyAdopter = new Achievement(
+            "early_adopter",
+            "Early Adopter",
+            "Be among the first 100 players to use cosmetics",
+            Material.EXPERIENCE_BOTTLE,
+            Arrays.asList("Join the cosmetics system early"),
+            100,
+            Achievement.AchievementType.EARLY_ADOPTER,
+            null
+        );
+        registerAchievement(earlyAdopter);
+        
+        Achievement completionist = new Achievement(
+            "completionist",
+            "Completionist",
+            "Own every single cosmetic in the plugin",
+            Material.NETHERITE_INGOT,
+            Arrays.asList("Collect ALL cosmetics available"),
+            2500,
+            Achievement.AchievementType.COMPLETIONIST,
+            null
+        );
+        registerAchievement(completionist);
+        
         plugin.getLogger().info("Registered " + achievements.size() + " achievements");
     }
     
