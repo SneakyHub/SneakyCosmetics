@@ -442,7 +442,7 @@ public class CosmeticRegistry {
                 "hat_netherite", "Netherite Helm", 1000, Material.NETHERITE_HELMET,
                 java.util.Arrays.asList("§7The ultimate helmet", "§7forged in the depths of the Nether!"),
                 "sneakycosmetics.premium", true, true,
-                Material.NETHERITE_HELMET, "§4Netherite Helm", java.util.Arrays.asList("§4❖ Legendary ❖")
+                Material.NETHERITE_HELMET, "§4Netherite Helm", java.util.Arrays.asList("§4Legendary")
             );
             registerCosmetic(netheriteHelm);
             
@@ -453,7 +453,7 @@ public class CosmeticRegistry {
                 "hat_chef", "Chef's Hat", 200, Material.WHITE_WOOL,
                 java.util.Arrays.asList("§7A tall white chef's hat", "§7for culinary adventures!"),
                 null, false, false,
-                Material.WHITE_WOOL, "§f👨‍🍳 Chef's Hat", java.util.Arrays.asList("§7Perfect for cooking!")
+                Material.WHITE_WOOL, "§fChef's Hat", java.util.Arrays.asList("§7Perfect for cooking!")
             );
             registerCosmetic(chefHat);
             
@@ -462,7 +462,7 @@ public class CosmeticRegistry {
                 "hat_pirate", "Pirate Hat", 250, Material.BLACK_WOOL,
                 java.util.Arrays.asList("§7Ahoy matey! A classic", "§7pirate tricorn hat!"),
                 null, false, false,
-                Material.BLACK_WOOL, "§8🏴‍☠️ Pirate Hat", java.util.Arrays.asList("§8Sail the seven seas!")
+                Material.BLACK_WOOL, "§8Pirate Hat", java.util.Arrays.asList("§8Sail the seven seas!")
             );
             registerCosmetic(pirateHat);
             
@@ -471,7 +471,7 @@ public class CosmeticRegistry {
                 "hat_top", "Gentleman's Top Hat", 400, Material.BLACK_CARPET,
                 java.util.Arrays.asList("§7A sophisticated black top hat", "§7for the distinguished player!"),
                 null, false, false,
-                Material.BLACK_CARPET, "§8🎩 Top Hat", java.util.Arrays.asList("§8Quite distinguished!")
+                Material.BLACK_CARPET, "§8Top Hat", java.util.Arrays.asList("§8Quite distinguished!")
             );
             registerCosmetic(topHat);
             
@@ -480,7 +480,7 @@ public class CosmeticRegistry {
                 "hat_wizard", "Wizard Hat", 350, Material.PURPLE_WOOL,
                 java.util.Arrays.asList("§7A mystical pointed wizard hat", "§7filled with arcane power!"),
                 null, false, false,
-                Material.PURPLE_WOOL, "§5🧙‍♂️ Wizard Hat", java.util.Arrays.asList("§5✨ Magical powers! ✨")
+                Material.PURPLE_WOOL, "§5Wizard Hat", java.util.Arrays.asList("§5Magical powers!")
             );
             registerCosmetic(wizardHat);
             
@@ -489,7 +489,7 @@ public class CosmeticRegistry {
                 "hat_santa", "Santa Hat", 300, Material.RED_WOOL,
                 java.util.Arrays.asList("§7Ho ho ho! A festive", "§7red Santa hat!"),
                 null, false, false,
-                Material.RED_WOOL, "§c🎅 Santa Hat", java.util.Arrays.asList("§cSpread Christmas cheer!")
+                Material.RED_WOOL, "§cSanta Hat", java.util.Arrays.asList("§cSpread Christmas cheer!")
             );
             registerCosmetic(santaHat);
             
@@ -498,7 +498,7 @@ public class CosmeticRegistry {
                 "hat_party", "Party Hat", 180, Material.YELLOW_WOOL,
                 java.util.Arrays.asList("§7A colorful cone party hat", "§7for celebrations!"),
                 null, false, false,
-                Material.YELLOW_WOOL, "§e🎉 Party Hat", java.util.Arrays.asList("§eLet's celebrate!")
+                Material.YELLOW_WOOL, "§eParty Hat", java.util.Arrays.asList("§eLet's celebrate!")
             );
             registerCosmetic(partyHat);
             
@@ -507,7 +507,7 @@ public class CosmeticRegistry {
                 "hat_thorns", "Crown of Thorns", 450, Material.DEAD_BUSH,
                 java.util.Arrays.asList("§7A dark crown made of", "§7twisted thorns and brambles!"),
                 null, true, false,
-                Material.DEAD_BUSH, "§8⚫ Crown of Thorns", java.util.Arrays.asList("§8Sharp and dangerous!")
+                Material.DEAD_BUSH, "§8Crown of Thorns", java.util.Arrays.asList("§8Sharp and dangerous!")
             );
             registerCosmetic(thornCrown);
             
@@ -516,7 +516,7 @@ public class CosmeticRegistry {
                 "hat_ice", "Ice Crown", 380, Material.ICE,
                 java.util.Arrays.asList("§7A crystalline crown", "§7made of pure ice!"),
                 null, false, false,
-                Material.ICE, "§b❄️ Ice Crown", java.util.Arrays.asList("§bFrozen majesty!")
+                Material.ICE, "§bIce Crown", java.util.Arrays.asList("§bFrozen majesty!")
             );
             registerCosmetic(iceCrown);
             
@@ -525,7 +525,7 @@ public class CosmeticRegistry {
                 "hat_fire", "Crown of Flames", 420, Material.MAGMA_BLOCK,
                 java.util.Arrays.asList("§7A blazing crown that", "§7burns with eternal fire!"),
                 null, false, true,
-                Material.MAGMA_BLOCK, "§c🔥 Crown of Flames", java.util.Arrays.asList("§cBurning with power!")
+                Material.MAGMA_BLOCK, "§cCrown of Flames", java.util.Arrays.asList("§cBurning with power!")
             );
             registerCosmetic(fireCrown);
             
@@ -534,7 +534,7 @@ public class CosmeticRegistry {
                 "hat_nature", "Nature's Crown", 320, Material.OAK_LEAVES,
                 java.util.Arrays.asList("§7A living crown made", "§7of leaves and flowers!"),
                 null, false, false,
-                Material.OAK_LEAVES, "§a🌿 Nature's Crown", java.util.Arrays.asList("§aOne with nature!")
+                Material.OAK_LEAVES, "§aNature's Crown", java.util.Arrays.asList("§aOne with nature!")
             );
             registerCosmetic(natureCrown);
             
@@ -543,7 +543,7 @@ public class CosmeticRegistry {
                 "hat_viking", "Viking Helmet", 280, Material.IRON_HELMET,
                 java.util.Arrays.asList("§7A horned viking helmet", "§7for brave warriors!"),
                 null, false, false,
-                Material.IRON_HELMET, "§8⚔️ Viking Helmet", java.util.Arrays.asList("§8For Valhalla!")
+                Material.IRON_HELMET, "§8Viking Helmet", java.util.Arrays.asList("§8For Valhalla!")
             );
             registerCosmetic(vikingHelmet);
             
@@ -552,7 +552,7 @@ public class CosmeticRegistry {
                 "hat_pharaoh", "Pharaoh's Headdress", 500, Material.GOLD_BLOCK,
                 java.util.Arrays.asList("§7An ancient Egyptian headdress", "§7worn by pharaohs!"),
                 null, false, true,
-                Material.GOLD_BLOCK, "§6👑 Pharaoh's Headdress", java.util.Arrays.asList("§6Rule like a pharaoh!")
+                Material.GOLD_BLOCK, "§6Pharaoh's Headdress", java.util.Arrays.asList("§6Rule like a pharaoh!")
             );
             registerCosmetic(pharaohHat);
             
@@ -561,7 +561,7 @@ public class CosmeticRegistry {
                 "hat_space", "Space Helmet", 600, Material.GLASS,
                 java.util.Arrays.asList("§7A futuristic space helmet", "§7for cosmic adventures!"),
                 null, false, true,
-                Material.GLASS, "§f🚀 Space Helmet", java.util.Arrays.asList("§fTo infinity and beyond!")
+                Material.GLASS, "§fSpace Helmet", java.util.Arrays.asList("§fTo infinity and beyond!")
             );
             registerCosmetic(spaceHelmet);
             
@@ -570,7 +570,7 @@ public class CosmeticRegistry {
                 "hat_samurai", "Samurai Helmet", 450, Material.IRON_HELMET,
                 java.util.Arrays.asList("§7A traditional samurai kabuto", "§7for honorable warriors!"),
                 null, true, false,
-                Material.IRON_HELMET, "§8🗾 Samurai Helmet", java.util.Arrays.asList("§8Honor and duty!")
+                Material.IRON_HELMET, "§8Samurai Helmet", java.util.Arrays.asList("§8Honor and duty!")
             );
             registerCosmetic(samuraiHelmet);
             
@@ -579,7 +579,7 @@ public class CosmeticRegistry {
                 "hat_jester", "Jester's Hat", 220, Material.PURPLE_WOOL,
                 java.util.Arrays.asList("§7A colorful jester's cap", "§7with jingling bells!"),
                 null, false, false,
-                Material.PURPLE_WOOL, "§d🃏 Jester's Hat", java.util.Arrays.asList("§dEntertain the court!")
+                Material.PURPLE_WOOL, "§dJester's Hat", java.util.Arrays.asList("§dEntertain the court!")
             );
             registerCosmetic(jesterHat);
             
@@ -588,7 +588,7 @@ public class CosmeticRegistry {
                 "hat_beret", "French Beret", 150, Material.BLACK_WOOL,
                 java.util.Arrays.asList("§7A stylish French beret", "§7très magnifique!"),
                 null, false, false,
-                Material.BLACK_WOOL, "§8🇫🇷 French Beret", java.util.Arrays.asList("§8Très chic!")
+                Material.BLACK_WOOL, "§8French Beret", java.util.Arrays.asList("§8Très chic!")
             );
             registerCosmetic(beret);
             
@@ -597,7 +597,7 @@ public class CosmeticRegistry {
                 "hat_cowboy", "Cowboy Hat", 240, Material.BROWN_WOOL,
                 java.util.Arrays.asList("§7Yeehaw! A classic", "§7western cowboy hat!"),
                 null, false, false,
-                Material.BROWN_WOOL, "§6🤠 Cowboy Hat", java.util.Arrays.asList("§6Ride 'em cowboy!")
+                Material.BROWN_WOOL, "§6Cowboy Hat", java.util.Arrays.asList("§6Ride 'em cowboy!")
             );
             registerCosmetic(cowboyHat);
             
@@ -606,7 +606,7 @@ public class CosmeticRegistry {
                 "hat_fedora", "Classic Fedora", 190, Material.GRAY_WOOL,
                 java.util.Arrays.asList("§7A classy fedora hat", "§7for the sophisticated player!"),
                 null, false, false,
-                Material.GRAY_WOOL, "§8🕴️ Classic Fedora", java.util.Arrays.asList("§8Timeless style!")
+                Material.GRAY_WOOL, "§8Classic Fedora", java.util.Arrays.asList("§8Timeless style!")
             );
             registerCosmetic(fedora);
             
@@ -615,7 +615,7 @@ public class CosmeticRegistry {
                 "hat_baseball", "Baseball Cap", 120, Material.BLUE_WOOL,
                 java.util.Arrays.asList("§7A casual baseball cap", "§7perfect for sports!"),
                 null, false, false,
-                Material.BLUE_WOOL, "§9⚾ Baseball Cap", java.util.Arrays.asList("§9Play ball!")
+                Material.BLUE_WOOL, "§9Baseball Cap", java.util.Arrays.asList("§9Play ball!")
             );
             registerCosmetic(baseballCap);
             
@@ -626,7 +626,7 @@ public class CosmeticRegistry {
                 "hat_dragon", "Dragon Scale Helmet", 800, Material.DRAGON_HEAD,
                 java.util.Arrays.asList("§7A helmet forged from", "§7ancient dragon scales!"),
                 "sneakycosmetics.premium", true, true,
-                Material.DRAGON_HEAD, "§4🐲 Dragon Scale Helmet", java.util.Arrays.asList("§4Legendary protection!")
+                Material.DRAGON_HEAD, "§4Dragon Scale Helmet", java.util.Arrays.asList("§4Legendary protection!")
             );
             registerCosmetic(dragonHelmet);
             
@@ -635,7 +635,7 @@ public class CosmeticRegistry {
                 "hat_halo", "Angel Halo", 750, Material.END_ROD,
                 java.util.Arrays.asList("§7A divine halo that", "§7radiates holy light!"),
                 "sneakycosmetics.premium", true, true,
-                Material.END_ROD, "§f😇 Angel Halo", java.util.Arrays.asList("§fDivine blessing!")
+                Material.END_ROD, "§fAngel Halo", java.util.Arrays.asList("§fDivine blessing!")
             );
             registerCosmetic(angelHalo);
             
@@ -644,7 +644,7 @@ public class CosmeticRegistry {
                 "hat_devil", "Devil Horns", 666, Material.BLACKSTONE,
                 java.util.Arrays.asList("§7Sinister horns that", "§7mark you as diabolical!"),
                 "sneakycosmetics.premium", true, true,
-                Material.BLACKSTONE, "§c😈 Devil Horns", java.util.Arrays.asList("§cEmbraced by darkness!")
+                Material.BLACKSTONE, "§cDevil Horns", java.util.Arrays.asList("§cEmbraced by darkness!")
             );
             registerCosmetic(devilHorns);
             
@@ -653,7 +653,7 @@ public class CosmeticRegistry {
                 "hat_crystal", "Crystal Tiara", 900, Material.AMETHYST_CLUSTER,
                 java.util.Arrays.asList("§7A sparkling tiara made", "§7of pure crystal shards!"),
                 "sneakycosmetics.premium", true, true,
-                Material.AMETHYST_CLUSTER, "§d💎 Crystal Tiara", java.util.Arrays.asList("§dShimmering beauty!")
+                Material.AMETHYST_CLUSTER, "§dCrystal Tiara", java.util.Arrays.asList("§dShimmering beauty!")
             );
             registerCosmetic(crystalTiara);
             
@@ -841,7 +841,7 @@ public class CosmeticRegistry {
                 "trail_slime", "Slime Trail", 150, Material.SLIME_BALL,
                 java.util.Arrays.asList("§7Bouncy slime drops", "§7mark your path!"),
                 null, false, false,
-                Particle.SLIME, 3, 0.3, 0.1, 0.3, 0.1, plugin
+                Particle.ITEM, 3, 0.3, 0.1, 0.3, 0.1, plugin
             );
             registerCosmetic(slimeTrail);
             
@@ -890,7 +890,7 @@ public class CosmeticRegistry {
                 "trail_paw", "Paw Prints", 140, Material.BONE,
                 java.util.Arrays.asList("§7Cute paw prints", "§7follow your path!"),
                 null, false, false,
-                Particle.FOOTSTEP, 2, 0.2, 0.1, 0.2, 0.05, plugin
+                Particle.BLOCK, 2, 0.2, 0.1, 0.2, 0.05, plugin
             );
             registerCosmetic(pawTrail);
             

@@ -33,7 +33,16 @@ public class GUIManager implements Listener {
         if (text == null || text.isEmpty()) {
             return "";
         }
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
+        
+        // First handle hex colors like &#FF0000
+        text = text.replaceAll("&#([0-9a-fA-F]{6})", "§x§$1");
+        text = text.replaceAll("§x§([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])", "§x§$1§$2§$3§$4§$5§$6");
+        
+        // Then handle normal color codes
+        text = org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
+        
+        // Also handle § codes that might already be there
+        return text;
     }
     
     /**
@@ -449,6 +458,229 @@ public class GUIManager implements Listener {
             closeButton.setItemMeta(closeMeta);
         }
         gui.setItem(49, closeButton);
+        
+        player.openInventory(gui);
+    }
+    
+    /**
+     * Open the player stats GUI
+     */
+    public void openStatsGUI(Player player) {
+        Inventory gui = Bukkit.createInventory(null, 54, color("&b&l⚡ Player Statistics ⚡"));
+        
+        // Add decorative border
+        addBorder(gui, Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+        
+        // Add player head and info
+        ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta headMeta = playerHead.getItemMeta();
+        if (headMeta != null) {
+            headMeta.setDisplayName(color("&b&l⚡ " + player.getName() + "'s Profile ⚡"));
+            List<String> headLore = new ArrayList<>();
+            headLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headLore.add(color("&7Player: &f" + getPlaceholder(player, "player_name")));
+            headLore.add(color("&7UUID: &f" + player.getUniqueId().toString()));
+            headLore.add(color("&7Rank: &a" + getPlaceholder(player, "player_rank")));
+            headLore.add(color("&7First Join: &e" + getPlaceholder(player, "player_first_join")));
+            headLore.add(color("&7Last Seen: &e" + getPlaceholder(player, "player_last_seen")));
+            headLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headMeta.setLore(headLore);
+            playerHead.setItemMeta(headMeta);
+        }
+        gui.setItem(4, playerHead);
+        
+        // Credits section
+        ItemStack creditsItem = new ItemStack(Material.EMERALD);
+        ItemMeta creditsMeta = creditsItem.getItemMeta();
+        if (creditsMeta != null) {
+            creditsMeta.setDisplayName(color("&e&l💰 Credits & Economy"));
+            List<String> creditsLore = new ArrayList<>();
+            creditsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            creditsLore.add(color("&7Current Credits: &e" + getPlaceholder(player, "credits")));
+            creditsLore.add(color("&7Total Earned: &a" + getPlaceholder(player, "credits_earned")));
+            creditsLore.add(color("&7Total Spent: &c" + getPlaceholder(player, "credits_spent")));
+            creditsLore.add(color("&7Daily Streak: &6" + getPlaceholder(player, "daily_streak")));
+            creditsLore.add(color("&7Total Daily Claims: &b" + getPlaceholder(player, "daily_total_claimed")));
+            creditsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            creditsMeta.setLore(creditsLore);
+            creditsItem.setItemMeta(creditsMeta);
+        }
+        gui.setItem(10, creditsItem);
+        
+        // Cosmetics section
+        ItemStack cosmeticsItem = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta cosmeticsMeta = cosmeticsItem.getItemMeta();
+        if (cosmeticsMeta != null) {
+            cosmeticsMeta.setDisplayName(color("&d&l✨ Cosmetics Collection"));
+            List<String> cosmeticsLore = new ArrayList<>();
+            cosmeticsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            
+            int totalOwned = 0;
+            int totalActive = 0;
+            int totalAvailable = plugin.getCosmeticManager().getTotalCosmetics();
+            
+            for (CosmeticType type : CosmeticType.values()) {
+                int owned = getOwnedCount(player, type);
+                int active = getActiveCount(player, type);
+                int available = plugin.getCosmeticManager().getCosmeticCountByType(type);
+                
+                totalOwned += owned;
+                totalActive += active;
+                
+                if (available > 0) {
+                    cosmeticsLore.add(color("&7" + type.getDisplayName() + ": &a" + owned + "&7/&e" + available + " &7(Active: &d" + active + "&7)"));
+                }
+            }
+            
+            cosmeticsLore.add("");
+            cosmeticsLore.add(color("&7Total Owned: &a" + totalOwned + "&7/&e" + totalAvailable));
+            cosmeticsLore.add(color("&7Currently Active: &d" + totalActive));
+            cosmeticsLore.add(color("&7Collection Progress: &b" + String.format("%.1f", (double) totalOwned / totalAvailable * 100) + "%"));
+            cosmeticsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            cosmeticsMeta.setLore(cosmeticsLore);
+            cosmeticsItem.setItemMeta(cosmeticsMeta);
+        }
+        gui.setItem(12, cosmeticsItem);
+        
+        // Achievements section
+        ItemStack achievementsItem = new ItemStack(Material.GOLDEN_APPLE);
+        ItemMeta achievementsMeta = achievementsItem.getItemMeta();
+        if (achievementsMeta != null) {
+            double completionPercent = plugin.getAchievementManager().getCompletionPercentage(player);
+            int completedCount = plugin.getAchievementManager().getPlayerAchievements(player).size();
+            int totalCount = plugin.getAchievementManager().getAllAchievements().size();
+            
+            achievementsMeta.setDisplayName(color("&6&l🏆 Achievements"));
+            List<String> achievementsLore = new ArrayList<>();
+            achievementsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            achievementsLore.add(color("&7Completed: &a" + completedCount + "&7/&e" + totalCount));
+            achievementsLore.add(color("&7Progress: &b" + String.format("%.1f", completionPercent) + "%"));
+            achievementsLore.add(color("&7Credits from Achievements: &e" + plugin.getAchievementManager().getTotalCreditsEarned(player)));
+            achievementsLore.add("");
+            achievementsLore.add(color("&e&l❱ Click to view achievements!"));
+            achievementsLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            achievementsMeta.setLore(achievementsLore);
+            achievementsItem.setItemMeta(achievementsMeta);
+        }
+        gui.setItem(14, achievementsItem);
+        
+        // Server statistics section
+        ItemStack serverItem = new ItemStack(Material.BEACON);
+        ItemMeta serverMeta = serverItem.getItemMeta();
+        if (serverMeta != null) {
+            serverMeta.setDisplayName(color("&c&l⚡ Server Statistics"));
+            List<String> serverLore = new ArrayList<>();
+            serverLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            serverLore.add(color("&7Online Players: &a" + getPlaceholder(player, "server_players_online") + "&7/&e" + getPlaceholder(player, "server_players_max")));
+            serverLore.add(color("&7Server TPS: &b" + getPlaceholder(player, "server_tps")));
+            serverLore.add(color("&7Server Uptime: &d" + getPlaceholder(player, "server_uptime")));
+            serverLore.add(color("&7Total Cosmetics: &e" + plugin.getCosmeticManager().getTotalCosmetics()));
+            serverLore.add(color("&7Total Achievements: &6" + plugin.getAchievementManager().getAllAchievements().size()));
+            serverLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            serverMeta.setLore(serverLore);
+            serverItem.setItemMeta(serverMeta);
+        }
+        gui.setItem(16, serverItem);
+        
+        // Play time section
+        ItemStack playTimeItem = new ItemStack(Material.CLOCK);
+        ItemMeta playTimeMeta = playTimeItem.getItemMeta();
+        if (playTimeMeta != null) {
+            playTimeMeta.setDisplayName(color("&9&l⏰ Play Time Statistics"));
+            List<String> playTimeLore = new ArrayList<>();
+            playTimeLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            playTimeLore.add(color("&7Total Play Time: &b" + getPlaceholder(player, "player_hours_played") + " hours"));
+            playTimeLore.add(color("&7Session Time: &a" + getPlaceholder(player, "player_session_time")));
+            playTimeLore.add(color("&7Total Deaths: &c" + getPlaceholder(player, "player_deaths")));
+            playTimeLore.add(color("&7Blocks Broken: &e" + getPlaceholder(player, "player_blocks_broken")));
+            playTimeLore.add(color("&7Blocks Placed: &a" + getPlaceholder(player, "player_blocks_placed")));
+            playTimeLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            playTimeMeta.setLore(playTimeLore);
+            playTimeItem.setItemMeta(playTimeMeta);
+        }
+        gui.setItem(28, playTimeItem);
+        
+        // Usage statistics section
+        ItemStack usageItem = new ItemStack(Material.BOOK);
+        ItemMeta usageMeta = usageItem.getItemMeta();
+        if (usageMeta != null) {
+            usageMeta.setDisplayName(color("&5&l📊 Usage Statistics"));
+            List<String> usageLore = new ArrayList<>();
+            usageLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            usageLore.add(color("&7Cosmetics Activated: &d" + getPlaceholder(player, "stats_cosmetics_activated")));
+            usageLore.add(color("&7Commands Used: &b" + getPlaceholder(player, "stats_commands_used")));
+            usageLore.add(color("&7Menu Opens: &a" + getPlaceholder(player, "stats_menu_opens")));
+            usageLore.add(color("&7Purchases Made: &e" + getPlaceholder(player, "stats_purchases_made")));
+            usageLore.add(color("&7Favorite Type: &6" + getPlaceholder(player, "stats_favorite_type")));
+            usageLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            usageMeta.setLore(usageLore);
+            usageItem.setItemMeta(usageMeta);
+        }
+        gui.setItem(30, usageItem);
+        
+        // Rank and permissions section
+        ItemStack rankItem = new ItemStack(Material.DIAMOND);
+        ItemMeta rankMeta = rankItem.getItemMeta();
+        if (rankMeta != null) {
+            rankMeta.setDisplayName(color("&b&l👑 Rank & Permissions"));
+            List<String> rankLore = new ArrayList<>();
+            rankLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            rankLore.add(color("&7Current Rank: &a" + getPlaceholder(player, "player_rank")));
+            
+            if (player.hasPermission("sneakycosmetics.free")) {
+                rankLore.add(color("&6&l⭐ FREE ACCESS MEMBER ⭐"));
+            } else if (player.hasPermission("sneakycosmetics.premium")) {
+                rankLore.add(color("&5&l✦ PREMIUM MEMBER ✦"));
+            } else if (player.hasPermission("sneakycosmetics.vip")) {
+                rankLore.add(color("&e&l⚡ VIP MEMBER ⚡"));
+            } else {
+                rankLore.add(color("&7&l◆ STANDARD MEMBER ◆"));
+            }
+            
+            rankLore.add("");
+            rankLore.add(color("&7Permissions:"));
+            rankLore.add(color("&7• Free Access: " + (player.hasPermission("sneakycosmetics.free") ? "&a✓" : "&c✗")));
+            rankLore.add(color("&7• Premium: " + (player.hasPermission("sneakycosmetics.premium") ? "&a✓" : "&c✗")));
+            rankLore.add(color("&7• VIP: " + (player.hasPermission("sneakycosmetics.vip") ? "&a✓" : "&c✗")));
+            rankLore.add(color("&7• Admin: " + (player.hasPermission("sneakycosmetics.admin") ? "&a✓" : "&c✗")));
+            rankLore.add(color("&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            rankMeta.setLore(rankLore);
+            rankItem.setItemMeta(rankMeta);
+        }
+        gui.setItem(32, rankItem);
+        
+        // Back button
+        ItemStack backButton = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = backButton.getItemMeta();
+        if (backMeta != null) {
+            backMeta.setDisplayName(color("&e&l← Back to Menu"));
+            backMeta.setLore(List.of(color("&7Return to the main cosmetics menu")));
+            backButton.setItemMeta(backMeta);
+        }
+        gui.setItem(45, backButton);
+        
+        // Close button
+        ItemStack closeButton = new ItemStack(Material.BARRIER);
+        ItemMeta closeMeta = closeButton.getItemMeta();
+        if (closeMeta != null) {
+            closeMeta.setDisplayName(color("&c&l✗ Close Menu"));
+            closeMeta.setLore(List.of(color("&7Click to close this menu")));
+            closeButton.setItemMeta(closeMeta);
+        }
+        gui.setItem(49, closeButton);
+        
+        // Refresh button
+        ItemStack refreshButton = new ItemStack(Material.LIME_DYE);
+        ItemMeta refreshMeta = refreshButton.getItemMeta();
+        if (refreshMeta != null) {
+            refreshMeta.setDisplayName(color("&a&l🔄 Refresh Stats"));
+            refreshMeta.setLore(List.of(
+                color("&7Click to refresh your statistics"),
+                color("&7and update all values!")
+            ));
+            refreshButton.setItemMeta(refreshMeta);
+        }
+        gui.setItem(53, refreshButton);
         
         player.openInventory(gui);
     }
@@ -888,10 +1120,10 @@ public class GUIManager implements Listener {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
         
-        // Ignore border items (black glass panes with no display name or empty display name)
-        if (clickedItem.getType() == Material.BLACK_STAINED_GLASS_PANE || clickedItem.getType() == Material.GRAY_STAINED_GLASS_PANE) {
+        // Ignore border items (glass panes with no display name or empty display name)
+        if (clickedItem.getType().name().contains("GLASS_PANE")) {
             ItemMeta borderMeta = clickedItem.getItemMeta();
-            if (borderMeta == null || !borderMeta.hasDisplayName() || borderMeta.getDisplayName().equals("&0")) {
+            if (borderMeta == null || !borderMeta.hasDisplayName() || borderMeta.getDisplayName().equals(color("&0")) || borderMeta.getDisplayName().isEmpty()) {
                 return;
             }
         }
@@ -929,6 +1161,12 @@ public class GUIManager implements Listener {
             // Check for achievements button (slot 47) 
             if (slot == 47 && clickedItem.getType() == Material.GOLDEN_APPLE) {
                 openAchievementsGUI(player);
+                return;
+            }
+            
+            // Check for stats button (slot 45) - Player head
+            if (slot == 45 && clickedItem.getType() == Material.PLAYER_HEAD) {
+                openStatsGUI(player);
                 return;
             }
             
@@ -1052,6 +1290,34 @@ public class GUIManager implements Listener {
                         handleCosmeticPurchase(player, cosmetic);
                         return;
                     }
+                }
+            }
+        }
+        
+        // Handle stats GUI clicks
+        else if (title.contains("Statistics")) {
+            if (clickedItem.getType() == Material.BARRIER) {
+                player.closeInventory();
+                return;
+            }
+            
+            if (clickedItem.getType() == Material.ARROW) {
+                openMainGUI(player);
+                return;
+            }
+            
+            // Handle refresh button
+            if (clickedItem.getType() == Material.LIME_DYE) {
+                openStatsGUI(player); // Refresh the stats
+                return;
+            }
+            
+            // Handle achievements section click
+            if (clickedItem.getType() == Material.GOLDEN_APPLE) {
+                ItemMeta meta = clickedItem.getItemMeta();
+                if (meta != null && meta.getDisplayName().contains("Achievements")) {
+                    openAchievementsGUI(player);
+                    return;
                 }
             }
         }
@@ -1323,25 +1589,90 @@ public class GUIManager implements Listener {
      * Get placeholder value with fallback
      */
     private String getPlaceholder(Player player, String placeholder) {
-        if (plugin.getPlaceholderAPIIntegration() != null) {
-            String value = plugin.getPlaceholderAPIIntegration().onRequest(player, placeholder);
-            return value != null ? value : "N/A";
-        }
-        
-        // Fallback values when PlaceholderAPI is not available
-        switch (placeholder) {
-            case "player_name": return player.getName();
-            case "credits": return String.valueOf(plugin.getCreditManager().getCreditsSync(player.getUniqueId()));
-            case "player_rank": return "Player";
-            case "server_players_online": return String.valueOf(plugin.getServer().getOnlinePlayers().size());
-            case "server_players_max": return String.valueOf(plugin.getServer().getMaxPlayers());
-            case "player_hours_played": return "0";
-            case "achievements_completed": return String.valueOf(plugin.getAchievementManager().getPlayerAchievements(player).size());
-            case "achievements_total": return String.valueOf(plugin.getAchievementManager().getAllAchievements().size());
-            case "stats_cosmetics_activated": return String.valueOf(plugin.getStatisticsManager().getCosmeticsActivated(player.getUniqueId()));
-            case "daily_streak": return String.valueOf(plugin.getCreditManager().getDailyStreak(player.getUniqueId()));
-            case "daily_total_claimed": return String.valueOf(plugin.getCreditManager().getTotalDailyClaimed(player.getUniqueId()));
-            default: return "N/A";
+        try {
+            // First try PlaceholderAPI integration
+            if (plugin.getPlaceholderAPIIntegration() != null) {
+                String value = plugin.getPlaceholderAPIIntegration().onRequest(player, placeholder);
+                if (value != null && !value.isEmpty() && !value.equals("N/A")) {
+                    return value;
+                }
+            }
+            
+            // Enhanced fallback values when PlaceholderAPI is not available or returns null
+            switch (placeholder) {
+                case "player_name": 
+                    return player.getName();
+                case "credits": 
+                    return String.valueOf(plugin.getCreditManager().getCreditsSync(player.getUniqueId()));
+                case "player_rank": 
+                    // Simple rank detection based on permissions
+                    if (player.hasPermission("sneakycosmetics.admin")) {
+                        return "Admin";
+                    } else if (player.hasPermission("sneakycosmetics.premium")) {
+                        return "Premium";
+                    } else if (player.hasPermission("sneakycosmetics.vip")) {
+                        return "VIP";
+                    }
+                    return "Player";
+                case "server_players_online": 
+                    return String.valueOf(plugin.getServer().getOnlinePlayers().size());
+                case "server_players_max": 
+                    return String.valueOf(plugin.getServer().getMaxPlayers());
+                case "player_hours_played": 
+                    // Fallback playtime estimation
+                    return "0";
+                case "achievements_completed": 
+                    return String.valueOf(plugin.getAchievementManager().getPlayerAchievements(player).size());
+                case "achievements_total": 
+                    return String.valueOf(plugin.getAchievementManager().getAllAchievements().size());
+                case "stats_cosmetics_activated": 
+                    return String.valueOf(plugin.getStatisticsManager().getCosmeticsActivated(player.getUniqueId()));
+                case "daily_streak": 
+                    return String.valueOf(plugin.getCreditManager().getDailyStreak(player.getUniqueId()));
+                case "daily_total_claimed": 
+                    return String.valueOf(plugin.getCreditManager().getTotalDailyClaimed(player.getUniqueId()));
+                case "credits_earned":
+                    try {
+                        return String.valueOf(plugin.getStatisticsManager().getTotalCreditsEarned());
+                    } catch (Exception e) {
+                        return "0";
+                    }
+                case "credits_spent":
+                    try {
+                        return String.valueOf(plugin.getStatisticsManager().getTotalCreditsSpent());
+                    } catch (Exception e) {
+                        return "0";
+                    }
+                case "player_first_join":
+                    return "Unknown";
+                case "player_last_seen":
+                    return "Now";
+                case "player_session_time":
+                    return "This session";
+                case "player_deaths":
+                    return "0";
+                case "player_blocks_broken":
+                    return "0";
+                case "player_blocks_placed":
+                    return "0";
+                case "server_tps":
+                    return "20.0";
+                case "server_uptime":
+                    return "Unknown";
+                case "stats_commands_used":
+                    return "0";
+                case "stats_menu_opens":
+                    return "0";
+                case "stats_purchases_made":
+                    return "0";
+                case "stats_favorite_type":
+                    return "None";
+                default: 
+                    return "0";
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Error getting placeholder '" + placeholder + "' for player " + player.getName() + ": " + e.getMessage());
+            return "0";
         }
     }
     

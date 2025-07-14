@@ -28,7 +28,11 @@
       "Bash(.mvnw.cmd compile:*)",
       "Bash(build.bat)",
       "Bash(mv:*)",
-      "Bash(.build.bat)"
+      "Bash(.build.bat)",
+      "Bash(\".\\tools\\apache-maven-3.9.6\\bin\\mvn.cmd\" compile)",
+      "Bash(\"tools\\apache-maven-3.9.6\\bin\\mvn.cmd\" compile)",
+      "Bash(.toolsapache-maven-3.9.6binmvn.cmd compile)",
+      "Bash(./tools/apache-maven-3.9.6/bin/mvn.cmd compile)"
     ],
     "deny": []
   }
