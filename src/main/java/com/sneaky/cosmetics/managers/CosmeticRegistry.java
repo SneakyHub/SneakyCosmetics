@@ -43,6 +43,7 @@ public class CosmeticRegistry {
         registerGadgetCosmetics();
         registerWingCosmetics();
         registerAuraCosmetics();
+        registerMorphCosmetics();
         
         plugin.getLogger().info("Cosmetic registration complete. Registered " + getTotalCosmetics() + " cosmetics!");
     }
@@ -2050,6 +2051,155 @@ public class CosmeticRegistry {
             
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register aura cosmetics: " + e.getMessage());
+        }
+    }
+    
+    private void registerMorphCosmetics() {
+        try {
+            Class.forName("com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic");
+            
+            // === COMMON MORPHS ===
+            
+            // Wolf Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic wolfMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_wolf", "Wolf", 500, Material.BONE,
+                java.util.Arrays.asList("§7Transform into a loyal wolf companion", "§7with pack-based abilities!"),
+                "sneakycosmetics.morph.wolf", false, false,
+                org.bukkit.entity.EntityType.WOLF, false, true, 1.0,
+                java.util.Arrays.asList("Pack Howl - Give speed boost to nearby players", "Enhanced senses - Detect nearby entities"),
+                "ENTITY_WOLF_AMBIENT", "ENTITY_WOLF_WHINE"
+            );
+            registerCosmetic(wolfMorph);
+            
+            // Rabbit Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic rabbitMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_rabbit", "Rabbit", 300, Material.CARROT,
+                java.util.Arrays.asList("§7Hop around as an adorable rabbit", "§7with enhanced jumping abilities!"),
+                "sneakycosmetics.morph.rabbit", false, false,
+                org.bukkit.entity.EntityType.RABBIT, false, true, 1.0,
+                java.util.Arrays.asList("Super Jump - Jump higher than normal", "Speed Boost - Move faster when hopping"),
+                "ENTITY_RABBIT_AMBIENT", "ENTITY_RABBIT_HURT"
+            );
+            registerCosmetic(rabbitMorph);
+            
+            // Bat Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic batMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_bat", "Bat", 400, Material.LEATHER,
+                java.util.Arrays.asList("§7Transform into a night-flying bat", "§7with echolocation powers!"),
+                "sneakycosmetics.morph.bat", false, false,
+                org.bukkit.entity.EntityType.BAT, true, true, 0.5,
+                java.util.Arrays.asList("Echolocation - Detect nearby entities", "Night Vision - See in darkness"),
+                "ENTITY_BAT_AMBIENT", "ENTITY_BAT_HURT"
+            );
+            registerCosmetic(batMorph);
+            
+            // Squid Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic squidMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_squid", "Squid", 350, Material.INK_SAC,
+                java.util.Arrays.asList("§7Become a mysterious squid", "§7with underwater abilities!"),
+                "sneakycosmetics.morph.squid", false, false,
+                org.bukkit.entity.EntityType.SQUID, false, true, 1.0,
+                java.util.Arrays.asList("Ink Cloud - Create defensive ink cloud", "Water Breathing - Breathe underwater"),
+                "ENTITY_SQUID_AMBIENT", "ENTITY_SQUID_HURT"
+            );
+            registerCosmetic(squidMorph);
+            
+            // === RARE MORPHS ===
+            
+            // Horse Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic horseMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_horse", "Horse", 600, Material.SADDLE,
+                java.util.Arrays.asList("§7Transform into a majestic horse", "§7with incredible speed!"),
+                "sneakycosmetics.morph.horse", false, false,
+                org.bukkit.entity.EntityType.HORSE, false, true, 1.6,
+                java.util.Arrays.asList("Gallop - Move at incredible speeds", "Jump Boost - Leap over obstacles"),
+                "ENTITY_HORSE_AMBIENT", "ENTITY_HORSE_HURT"
+            );
+            registerCosmetic(horseMorph);
+            
+            // Creeper Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic creeperMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_creeper", "Creeper", 550, Material.GUNPOWDER,
+                java.util.Arrays.asList("§7Become the feared creeper", "§7with explosive abilities!"),
+                "sneakycosmetics.morph.creeper", false, false,
+                org.bukkit.entity.EntityType.CREEPER, false, true, 1.0,
+                java.util.Arrays.asList("Explosion - Create harmless fireworks", "Sneak Walk - Move silently"),
+                "ENTITY_CREEPER_PRIMED", "ENTITY_CREEPER_HURT"
+            );
+            registerCosmetic(creeperMorph);
+            
+            // === EPIC MORPHS ===
+            
+            // Spider Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic spiderMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_spider", "Spider", 700, Material.STRING,
+                java.util.Arrays.asList("§7Transform into a venomous spider", "§7with wall-climbing abilities!"),
+                "sneakycosmetics.morph.spider", false, true,
+                org.bukkit.entity.EntityType.SPIDER, false, true, 1.0,
+                java.util.Arrays.asList("Wall Climb - Climb walls and ceilings", "Web Trap - Create web traps"),
+                "ENTITY_SPIDER_AMBIENT", "ENTITY_SPIDER_HURT"
+            );
+            registerCosmetic(spiderMorph);
+            
+            // Enderman Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic endermanMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_enderman", "Enderman", 800, Material.ENDER_PEARL,
+                java.util.Arrays.asList("§7Become the mysterious enderman", "§7with teleportation powers!"),
+                "sneakycosmetics.morph.enderman", false, true,
+                org.bukkit.entity.EntityType.ENDERMAN, false, true, 2.9,
+                java.util.Arrays.asList("Teleport - Instantly move to target location", "Block Pickup - Pick up blocks"),
+                "ENTITY_ENDERMAN_AMBIENT", "ENTITY_ENDERMAN_HURT"
+            );
+            registerCosmetic(endermanMorph);
+            
+            // Blaze Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic blazeMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_blaze", "Blaze", 750, Material.BLAZE_ROD,
+                java.util.Arrays.asList("§7Transform into a fiery blaze", "§7with fire-based abilities!"),
+                "sneakycosmetics.morph.blaze", false, true,
+                org.bukkit.entity.EntityType.BLAZE, true, true, 1.8,
+                java.util.Arrays.asList("Fireball - Launch fireballs", "Fire Immunity - Immune to fire damage"),
+                "ENTITY_BLAZE_AMBIENT", "ENTITY_BLAZE_HURT"
+            );
+            registerCosmetic(blazeMorph);
+            
+            // === LEGENDARY MORPHS ===
+            
+            // Ender Dragon Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic dragonMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_dragon", "Ender Dragon", 1500, Material.DRAGON_EGG,
+                java.util.Arrays.asList("§7Become the legendary Ender Dragon", "§7with ultimate powers!"),
+                "sneakycosmetics.morph.dragon", true, true,
+                org.bukkit.entity.EntityType.ENDER_DRAGON, true, true, 8.0,
+                java.util.Arrays.asList("Dragon Breath - Breathe deadly acid", "Flight - Soar through the skies"),
+                "ENTITY_ENDER_DRAGON_AMBIENT", "ENTITY_ENDER_DRAGON_HURT"
+            );
+            registerCosmetic(dragonMorph);
+            
+            // Phoenix Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic phoenixMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_phoenix", "Phoenix", 1200, Material.BLAZE_POWDER,
+                java.util.Arrays.asList("§7Rise as the mythical phoenix", "§7with rebirth abilities!"),
+                "sneakycosmetics.morph.phoenix", true, true,
+                org.bukkit.entity.EntityType.BLAZE, true, true, 1.8,
+                java.util.Arrays.asList("Rebirth - Resurrect after death", "Phoenix Fire - Create healing flames"),
+                "ENTITY_BLAZE_AMBIENT", "ENTITY_BLAZE_DEATH"
+            );
+            registerCosmetic(phoenixMorph);
+            
+            // Wither Morph
+            com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic witherMorph = new com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic(
+                "morph_wither", "Wither", 1800, Material.NETHER_STAR,
+                java.util.Arrays.asList("§7Transform into the devastating Wither", "§7with destructive powers!"),
+                "sneakycosmetics.morph.wither", true, true,
+                org.bukkit.entity.EntityType.WITHER, true, true, 3.5,
+                java.util.Arrays.asList("Wither Skull - Launch explosive skulls", "Wither Effect - Apply wither to enemies"),
+                "ENTITY_WITHER_AMBIENT", "ENTITY_WITHER_HURT"
+            );
+            registerCosmetic(witherMorph);
+            
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to register morph cosmetics: " + e.getMessage());
         }
     }
 }

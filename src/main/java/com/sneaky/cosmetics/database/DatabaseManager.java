@@ -301,7 +301,7 @@ public class DatabaseManager {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection();
                  PreparedStatement statement = connection.prepareStatement(
-                     "INSERT IGNORE INTO player_data (uuid, username, credits) VALUES (?, ?, ?)"
+                     "INSERT OR IGNORE INTO player_data (uuid, username, credits) VALUES (?, ?, ?)"
                  )) {
                 
                 statement.setString(1, uuid.toString());
@@ -418,7 +418,7 @@ public class DatabaseManager {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection();
                  PreparedStatement statement = connection.prepareStatement(
-                     "INSERT IGNORE INTO cosmetic_ownership (player_uuid, cosmetic_id) VALUES (?, ?)"
+                     "INSERT OR IGNORE INTO cosmetic_ownership (player_uuid, cosmetic_id) VALUES (?, ?)"
                  )) {
                 
                 statement.setString(1, uuid.toString());

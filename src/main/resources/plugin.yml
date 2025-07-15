@@ -24,6 +24,13 @@ commands:
     aliases: [credit, money]
     permission: sneakycosmetics.credits
     permission-message: "&cYou do not have permission to use credits!"
+  
+  morph:
+    description: Transform into different creatures
+    usage: /<command> [list|help|<morph_name>]
+    aliases: [transform, shift]
+    permission: sneakycosmetics.use
+    permission-message: "&cYou do not have permission to use morphs!"
 
 permissions:
   sneakycosmetics.*:

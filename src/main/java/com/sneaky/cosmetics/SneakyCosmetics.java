@@ -285,6 +285,12 @@ public class SneakyCosmetics extends JavaPlugin {
         } else {
             getLogger().warning("Failed to register /credits command - command not found in plugin.yml");
         }
+        
+        if (getCommand("morph") != null) {
+            getCommand("morph").setExecutor(new com.sneaky.cosmetics.commands.MorphCommand(this));
+        } else {
+            getLogger().warning("Failed to register /morph command - command not found in plugin.yml");
+        }
     }
     
     private void registerListeners() {
