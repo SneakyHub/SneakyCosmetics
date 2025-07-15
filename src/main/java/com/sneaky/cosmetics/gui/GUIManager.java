@@ -1347,7 +1347,7 @@ public class GUIManager implements Listener {
         if (!cleanTitle.contains("Cosmetics") && !cleanTitle.contains("Particles") && !cleanTitle.contains("Hats") && 
             !cleanTitle.contains("Pets") && !cleanTitle.contains("Trails") && !cleanTitle.contains("Gadgets") && 
             !cleanTitle.contains("Wings") && !cleanTitle.contains("Auras") && !cleanTitle.contains("Shop") && 
-            !cleanTitle.contains("Achievement") && !cleanTitle.contains("Daily Rewards")) {
+            !cleanTitle.contains("Achievement") && !cleanTitle.contains("Daily Rewards") && !cleanTitle.contains("Statistics")) {
             plugin.getLogger().info("GUI Click Debug - Title not matching, clean title: '" + cleanTitle + "'");
             return;
         }
@@ -1439,7 +1439,7 @@ public class GUIManager implements Listener {
         }
         
         // Handle credits shop clicks
-        else if (title.contains("Shop")) {
+        else if (cleanTitle.contains("Shop")) {
             if (clickedItem.getType() == Material.BARRIER) {
                 player.closeInventory();
                 return;
@@ -1534,7 +1534,7 @@ public class GUIManager implements Listener {
         }
         
         // Handle stats GUI clicks
-        else if (title.contains("Statistics")) {
+        else if (cleanTitle.contains("Statistics")) {
             if (clickedItem.getType() == Material.BARRIER) {
                 player.closeInventory();
                 return;
@@ -1562,7 +1562,7 @@ public class GUIManager implements Listener {
         }
         
         // Handle achievements GUI clicks
-        else if (title.contains("Achievement")) {
+        else if (cleanTitle.contains("Achievement")) {
             if (clickedItem.getType() == Material.BARRIER) {
                 player.closeInventory();
                 return;
@@ -1589,7 +1589,7 @@ public class GUIManager implements Listener {
         }
         
         // Handle daily rewards GUI clicks
-        else if (title.contains("Daily Rewards")) {
+        else if (cleanTitle.contains("Daily Rewards")) {
             if (clickedItem.getType() == Material.BARRIER) {
                 player.closeInventory();
                 return;
@@ -2002,7 +2002,8 @@ public class GUIManager implements Listener {
         if (cleanTitle.contains("Cosmetics") || cleanTitle.contains("Particles") || cleanTitle.contains("Hats") || 
             cleanTitle.contains("Pets") || cleanTitle.contains("Trails") || cleanTitle.contains("Gadgets") || 
             cleanTitle.contains("Wings") || cleanTitle.contains("Auras") || cleanTitle.contains("Morphs") || 
-            cleanTitle.contains("Shop") || cleanTitle.contains("Achievement") || cleanTitle.contains("Daily Rewards")) {
+            cleanTitle.contains("Shop") || cleanTitle.contains("Achievement") || cleanTitle.contains("Daily Rewards") || 
+            cleanTitle.contains("Statistics")) {
             event.setCancelled(true);
         }
     }
@@ -2025,8 +2026,8 @@ public class GUIManager implements Listener {
         }
         
         // Cancel if either source or destination is a cosmetics GUI
-        if ((sourceTitle.contains("Cosmetics") || sourceTitle.contains("Shop") || sourceTitle.contains("Achievement") || sourceTitle.contains("Daily Rewards") || sourceTitle.contains("Morphs") || sourceTitle.contains("Pets")) ||
-            (destTitle.contains("Cosmetics") || destTitle.contains("Shop") || destTitle.contains("Achievement") || destTitle.contains("Daily Rewards") || destTitle.contains("Morphs") || destTitle.contains("Pets"))) {
+        if ((sourceTitle.contains("Cosmetics") || sourceTitle.contains("Shop") || sourceTitle.contains("Achievement") || sourceTitle.contains("Daily Rewards") || sourceTitle.contains("Morphs") || sourceTitle.contains("Pets") || sourceTitle.contains("Statistics")) ||
+            (destTitle.contains("Cosmetics") || destTitle.contains("Shop") || destTitle.contains("Achievement") || destTitle.contains("Daily Rewards") || destTitle.contains("Morphs") || destTitle.contains("Pets") || destTitle.contains("Statistics"))) {
             event.setCancelled(true);
         }
     }

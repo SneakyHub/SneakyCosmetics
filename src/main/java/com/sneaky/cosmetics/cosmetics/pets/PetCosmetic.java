@@ -181,37 +181,65 @@ public class PetCosmetic extends Cosmetic implements Listener {
                 // Get speed multiplier based on level
                 double speedMultiplier = 1.0 + (petData.getAbilityLevel("speed") * 0.1);
                 
-                // Teleport if too far
-                if (distance > 15) {
-                    Location teleportLocation = playerLocation.add(
-                        Math.random() * 4 - 2, 0, Math.random() * 4 - 2
-                    );
-                    pet.teleport(teleportLocation);
-                    
-                    // Play teleport effect
-                    pet.getWorld().spawnParticle(Particle.PORTAL, petLocation, 10);
-                    pet.getWorld().playSound(petLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 1.2f);
-                } else if (distance > 3) {
-                    // Move towards player with level-based speed
-                    Location targetLocation = playerLocation.clone().add(
-                        Math.random() * 2 - 1, 0, Math.random() * 2 - 1
-                    );
-                    
-                    // Simple movement towards target
-                    double deltaX = targetLocation.getX() - petLocation.getX();
-                    double deltaZ = targetLocation.getZ() - petLocation.getZ();
-                    double deltaY = targetLocation.getY() - petLocation.getY();
-                    
-                    // Normalize and apply speed with level bonus
-                    double speed = 0.3 * speedMultiplier;
-                    double length = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-                    if (length > 0) {
-                        deltaX = (deltaX / length) * speed;
-                        deltaZ = (deltaZ / length) * speed;
-                    }
-                    
-                    Location newLocation = petLocation.add(deltaX, deltaY, deltaZ);
-                    pet.teleport(newLocation);
+                // Use improved pathfinding system
+                PetPathfinder.MovementResult movement = PetPathfinder.calculateMovement(pet, player, speedMultiplier);
+                
+                switch (movement.getType()) {
+                    case TELEPORT:
+                        Location teleportLoc = movement.getLocation();
+                        if (teleportLoc != null) {
+                            // Play teleport effect at old location
+                            pet.getWorld().spawnParticle(Particle.PORTAL, petLocation, 15, 0.5, 0.5, 0.5, 0.1);
+                            pet.getWorld().playSound(petLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 1.2f);
+                            
+                            // Teleport pet
+                            pet.teleport(teleportLoc);
+                            
+                            // Play teleport effect at new location
+                            pet.getWorld().spawnParticle(Particle.PORTAL, teleportLoc, 15, 0.5, 0.5, 0.5, 0.1);
+                            pet.getWorld().playSound(teleportLoc, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 1.2f);
+                        }
+                        break;
+                        
+                    case WALK:
+                        Location walkLoc = movement.getLocation();
+                        if (walkLoc != null) {
+                            // Check if pet should jump
+                            if (PetPathfinder.shouldJump(petLocation, walkLoc) && pet instanceof LivingEntity) {
+                                PetPathfinder.applyJump((LivingEntity) pet);
+                            }
+                            
+                            // Smooth movement with velocity
+                            if (pet instanceof LivingEntity) {
+                                LivingEntity livingPet = (LivingEntity) pet;
+                                Vector velocity = walkLoc.toVector().subtract(petLocation.toVector());
+                                
+                                // Limit velocity to prevent pets from moving too fast
+                                double maxVelocity = 0.5 * speedMultiplier;
+                                if (velocity.length() > maxVelocity) {
+                                    velocity.normalize().multiply(maxVelocity);
+                                }
+                                
+                                // Preserve Y velocity for jumping/falling
+                                velocity.setY(Math.max(velocity.getY(), livingPet.getVelocity().getY()));
+                                
+                                livingPet.setVelocity(velocity);
+                            } else {
+                                // Fallback to teleportation for non-living entities
+                                pet.teleport(walkLoc);
+                            }
+                        }
+                        break;
+                        
+                    case JUMP:
+                        if (pet instanceof LivingEntity) {
+                            PetPathfinder.applyJump((LivingEntity) pet);
+                        }
+                        break;
+                        
+                    case IDLE:
+                        // Pet is close enough, no movement needed
+                        break;
                 }
                 
                 // Spawn mood particles
@@ -219,7 +247,7 @@ public class PetCosmetic extends Cosmetic implements Listener {
             }
         };
         
-        followTask.runTaskTimer(plugin, 0L, 10L); // Every 0.5 seconds
+        followTask.runTaskTimer(plugin, 0L, 6L); // Every 0.3 seconds for smoother movement
         petTasks.put(player, followTask);
     }
     
