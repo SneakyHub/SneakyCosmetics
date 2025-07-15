@@ -78,7 +78,7 @@ public class GUIManager implements Listener {
         gui.setItem(4, titleItem);
         
         // Add cosmetic type categories in a nice layout
-        int[] slots = {19, 21, 23, 25, 28, 30, 32};
+        int[] slots = {19, 20, 21, 23, 24, 25, 28, 29};
         CosmeticType[] types = CosmeticType.values();
         
         for (int i = 0; i < Math.min(types.length, slots.length); i++) {
@@ -1410,7 +1410,7 @@ public class GUIManager implements Listener {
             }
             
             // Check specific slots for cosmetic types (more reliable than material matching)
-            int[] slots = {19, 21, 23, 25, 28, 30, 32};
+            int[] slots = {19, 20, 21, 23, 24, 25, 28, 29};
             CosmeticType[] types = CosmeticType.values();
             
             plugin.getLogger().info("GUI Click Debug - Checking slot " + slot + " against slots: " + java.util.Arrays.toString(slots));

@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
@@ -322,6 +323,15 @@ public class PetCosmetic extends Cosmetic implements Listener {
                     plugin.getMessageManager().sendMessage(player, "§7You dismounted your pet!");
                 }
             }
+        }
+    }
+    
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        // Prevent all pets from taking damage
+        Entity entity = event.getEntity();
+        if (activePets.containsValue(entity)) {
+            event.setCancelled(true);
         }
     }
     
