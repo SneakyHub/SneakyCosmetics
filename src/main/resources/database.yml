@@ -1,0 +1,341 @@
+# SneakyCosmetics Database Configuration
+# This file contains all database-related settings
+# Version: 1.1.0
+
+# Configuration version (do not modify)
+config-version: 1
+
+# Database Configuration
+database:
+  # Database type: sqlite, mysql, postgresql, mariadb
+  type: sqlite
+  
+  # SQLite settings (only used if type is sqlite)
+  sqlite:
+    # Database file name (will be created in plugin folder)
+    filename: "sneakycosmetics.db"
+    # Enable WAL mode for better performance
+    wal-mode: true
+    # Database pragma settings for optimization
+    pragmas:
+      journal_mode: "WAL"
+      synchronous: "NORMAL"
+      cache_size: 10000
+      temp_store: "MEMORY"
+      mmap_size: 268435456  # 256MB
+  
+  # MySQL settings (only used if type is mysql)
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "sneakycosmetics"
+    username: "root"
+    password: "password"
+    # Use SSL connection
+    ssl: false
+    # Verify server certificate (only if SSL is enabled)
+    verify-server-certificate: false
+    # Character set
+    charset: "utf8mb4"
+    # Collation
+    collation: "utf8mb4_unicode_ci"
+    # Additional connection properties
+    properties:
+      useSSL: false
+      allowPublicKeyRetrieval: true
+      serverTimezone: "UTC"
+      autoReconnect: true
+      failOverReadOnly: false
+      maxReconnects: 3
+      initialTimeout: 2
+    
+  # PostgreSQL settings (only used if type is postgresql)
+  postgresql:
+    host: "localhost"
+    port: 5432
+    database: "sneakycosmetics"
+    username: "postgres"
+    password: "password"
+    # Schema name
+    schema: "public"
+    # Use SSL connection
+    ssl: false
+    # Additional connection properties
+    properties:
+      sslmode: "disable"
+      ApplicationName: "SneakyCosmetics"
+      tcpKeepAlive: true
+    
+  # MariaDB settings (only used if type is mariadb)
+  mariadb:
+    host: "localhost"
+    port: 3306
+    database: "sneakycosmetics"
+    username: "root"
+    password: "password"
+    # Use SSL connection
+    ssl: false
+    # Character set
+    charset: "utf8mb4"
+    # Collation
+    collation: "utf8mb4_unicode_ci"
+    # Additional connection properties
+    properties:
+      useSSL: false
+      serverTimezone: "UTC"
+      autoReconnect: true
+      
+# Connection Pool Settings
+connection-pool:
+  # HikariCP connection pool settings
+  hikari:
+    # Maximum number of connections in the pool
+    maximum-pool-size: 10
+    # Minimum number of idle connections
+    minimum-idle: 2
+    # Maximum time to wait for a connection (milliseconds)
+    connection-timeout: 30000
+    # Maximum idle time for connections (milliseconds)
+    idle-timeout: 600000
+    # Maximum lifetime of connections (milliseconds)
+    max-lifetime: 1800000
+    # Time between keepalive checks (milliseconds)
+    keepalive-time: 300000
+    # Validate connections before use
+    validation-timeout: 5000
+    # Test connection on borrow
+    test-on-borrow: true
+    # Custom connection test query (leave empty for default)
+    connection-test-query: ""
+    # Pool name for monitoring
+    pool-name: "SneakyCosmetics-Pool"
+    
+  # Connection retry settings
+  retry:
+    enabled: true
+    max-attempts: 3
+    delay-between-attempts: 5000  # milliseconds
+    exponential-backoff: true
+
+# Database Optimization Settings
+optimization:
+  # Batch operations for better performance
+  batch-operations:
+    enabled: true
+    # Batch size for insert/update operations
+    batch-size: 100
+    # Maximum time to wait before executing batch (milliseconds)
+    batch-timeout: 1000
+    
+  # Connection management
+  connection-management:
+    # Close connections after this many operations
+    max-operations-per-connection: 1000
+    # Force connection refresh after this time (minutes)
+    connection-refresh-interval: 30
+    
+  # Query optimization
+  query-optimization:
+    # Use prepared statements
+    use-prepared-statements: true
+    # Cache prepared statements
+    cache-prepared-statements: true
+    # Maximum cached statements
+    max-cached-statements: 50
+    
+  # Database maintenance
+  maintenance:
+    # Auto-optimize database (SQLite only)
+    auto-optimize: true
+    # Optimization interval (hours)
+    optimize-interval: 24
+    # Auto-vacuum for SQLite
+    auto-vacuum: "INCREMENTAL"
+
+# Data Management Settings
+data-management:
+  # Automatic data cleanup
+  cleanup:
+    enabled: true
+    # Clean up old transaction logs (days)
+    transaction-logs: 90
+    # Clean up old login records (days)
+    login-records: 30
+    # Clean up old achievement data (days)
+    achievement-data: 365
+    # Cleanup interval (hours)
+    cleanup-interval: 24
+    
+  # Data archiving
+  archiving:
+    enabled: false
+    # Archive old data instead of deleting
+    archive-old-data: true
+    # Archive threshold (days)
+    archive-threshold: 180
+    # Archive table suffix
+    archive-suffix: "_archived"
+    
+  # Data backup
+  backup:
+    enabled: true
+    # Backup interval (hours)
+    backup-interval: 24
+    # Number of backups to keep
+    backup-retention: 7
+    # Backup location (relative to plugin folder)
+    backup-location: "backups"
+    # Compress backups
+    compress-backups: true
+
+# Database Schema Settings
+schema:
+  # Table prefix for all SneakyCosmetics tables
+  table-prefix: "sc_"
+  
+  # Table names (without prefix)
+  tables:
+    players: "players"
+    cosmetics: "cosmetics"
+    owned_cosmetics: "owned_cosmetics"
+    active_cosmetics: "active_cosmetics"
+    transactions: "transactions"
+    achievements: "achievements"
+    player_achievements: "player_achievements"
+    daily_rewards: "daily_rewards"
+    statistics: "statistics"
+    morph_data: "morph_data"
+    
+  # Auto-create tables on startup
+  auto-create-tables: true
+  
+  # Auto-update schema on plugin updates
+  auto-update-schema: true
+  
+  # Schema version tracking
+  version-tracking: true
+
+# Debugging and Monitoring
+debugging:
+  # Enable database debug logging
+  debug-logging: false
+  
+  # Log all SQL queries (performance impact!)
+  log-queries: false
+  
+  # Log slow queries (queries taking longer than this time in ms)
+  log-slow-queries: true
+  slow-query-threshold: 1000
+  
+  # Monitor connection pool
+  monitor-pool: true
+  pool-monitoring-interval: 300  # seconds
+  
+  # Database statistics
+  statistics:
+    enabled: true
+    # Log statistics interval (minutes)
+    log-interval: 60
+    # Track query performance
+    track-performance: true
+
+# Migration Settings
+migration:
+  # Enable automatic migration from other plugins
+  auto-migration: false
+  
+  # Migration sources
+  sources:
+    # UltraCosmetics migration
+    ultracosmetics:
+      enabled: false
+      table-prefix: "uc_"
+      
+    # GadgetsMenu migration  
+    gadgetsmenu:
+      enabled: false
+      table-prefix: "gm_"
+      
+    # PlayerParticles migration
+    playerparticles:
+      enabled: false
+      table-prefix: "pp_"
+  
+  # Backup before migration
+  backup-before-migration: true
+  
+  # Validation after migration
+  validate-after-migration: true
+
+# Security Settings
+security:
+  # Enable SQL injection protection
+  sql-injection-protection: true
+  
+  # Connection encryption (for supported databases)
+  encryption:
+    enabled: false
+    # Encryption algorithm
+    algorithm: "AES"
+    # Key length
+    key-length: 256
+    
+  # Access control
+  access-control:
+    # Limit database access to specific IPs (empty = no restriction)
+    allowed-ips: []
+    # Block suspicious queries
+    block-suspicious-queries: true
+    
+  # Data privacy
+  privacy:
+    # Anonymize player data older than X days (0 = disabled)
+    anonymize-after-days: 0
+    # Hash sensitive data
+    hash-sensitive-data: false
+
+# Error Handling
+error-handling:
+  # Retry failed operations
+  retry-failed-operations: true
+  max-retries: 3
+  retry-delay: 1000  # milliseconds
+  
+  # Fallback to read-only mode on critical errors
+  fallback-readonly: true
+  
+  # Emergency data preservation
+  emergency-backup: true
+  
+  # Error notification
+  notify-admins: true
+  notification-methods: ["console", "log"]
+
+# Performance Monitoring
+monitoring:
+  # Enable performance monitoring
+  enabled: true
+  
+  # Metrics to track
+  metrics:
+    connection-usage: true
+    query-performance: true
+    pool-statistics: true
+    error-rates: true
+    
+  # Alert thresholds
+  alerts:
+    # Alert when connection pool usage exceeds this percentage
+    high-connection-usage: 80
+    # Alert when average query time exceeds this (ms)
+    slow-query-alert: 2000
+    # Alert when error rate exceeds this percentage
+    high-error-rate: 5
+    
+  # Monitoring interval (seconds)
+  monitoring-interval: 60
+  
+  # Export metrics for external monitoring
+  export-metrics: false
+  export-format: "prometheus"  # prometheus, json
+  export-endpoint: "/metrics"

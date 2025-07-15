@@ -75,6 +75,7 @@ gui:
     gadgets: "&#FF6347🎮 &#FFA500Fun Gadgets &#FF6347🎮"
     wings: "&#FFD700🕊️ &#FFA500Wing Collection &#FFD700🕊️"
     auras: "&#FF8C00🌟 &#FFA500Mystic Auras &#FF8C00🌟"
+    morphs: "&#FF4500🔄 &#FFA500Transformations &#FF4500🔄"
     active: "&#FFA500⚡ &#FFD700Active Cosmetics &#FFA500⚡"
     credits: "&#FFD700💰 &#FF8C00Buy Credits &#FFD700💰"
     confirm: "&#FF4500⚠️ &#FFA500Confirm Purchase &#FF4500⚠️"
@@ -156,6 +157,14 @@ gui:
       lore:
         - "&#808080Click to browse mystical"
         - "&#808080aura effects!"
+        - ""
+        - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
+    
+    morphs:
+      name: "&#FF4500🔄 &#FFA500Morphs &#FF4500🔄"
+      lore:
+        - "&#808080Click to browse amazing"
+        - "&#808080transformation morphs!"
         - ""
         - "&#808080Owned: &#FFD700{owned}&#808080/&#FFD700{total}"
 
@@ -254,6 +263,15 @@ cosmetics:
   auras:
     activated: "&#FF8C00🌟 Aura &#FFD700{aura} &#FF8C00activated!"
     deactivated: "&#FF4500🌟 Aura &#FFA500{aura} &#FF4500deactivated!"
+  
+  morphs:
+    transformed: "&#FF4500🔄 Transformed into &#FFD700{morph}&#FF4500!"
+    returned: "&#808080🔄 Returned to human form!"
+    ability-used: "&#FF8C00✨ Used &#FFD700{ability} &#FF8C00ability!"
+    ability-cooldown: "&#FF4500⏰ Ability is on cooldown for &#FFA500{time} &#FF4500seconds!"
+    no-ability: "&#808080This morph doesn't have special abilities."
+    flight-enabled: "&#32CD32✈️ Flight enabled!"
+    flight-disabled: "&#FF4500✈️ Flight disabled!"
 
 # Random Rewards
 random-rewards:

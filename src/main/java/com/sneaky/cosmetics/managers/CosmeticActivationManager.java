@@ -3,6 +3,8 @@ package com.sneaky.cosmetics.managers;
 import com.sneaky.cosmetics.SneakyCosmetics;
 import com.sneaky.cosmetics.cosmetics.Cosmetic;
 import com.sneaky.cosmetics.cosmetics.CosmeticType;
+import com.sneaky.cosmetics.cosmetics.morphs.MorphCosmetic;
+import com.sneaky.cosmetics.cosmetics.morphs.MorphManager;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -16,10 +18,19 @@ public class CosmeticActivationManager {
     private final SneakyCosmetics plugin;
     private final CosmeticRegistry registry;
     private final Map<UUID, Set<String>> activeCosmetics = new ConcurrentHashMap<>();
+    private MorphManager morphManager;
     
     public CosmeticActivationManager(SneakyCosmetics plugin, CosmeticRegistry registry) {
         this.plugin = plugin;
         this.registry = registry;
+        this.morphManager = new MorphManager(plugin);
+    }
+    
+    /**
+     * Get the morph manager instance
+     */
+    public MorphManager getMorphManager() {
+        return morphManager;
     }
     
     /**
@@ -49,7 +60,14 @@ public class CosmeticActivationManager {
         
         // Activate the cosmetic
         try {
-            cosmetic.activate(player);
+            // Special handling for morph cosmetics
+            if (cosmetic instanceof MorphCosmetic) {
+                MorphCosmetic morphCosmetic = (MorphCosmetic) cosmetic;
+                morphManager.setActiveMorph(player, morphCosmetic);
+            } else {
+                cosmetic.activate(player);
+            }
+            
             activeCosmetics.computeIfAbsent(player.getUniqueId(), k -> new HashSet<>()).add(cosmeticId);
             
             // Record statistics
@@ -81,7 +99,13 @@ public class CosmeticActivationManager {
         }
         
         try {
-            cosmetic.deactivate(player);
+            // Special handling for morph cosmetics
+            if (cosmetic instanceof MorphCosmetic) {
+                morphManager.removeMorph(player);
+            } else {
+                cosmetic.deactivate(player);
+            }
+            
             playerCosmetics.remove(cosmeticId);
             
             if (playerCosmetics.isEmpty()) {
@@ -122,7 +146,12 @@ public class CosmeticActivationManager {
             
             if (cosmetic != null && cosmetic.getType() == type) {
                 try {
-                    cosmetic.deactivate(player);
+                    // Special handling for morph cosmetics
+                    if (cosmetic instanceof MorphCosmetic) {
+                        morphManager.removeMorph(player);
+                    } else {
+                        cosmetic.deactivate(player);
+                    }
                     iterator.remove();
                     plugin.getLogger().fine("Deactivated " + type.name() + " cosmetic " + cosmeticId + " for " + player.getName());
                 } catch (Exception e) {
@@ -147,7 +176,12 @@ public class CosmeticActivationManager {
             Cosmetic cosmetic = registry.getCosmetic(cosmeticId);
             if (cosmetic != null) {
                 try {
-                    cosmetic.deactivate(player);
+                    // Special handling for morph cosmetics
+                    if (cosmetic instanceof MorphCosmetic) {
+                        morphManager.removeMorph(player);
+                    } else {
+                        cosmetic.deactivate(player);
+                    }
                 } catch (Exception e) {
                     plugin.getLogger().warning("Failed to deactivate cosmetic " + cosmeticId + " during clear all");
                 }

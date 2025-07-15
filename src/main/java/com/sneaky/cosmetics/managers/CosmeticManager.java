@@ -120,6 +120,13 @@ public class CosmeticManager {
         return activationManager.getAccessibleCosmetics(player, type);
     }
     
+    /**
+     * Get the morph manager for direct access to morph functionality
+     */
+    public com.sneaky.cosmetics.cosmetics.morphs.MorphManager getMorphManager() {
+        return activationManager.getMorphManager();
+    }
+    
     // Delegation methods to CosmeticCleanupManager
     public void cleanupInactiveCosmetics() {
         cleanupManager.cleanupInactiveCosmetics();

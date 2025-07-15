@@ -13,7 +13,8 @@ public enum CosmeticType {
     TRAIL("Trails", "&#1E90FF", Material.FEATHER, "Leave magical trails as you move"),
     GADGET("Gadgets", "&#FF6347", Material.STICK, "Fun interactive items and tools"),
     WINGS("Wings", "&#F0F8FF", Material.ELYTRA, "Spread your wings and glide in style"),
-    AURA("Auras", "&#8A2BE2", Material.NETHER_STAR, "Surround yourself with mystical auras");
+    AURA("Auras", "&#8A2BE2", Material.NETHER_STAR, "Surround yourself with mystical auras"),
+    MORPH("Morphs", "&#FF4500", Material.DRAGON_EGG, "Transform into different mobs and creatures");
     
     private final String displayName;
     private final String colorCode;

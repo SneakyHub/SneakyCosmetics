@@ -2001,8 +2001,8 @@ public class GUIManager implements Listener {
         // Prevent dragging items in cosmetics GUIs
         if (cleanTitle.contains("Cosmetics") || cleanTitle.contains("Particles") || cleanTitle.contains("Hats") || 
             cleanTitle.contains("Pets") || cleanTitle.contains("Trails") || cleanTitle.contains("Gadgets") || 
-            cleanTitle.contains("Wings") || cleanTitle.contains("Auras") || cleanTitle.contains("Shop") || 
-            cleanTitle.contains("Achievement") || cleanTitle.contains("Daily Rewards")) {
+            cleanTitle.contains("Wings") || cleanTitle.contains("Auras") || cleanTitle.contains("Morphs") || 
+            cleanTitle.contains("Shop") || cleanTitle.contains("Achievement") || cleanTitle.contains("Daily Rewards")) {
             event.setCancelled(true);
         }
     }
@@ -2025,9 +2025,23 @@ public class GUIManager implements Listener {
         }
         
         // Cancel if either source or destination is a cosmetics GUI
-        if ((sourceTitle.contains("Cosmetics") || sourceTitle.contains("Shop") || sourceTitle.contains("Achievement") || sourceTitle.contains("Daily Rewards")) ||
-            (destTitle.contains("Cosmetics") || destTitle.contains("Shop") || destTitle.contains("Achievement") || destTitle.contains("Daily Rewards"))) {
+        if ((sourceTitle.contains("Cosmetics") || sourceTitle.contains("Shop") || sourceTitle.contains("Achievement") || sourceTitle.contains("Daily Rewards") || sourceTitle.contains("Morphs") || sourceTitle.contains("Pets")) ||
+            (destTitle.contains("Cosmetics") || destTitle.contains("Shop") || destTitle.contains("Achievement") || destTitle.contains("Daily Rewards") || destTitle.contains("Morphs") || destTitle.contains("Pets"))) {
             event.setCancelled(true);
         }
+    }
+    
+    /**
+     * Open the morphs GUI for a player
+     */
+    public void openMorphsGUI(Player player) {
+        openTypeGUI(player, CosmeticType.MORPH);
+    }
+    
+    /**
+     * Open the pets GUI for a player
+     */
+    public void openPetsGUI(Player player) {
+        openTypeGUI(player, CosmeticType.PET);
     }
 }

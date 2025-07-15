@@ -1,0 +1,306 @@
+# SneakyCosmetics Morph Configurations
+# This file defines all available morph cosmetics and their properties
+
+# Configuration version (do not modify)
+config-version: 1
+
+# Default morph settings
+default-settings:
+  morph-sound: "ENTITY_ENDERMAN_TELEPORT"
+  demorph-sound: "ENTITY_ENDERMAN_TELEPORT"
+  size-multiplier: 1.0
+  special-abilities: true
+
+# Morph definitions
+morphs:
+  
+  # === COMMON MORPHS ===
+  wolf:
+    display-name: "§6Wolf"
+    entity-type: WOLF
+    price: 500
+    icon: BONE
+    description:
+      - "§7Transform into a loyal wolf companion"
+      - "§7with pack-based abilities!"
+    permission: "sneakycosmetics.morph.wolf"
+    requires-vip: false
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Pack Howl - Give speed boost to nearby players"
+      - "Enhanced senses - Detect nearby entities"
+    morph-sound: "ENTITY_WOLF_HOWL"
+    demorph-sound: "ENTITY_WOLF_WHINE"
+    
+  rabbit:
+    display-name: "§aRabbit"
+    entity-type: RABBIT
+    price: 300
+    icon: CARROT
+    description:
+      - "§7Hop around as an adorable rabbit"
+      - "§7with enhanced jumping abilities!"
+    permission: "sneakycosmetics.morph.rabbit"
+    requires-vip: false
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Super Jump - Permanent jump boost effect"
+      - "Quick escape - Higher movement speed"
+    morph-sound: "ENTITY_RABBIT_AMBIENT"
+    
+  bat:
+    display-name: "§8Bat"
+    entity-type: BAT
+    price: 750
+    icon: FEATHER
+    description:
+      - "§7Fly around as a small bat with"
+      - "§7echolocation abilities!"
+    permission: "sneakycosmetics.morph.bat"
+    requires-vip: false
+    requires-premium: false
+    can-fly: true
+    special-abilities: true
+    abilities:
+      - "Flight - Unlimited creative-like flight"
+      - "Echolocation - Highlight nearby entities"
+    morph-sound: "ENTITY_BAT_TAKEOFF"
+    demorph-sound: "ENTITY_BAT_DEATH"
+    
+  squid:
+    display-name: "§9Squid"
+    entity-type: SQUID
+    price: 600
+    icon: INK_SAC
+    description:
+      - "§7Swim through the depths as a squid"
+      - "§7with aquatic abilities!"
+    permission: "sneakycosmetics.morph.squid"
+    requires-vip: false
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Water Breathing - Unlimited underwater breathing"
+      - "Ink Cloud - Create blindness cloud effect"
+    morph-sound: "ENTITY_SQUID_AMBIENT"
+    
+  horse:
+    display-name: "§6Horse"
+    entity-type: HORSE
+    price: 800
+    icon: SADDLE
+    description:
+      - "§7Gallop across the lands as a"
+      - "§7swift and mighty horse!"
+    permission: "sneakycosmetics.morph.horse"
+    requires-vip: false
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Speed Boost - Permanent speed enhancement"
+      - "Jump Higher - Enhanced jump ability"
+    morph-sound: "ENTITY_HORSE_AMBIENT"
+
+  # === RARE MORPHS ===
+  creeper:
+    display-name: "§2Creeper"
+    entity-type: CREEPER
+    price: 1500
+    icon: GUNPOWDER
+    description:
+      - "§7Become the most feared mob in"
+      - "§7Minecraft with explosive abilities!"
+    permission: "sneakycosmetics.morph.creeper"
+    requires-vip: true
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Fake Explosion - Create harmless explosion effect"
+      - "Creeper Hiss - Intimidate nearby players"
+    morph-sound: "ENTITY_CREEPER_PRIMED"
+    demorph-sound: "ENTITY_CREEPER_DEATH"
+    
+  spider:
+    display-name: "§4Spider"
+    entity-type: SPIDER
+    price: 1200
+    icon: SPIDER_EYE
+    description:
+      - "§7Crawl along walls and ceilings"
+      - "§7as a venomous spider!"
+    permission: "sneakycosmetics.morph.spider"
+    requires-vip: true
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Wall Climbing - Climb up walls (visual effect)"
+      - "Web Shot - Slow nearby enemies"
+    morph-sound: "ENTITY_SPIDER_AMBIENT"
+    
+  # === EPIC MORPHS ===
+  enderman:
+    display-name: "§5Enderman"
+    entity-type: ENDERMAN
+    price: 3000
+    icon: ENDER_PEARL
+    description:
+      - "§7Teleport through dimensions as"
+      - "§7the mysterious Enderman!"
+    permission: "sneakycosmetics.morph.enderman"
+    requires-vip: true
+    requires-premium: false
+    can-fly: false
+    special-abilities: true
+    abilities:
+      - "Teleportation - Teleport to your target location"
+      - "Ender Particles - Continuous portal particle effects"
+    morph-sound: "ENTITY_ENDERMAN_TELEPORT"
+    demorph-sound: "ENTITY_ENDERMAN_SCREAM"
+    
+  blaze:
+    display-name: "§6Blaze"
+    entity-type: BLAZE
+    price: 2500
+    icon: BLAZE_ROD
+    description:
+      - "§7Soar through the skies as a fiery"
+      - "§7Blaze with fire immunity!"
+    permission: "sneakycosmetics.morph.blaze"
+    requires-vip: true
+    requires-premium: true
+    can-fly: true
+    special-abilities: true
+    abilities:
+      - "Flight - Unlimited creative-like flight"
+      - "Fire Immunity - Complete fire resistance"
+      - "Flame Aura - Continuous fire particle effects"
+    morph-sound: "ENTITY_BLAZE_AMBIENT"
+    demorph-sound: "ENTITY_BLAZE_DEATH"
+
+  # === LEGENDARY MORPHS ===
+  dragon:
+    display-name: "§4§lDragon"
+    entity-type: ENDER_DRAGON
+    price: 10000
+    icon: DRAGON_EGG
+    description:
+      - "§7Become the ultimate apex predator!"
+      - "§7Rule the skies as the mighty Ender Dragon!"
+      - "§6§lLEGENDARY MORPH"
+    permission: "sneakycosmetics.morph.dragon"
+    requires-vip: true
+    requires-premium: true
+    can-fly: true
+    special-abilities: true
+    size-multiplier: 0.3  # Scale down for playability
+    abilities:
+      - "Draconic Flight - Ultimate flight experience"
+      - "Dragon Breath - Devastating breath attack (visual)"
+      - "Intimidating Presence - All mobs flee in fear"
+      - "Portal Creation - Create temporary end portal particles"
+    morph-sound: "ENTITY_ENDER_DRAGON_AMBIENT"
+    demorph-sound: "ENTITY_ENDER_DRAGON_DEATH"
+    
+  phoenix:
+    display-name: "§c§lPhoenix"
+    entity-type: PARROT  # Using parrot as base, with custom effects
+    price: 8000
+    icon: FIRE_CHARGE
+    description:
+      - "§7Rise from the ashes as the"
+      - "§7legendary Phoenix of rebirth!"
+      - "§6§lLEGENDARY MORPH"
+    permission: "sneakycosmetics.morph.phoenix"
+    requires-vip: true
+    requires-premium: true
+    can-fly: true
+    special-abilities: true
+    abilities:
+      - "Rebirth - Regeneration effects"
+      - "Phoenix Flight - Blazing trail flight"
+      - "Fire Aura - Continuous flame effects"
+      - "Healing Presence - Regenerate nearby players"
+    morph-sound: "ENTITY_BLAZE_AMBIENT"
+    demorph-sound: "ENTITY_PHOENIX_DEATH"  # Custom sound if available
+    
+  wither:
+    display-name: "§8§lWither"
+    entity-type: WITHER
+    price: 12000
+    icon: WITHER_SKELETON_SKULL
+    description:
+      - "§7Embrace the darkness as the"
+      - "§7terrifying Wither Boss!"
+      - "§6§lLEGENDARY MORPH"
+    permission: "sneakycosmetics.morph.wither"
+    requires-vip: true
+    requires-premium: true
+    can-fly: true
+    special-abilities: true
+    size-multiplier: 0.5  # Scale down for playability
+    abilities:
+      - "Wither Flight - Dark, ominous flight"
+      - "Wither Aura - Continuous dark particle effects"
+      - "Intimidation - Scare away hostile mobs"
+      - "Soul Harvest - Visual soul particle collection"
+    morph-sound: "ENTITY_WITHER_AMBIENT"
+    demorph-sound: "ENTITY_WITHER_DEATH"
+
+# Achievement integration
+achievement-morphs:
+  # Morphs that are unlocked through achievements
+  dragon:
+    required-achievement: "legendary_collector"
+    unlock-message: "§6🐉 You've unlocked the legendary Dragon morph!"
+    
+  phoenix:
+    required-achievement: "phoenix_rising"
+    unlock-message: "§c🔥 You've unlocked the legendary Phoenix morph!"
+    
+  wither:
+    required-achievement: "dark_lord"
+    unlock-message: "§8💀 You've unlocked the legendary Wither morph!"
+
+# Morph categories for GUI organization
+categories:
+  common:
+    display-name: "§a§lCommon Morphs"
+    description: "Basic animals and creatures"
+    morphs: [wolf, rabbit, bat, squid, horse]
+    
+  rare:
+    display-name: "§b§lRare Morphs"  
+    description: "Special and unique creatures"
+    morphs: [creeper, spider]
+    
+  epic:
+    display-name: "§5§lEpic Morphs"
+    description: "Powerful supernatural beings"
+    morphs: [enderman, blaze]
+    
+  legendary:
+    display-name: "§6§lLegendary Morphs"
+    description: "Ultimate boss-tier creatures"
+    morphs: [dragon, phoenix, wither]
+
+# Special events and limited-time morphs
+seasonal-morphs:
+  halloween:
+    available-morphs: [creeper, spider, enderman, wither]
+    bonus-discount: 25  # 25% discount during event
+    
+  christmas:
+    available-morphs: [rabbit, horse]  # Reindeer theme
+    bonus-effects: true  # Extra particle effects
+    
+  easter:
+    available-morphs: [rabbit]
+    special-abilities: ["Easter Egg Hunt - Drop colored eggs"]
