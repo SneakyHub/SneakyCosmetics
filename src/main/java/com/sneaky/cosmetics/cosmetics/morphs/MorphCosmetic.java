@@ -210,7 +210,7 @@ public class MorphCosmetic extends Cosmetic {
             case RABBIT:
                 // Jump boost
                 player.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                    org.bukkit.potion.PotionEffectType.JUMP, Integer.MAX_VALUE, 2, false, false));
+                    org.bukkit.potion.PotionEffectType.JUMP_BOOST, Integer.MAX_VALUE, 2, false, false));
                 break;
             case HORSE:
                 // Speed boost
@@ -234,7 +234,7 @@ public class MorphCosmetic extends Cosmetic {
         // Remove specific potion effects
         player.removePotionEffect(org.bukkit.potion.PotionEffectType.WATER_BREATHING);
         player.removePotionEffect(org.bukkit.potion.PotionEffectType.FIRE_RESISTANCE);
-        player.removePotionEffect(org.bukkit.potion.PotionEffectType.JUMP);
+        player.removePotionEffect(org.bukkit.potion.PotionEffectType.JUMP_BOOST);
         player.removePotionEffect(org.bukkit.potion.PotionEffectType.SPEED);
     }
     

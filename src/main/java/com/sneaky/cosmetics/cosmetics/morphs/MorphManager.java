@@ -1,6 +1,7 @@
 package com.sneaky.cosmetics.cosmetics.morphs;
 
 import com.sneaky.cosmetics.SneakyCosmetics;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -187,7 +188,7 @@ public class MorphManager implements Listener {
         org.bukkit.Location loc = player.getLocation();
         
         // Create fake explosion effect
-        player.getWorld().spawnParticle(org.bukkit.Particle.EXPLOSION_LARGE, loc, 3, 0.5, 0.5, 0.5, 0.1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION, loc, 3, 0.5, 0.5, 0.5, 0.1);
         player.getWorld().playSound(loc, org.bukkit.Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
         
         // Push nearby players away (non-damaging)
