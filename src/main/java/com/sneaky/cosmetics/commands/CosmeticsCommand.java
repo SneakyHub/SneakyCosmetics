@@ -548,8 +548,8 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         
         // Database Information
         messageManager.sendInfo(sender, "&#FF8C00💾 &#FFD700Database Information:");
-        messageManager.sendInfo(sender, "   &#FFA500Type: &#FFFFFF" + plugin.getConfig().getString("database.type", "SQLite"));
-        messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500Status: &#FFFFFF Connected");
+        messageManager.sendInfo(sender, "   &#FFA500Type: &#FFFFFF" + plugin.getDatabaseManager().getDatabaseConfig().getDatabaseType().toUpperCase());
+        messageManager.sendInfo(sender, "   &#32CD32✓ &#FFA500Status: &#FFFFFF" + plugin.getDatabaseManager().getConnectionInfo());
         
         // Performance Statistics
         messageManager.sendInfo(sender, "");

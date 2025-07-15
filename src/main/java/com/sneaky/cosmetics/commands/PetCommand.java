@@ -122,7 +122,7 @@ public class PetCommand implements CommandExecutor, TabCompleter {
         String petId = args[1];
 
         // Check if player owns the pet
-        if (!plugin.getCosmeticManager().playerOwnsCosmetic(player, petId)) {
+        if (!plugin.getCosmeticManager().hasCosmetic(player, petId)) {
             messageManager.sendError(player, "You don't own this pet!");
             return;
         }
@@ -146,7 +146,7 @@ public class PetCommand implements CommandExecutor, TabCompleter {
         }
 
         // Dismiss active pets
-        plugin.getCosmeticManager().deactivateAllCosmetics(player, "PET");
+        plugin.getCosmeticManager().deactivateAllCosmetics(player, com.sneaky.cosmetics.cosmetics.CosmeticType.PET);
         messageManager.sendSuccess(player, "§c=> Dismissed all pets.");
     }
 
@@ -308,7 +308,7 @@ public class PetCommand implements CommandExecutor, TabCompleter {
         String newName = args[2];
 
         // Check if player owns the pet
-        if (!plugin.getCosmeticManager().playerOwnsCosmetic(player, petId)) {
+        if (!plugin.getCosmeticManager().hasCosmetic(player, petId)) {
             messageManager.sendError(player, "You don't own this pet!");
             return;
         }

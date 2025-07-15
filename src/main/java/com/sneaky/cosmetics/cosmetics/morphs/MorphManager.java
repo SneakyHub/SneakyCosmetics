@@ -210,7 +210,7 @@ public class MorphManager implements Listener {
         org.bukkit.Location loc = player.getLocation();
         
         // Play howl sound
-        player.getWorld().playSound(loc, org.bukkit.Sound.ENTITY_WOLF_HOWL, 2.0f, 1.0f);
+        player.getWorld().playSound(loc, org.bukkit.Sound.ENTITY_WOLF_AMBIENT, 2.0f, 1.0f);
         
         // Give temporary speed boost to nearby players
         for (Player nearby : player.getWorld().getPlayers()) {

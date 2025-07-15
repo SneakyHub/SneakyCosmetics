@@ -20,6 +20,7 @@ import java.util.logging.Level;
 public class DatabaseManager {
     
     private final SneakyCosmetics plugin;
+    private final DatabaseConfig databaseConfig;
     private HikariDataSource dataSource;
     private final String databaseType;
     
@@ -29,7 +30,8 @@ public class DatabaseManager {
     
     public DatabaseManager(SneakyCosmetics plugin) {
         this.plugin = plugin;
-        this.databaseType = plugin.getConfig().getString("database.type", "sqlite").toLowerCase();
+        this.databaseConfig = new DatabaseConfig(plugin);
+        this.databaseType = databaseConfig.getDatabaseType();
     }
     
     public void initialize() throws SQLException {
@@ -47,38 +49,49 @@ public class DatabaseManager {
     private void setupDataSource() {
         HikariConfig config = new HikariConfig();
         
-        if (databaseType.equals("mysql")) {
-            setupMySQLDataSource(config);
-        } else {
-            setupSQLiteDataSource(config);
+        switch (databaseType) {
+            case "mysql":
+                setupMySQLDataSource(config);
+                break;
+            case "postgresql":
+                setupPostgreSQLDataSource(config);
+                break;
+            case "mariadb":
+                setupMariaDBDataSource(config);
+                break;
+            default:
+                setupSQLiteDataSource(config);
+                break;
         }
         
         this.dataSource = new HikariDataSource(config);
     }
     
     private void setupMySQLDataSource(HikariConfig config) {
-        String host = plugin.getConfig().getString("database.mysql.host", "localhost");
-        int port = plugin.getConfig().getInt("database.mysql.port", 3306);
-        String database = plugin.getConfig().getString("database.mysql.database", "sneakycosmetics");
-        String username = plugin.getConfig().getString("database.mysql.username", "root");
-        String password = plugin.getConfig().getString("database.mysql.password", "password");
-        boolean ssl = plugin.getConfig().getBoolean("database.mysql.ssl", false);
+        String host = databaseConfig.getMySQLHost();
+        int port = databaseConfig.getMySQLPort();
+        String database = databaseConfig.getMySQLDatabase();
+        String username = databaseConfig.getMySQLUsername();
+        String password = databaseConfig.getMySQLPassword();
+        boolean ssl = databaseConfig.isMySQLSSL();
+        String charset = databaseConfig.getMySQLCharset();
         
-        config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=" + ssl + "&autoReconnect=true");
+        String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s?useSSL=%s&autoReconnect=true&characterEncoding=%s&serverTimezone=UTC", 
+                                      host, port, database, ssl, charset);
+        
+        config.setJdbcUrl(jdbcUrl);
         config.setUsername(username);
         config.setPassword(password);
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         
-        // Connection pool settings
-        config.setMaximumPoolSize(plugin.getConfig().getInt("database.pool.maximum-pool-size", 10));
-        config.setMinimumIdle(plugin.getConfig().getInt("database.pool.minimum-idle", 2));
-        config.setConnectionTimeout(plugin.getConfig().getLong("database.pool.connection-timeout", 30000));
-        config.setIdleTimeout(plugin.getConfig().getLong("database.pool.idle-timeout", 600000));
-        config.setMaxLifetime(plugin.getConfig().getLong("database.pool.max-lifetime", 1800000));
+        // Connection pool settings from database config
+        setupConnectionPool(config);
         
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        // MySQL-specific optimizations
+        config.addDataSourceProperty("cachePrepStmts", databaseConfig.isCachePreparedStatements());
+        config.addDataSourceProperty("prepStmtCacheSize", databaseConfig.getMaxCachedStatements());
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", databaseConfig.isUsePreparedStatements());
     }
     
     private void setupSQLiteDataSource(HikariConfig config) {
@@ -87,16 +100,97 @@ public class DatabaseManager {
             dataFolder.mkdirs();
         }
         
-        File databaseFile = new File(dataFolder, "cosmetics.db");
+        String filename = databaseConfig.getSQLiteFilename();
+        File databaseFile = new File(dataFolder, filename);
         
         config.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
         config.setDriverClassName("org.sqlite.JDBC");
         config.setMaximumPoolSize(1); // SQLite doesn't support multiple connections well
         
-        config.addDataSourceProperty("journal_mode", "WAL");
+        // SQLite-specific optimizations
+        if (databaseConfig.isSQLiteWalMode()) {
+            config.addDataSourceProperty("journal_mode", "WAL");
+        }
         config.addDataSourceProperty("synchronous", "NORMAL");
         config.addDataSourceProperty("cache_size", "10000");
         config.addDataSourceProperty("foreign_keys", "true");
+        config.addDataSourceProperty("temp_store", "MEMORY");
+        
+        // Basic connection pool settings (limited for SQLite)
+        config.setConnectionTimeout(databaseConfig.getConnectionTimeout());
+        config.setIdleTimeout(databaseConfig.getIdleTimeout());
+        config.setPoolName(databaseConfig.getPoolName() + "-SQLite");
+    }
+    
+    private void setupPostgreSQLDataSource(HikariConfig config) {
+        String host = databaseConfig.getPostgreSQLHost();
+        int port = databaseConfig.getPostgreSQLPort();
+        String database = databaseConfig.getPostgreSQLDatabase();
+        String username = databaseConfig.getPostgreSQLUsername();
+        String password = databaseConfig.getPostgreSQLPassword();
+        String schema = databaseConfig.getPostgreSQLSchema();
+        boolean ssl = databaseConfig.isPostgreSQLSSL();
+        
+        String jdbcUrl = String.format("jdbc:postgresql://%s:%d/%s?currentSchema=%s&sslmode=%s", 
+                                      host, port, database, schema, ssl ? "require" : "disable");
+        
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(username);
+        config.setPassword(password);
+        config.setDriverClassName("org.postgresql.Driver");
+        
+        // Connection pool settings
+        setupConnectionPool(config);
+        
+        // PostgreSQL-specific optimizations
+        config.addDataSourceProperty("prepareThreshold", "0");
+        config.addDataSourceProperty("preparedStatementCacheQueries", databaseConfig.getMaxCachedStatements());
+        config.addDataSourceProperty("preparedStatementCacheSizeMiB", "5");
+    }
+    
+    private void setupMariaDBDataSource(HikariConfig config) {
+        String host = databaseConfig.getMariaDBHost();
+        int port = databaseConfig.getMariaDBPort();
+        String database = databaseConfig.getMariaDBDatabase();
+        String username = databaseConfig.getMariaDBUsername();
+        String password = databaseConfig.getMariaDBPassword();
+        boolean ssl = databaseConfig.isMariaDBSSL();
+        
+        String jdbcUrl = String.format("jdbc:mariadb://%s:%d/%s?useSSL=%s&autoReconnect=true&serverTimezone=UTC", 
+                                      host, port, database, ssl);
+        
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(username);
+        config.setPassword(password);
+        config.setDriverClassName("org.mariadb.jdbc.Driver");
+        
+        // Connection pool settings
+        setupConnectionPool(config);
+        
+        // MariaDB-specific optimizations
+        config.addDataSourceProperty("cachePrepStmts", databaseConfig.isCachePreparedStatements());
+        config.addDataSourceProperty("prepStmtCacheSize", databaseConfig.getMaxCachedStatements());
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+    }
+    
+    private void setupConnectionPool(HikariConfig config) {
+        config.setMaximumPoolSize(databaseConfig.getMaximumPoolSize());
+        config.setMinimumIdle(databaseConfig.getMinimumIdle());
+        config.setConnectionTimeout(databaseConfig.getConnectionTimeout());
+        config.setIdleTimeout(databaseConfig.getIdleTimeout());
+        config.setMaxLifetime(databaseConfig.getMaxLifetime());
+        config.setKeepaliveTime(databaseConfig.getKeepaliveTime());
+        config.setValidationTimeout(databaseConfig.getValidationTimeout());
+        config.setPoolName(databaseConfig.getPoolName());
+        
+        // Connection test query if specified
+        String testQuery = databaseConfig.getConnectionTestQuery();
+        if (!testQuery.isEmpty()) {
+            config.setConnectionTestQuery(testQuery);
+        }
+        
+        // Leak detection threshold (30 seconds)
+        config.setLeakDetectionThreshold(30000);
     }
     
     private void createTables() throws SQLException {
@@ -585,6 +679,38 @@ public class DatabaseManager {
         if (cosmeticId.startsWith("gadget_")) return "GADGET";
         if (cosmeticId.startsWith("wing_")) return "WING";
         if (cosmeticId.startsWith("aura_")) return "AURA";
+        if (cosmeticId.startsWith("morph_")) return "MORPH";
         return "UNKNOWN";
+    }
+    
+    /**
+     * Get the database configuration instance
+     */
+    public DatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
+    }
+    
+    /**
+     * Reload the database configuration
+     */
+    public void reloadDatabaseConfig() {
+        databaseConfig.reload();
+        plugin.getLogger().info("Database configuration reloaded");
+    }
+    
+    /**
+     * Get database connection status information
+     */
+    public String getConnectionInfo() {
+        if (dataSource == null) {
+            return "Database not initialized";
+        }
+        
+        return String.format("Database: %s | Pool: %s | Active: %d/%d | Idle: %d", 
+                           databaseType.toUpperCase(),
+                           dataSource.getPoolName(),
+                           dataSource.getHikariPoolMXBean().getActiveConnections(),
+                           dataSource.getHikariPoolMXBean().getTotalConnections(),
+                           dataSource.getHikariPoolMXBean().getIdleConnections());
     }
 }

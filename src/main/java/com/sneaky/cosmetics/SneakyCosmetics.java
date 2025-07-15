@@ -330,6 +330,9 @@ public class SneakyCosmetics extends JavaPlugin {
         // Reload configuration
         reloadConfig();
         
+        // Reload database configuration
+        databaseManager.reloadDatabaseConfig();
+        
         // Reload message manager
         messageManager.reload();
         

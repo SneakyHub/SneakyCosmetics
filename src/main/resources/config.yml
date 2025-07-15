@@ -49,28 +49,6 @@ credits:
     log-rewards: true
     log-admin-commands: true
 
-# Database Configuration
-database:
-  # Database type: sqlite, mysql
-  type: sqlite
-  
-  # MySQL settings (only used if type is mysql)
-  mysql:
-    host: localhost
-    port: 3306
-    database: sneakycosmetics
-    username: root
-    password: password
-    ssl: false
-    
-  # Connection pool settings
-  pool:
-    maximum-pool-size: 10
-    minimum-idle: 2
-    connection-timeout: 30000
-    idle-timeout: 600000
-    max-lifetime: 1800000
-
 # Cosmetic Configuration
 cosmetics:
   # Update intervals (in ticks, 20 ticks = 1 second)
@@ -82,6 +60,7 @@ cosmetics:
     wing: 15
     aura: 12
     gadget: 5
+    morph: 30
   
   # Maximum distance for cosmetic effects to be visible
   max-effect-distance: 50
@@ -95,6 +74,7 @@ cosmetics:
     wing: 1
     aura: 1
     gadget: 3
+    morph: 1
   
   # Auto-deactivate cosmetics on logout
   auto-deactivate-on-logout: false
@@ -258,6 +238,11 @@ shop:
       display-name: "&5&lAuras"
       icon: "NETHER_STAR"
       slot: 32
+    morphs:
+      enabled: true
+      display-name: "&4&lMorphs"
+      icon: "DRAGON_EGG"
+      slot: 34
   
   # Purchase confirmation
   confirmation:
