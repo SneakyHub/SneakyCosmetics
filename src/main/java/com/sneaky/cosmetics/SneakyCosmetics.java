@@ -4,6 +4,10 @@ import com.sneaky.cosmetics.achievements.AchievementManager;
 import com.sneaky.cosmetics.api.SneakyCosmeticsAPI;
 import com.sneaky.cosmetics.commands.CosmeticsCommand;
 import com.sneaky.cosmetics.commands.CreditsCommand;
+import com.sneaky.cosmetics.commands.CrateCommand;
+import com.sneaky.cosmetics.commands.RentalCommand;
+import com.sneaky.cosmetics.commands.SneakyCosmeticsCommand;
+import com.sneaky.cosmetics.cosmetics.CosmeticType;
 import com.sneaky.cosmetics.database.DatabaseManager;
 import com.sneaky.cosmetics.gui.GUIManager;
 import com.sneaky.cosmetics.integrations.CMIIntegration;
@@ -24,11 +28,11 @@ import com.sneaky.cosmetics.cosmetics.wings.WingCosmetic;
 import java.util.logging.Level;
 
 /**
- * SneakyCosmetics - A comprehensive cosmetics plugin for Minecraft 1.21.7
+ * SneakyCosmetics - A comprehensive cosmetics plugin for Minecraft 1.21.8
  * Features: Credits system, GUI, 80+ cosmetics, Vault/LuckPerms integration
  * 
  * @author SneakyHub
- * @version 1.1.0
+ * @version 1.0.0-dev
  */
 public class SneakyCosmetics extends JavaPlugin {
 
@@ -59,6 +63,10 @@ public class SneakyCosmetics extends JavaPlugin {
     private WingManager wingManager;
     private AuraManager auraManager;
     private com.sneaky.cosmetics.cosmetics.morphs.MorphManager morphManager;
+    
+    // Advanced feature managers
+    private RentalManager rentalManager;
+    private CrateManager crateManager;
     
     // Integration managers
     private VaultIntegration vaultIntegration;
@@ -136,14 +144,113 @@ public class SneakyCosmetics extends JavaPlugin {
             }
         }
         
-        // Startup message
-        getLogger().info("SneakyCosmetics v" + getDescription().getVersion() + " has been enabled!");
-        getLogger().info("Running on " + (schedulerAdapter.isFolia() ? "Folia" : "Paper/Spigot"));
+        // Enhanced startup display
+        displayStartupBanner();
+    }
+    
+    /**
+     * Display enhanced startup banner with statistics and information
+     */
+    private void displayStartupBanner() {
+        // ASCII Art Banner
+        getLogger().info("╔══════════════════════════════════════════════════════════════╗");
+        getLogger().info("║                                                              ║");
+        getLogger().info("║    ███████ ███    █ ███████  █████  █   ██ ██    ██         ║");
+        getLogger().info("║    █      ████   █ █      █     █ █  █  █  █  █              ║");
+        getLogger().info("║    ███████ █ █ █ █ ███████ █████████ █   █   ██               ║");
+        getLogger().info("║          █ █  ███ █       █ █     █ █  █  █  █  █             ║");
+        getLogger().info("║    ███████ █   ██ █ ███████ █     █ █   ██ ██    ██          ║");
+        getLogger().info("║                                                              ║");
+        getLogger().info("║                SneakyCosmetics v" + getDescription().getVersion() + "                     ║");
+        getLogger().info("║             A Premium Cosmetics Experience                  ║");
+        getLogger().info("║                                                              ║");
+        getLogger().info("╚══════════════════════════════════════════════════════════════╝");
         
+        // System Information
+        getLogger().info("");
+        getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ System Information ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        getLogger().info("│ Server Platform: " + (schedulerAdapter.isFolia() ? "Folia" : "Paper/Spigot"));
+        getLogger().info("│ Minecraft Version: " + getServer().getBukkitVersion());
+        getLogger().info("│ Java Version: " + System.getProperty("java.version"));
+        getLogger().info("│ Plugin Version: " + getDescription().getVersion());
+        
+        // Cosmetic Statistics
         if (cosmeticManager != null) {
-            getLogger().info("Loaded " + cosmeticManager.getTotalCosmetics() + " cosmetics across " + 
-                            cosmeticManager.getCosmeticTypes().size() + " categories");
+            getLogger().info("");
+            getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Cosmetic Statistics ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            
+            int totalCosmetics = cosmeticManager.getTotalCosmetics();
+            int totalTypes = cosmeticManager.getCosmeticTypes().size();
+            
+            getLogger().info("│ Total Cosmetics: " + totalCosmetics);
+            getLogger().info("│ Cosmetic Categories: " + totalTypes);
+            
+            // Individual category counts
+            for (CosmeticType type : cosmeticManager.getCosmeticTypes()) {
+                int count = cosmeticManager.getCosmeticCountByType(type);
+                String typeName = formatTypeName(type.name());
+                getLogger().info("│   • " + typeName + ": " + count);
+            }
         }
+        
+        // Integration Status
+        getLogger().info("");
+        getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Integration Status ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        getLogger().info("│ Vault: " + getIntegrationStatus(vaultIntegration != null));
+        getLogger().info("│ LuckPerms: " + getIntegrationStatus(luckPermsIntegration != null));
+        getLogger().info("│ EssentialsX: " + getIntegrationStatus(essentialsXIntegration != null));
+        getLogger().info("│ PlaceholderAPI: " + getIntegrationStatus(placeholderAPIIntegration != null));
+        getLogger().info("│ CMI: " + getIntegrationStatus(cmiIntegration != null));
+        
+        // Feature Status
+        getLogger().info("");
+        getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Feature Status ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        getLogger().info("│ Database: " + getFeatureStatus(databaseManager != null));
+        getLogger().info("│ Credits System: " + getFeatureStatus(creditManager != null));
+        getLogger().info("│ Rental System: " + getFeatureStatus(rentalManager != null));
+        getLogger().info("│ Crate System: " + getFeatureStatus(crateManager != null));
+        getLogger().info("│ Achievements: " + getFeatureStatus(achievementManager != null));
+        getLogger().info("│ Statistics: " + getFeatureStatus(statisticsManager != null));
+        getLogger().info("│ Update Checker: " + getFeatureStatus(updateChecker != null));
+        getLogger().info("│ bStats Metrics: " + getFeatureStatus(getConfig().getBoolean("admin.metrics", true)));
+        
+        // Commands Available
+        getLogger().info("");
+        getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Command System ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        getLogger().info("│ Unified Command: /sneakycosmetics (aliases: /sc, /sneaky)");
+        getLogger().info("│ Legacy Commands: /cosmetics, /crate, /rental, /credits, /morph");
+        getLogger().info("│ Help Command: /sneakycosmetics help");
+        
+        // Footer
+        getLogger().info("");
+        getLogger().info("██████████████████████████████████████████████████████████████");
+        getLogger().info("█ ✓ SneakyCosmetics has been successfully enabled! █");
+        getLogger().info("█ For support: https://github.com/SneakyHub/SneakyCosmetics █");
+        getLogger().info("██████████████████████████████████████████████████████████████");
+        getLogger().info("");
+    }
+    
+    /**
+     * Format cosmetic type name for display
+     */
+    private String formatTypeName(String typeName) {
+        return typeName.toLowerCase().replace("_", " ")
+                .substring(0, 1).toUpperCase() + 
+                typeName.toLowerCase().replace("_", " ").substring(1);
+    }
+    
+    /**
+     * Get integration status with color coding
+     */
+    private String getIntegrationStatus(boolean enabled) {
+        return enabled ? "✓ Enabled" : "✗ Disabled";
+    }
+    
+    /**
+     * Get feature status with color coding
+     */
+    private String getFeatureStatus(boolean enabled) {
+        return enabled ? "✓ Active" : "✗ Inactive";
     }
 
     @Override
@@ -169,6 +276,10 @@ public class SneakyCosmetics extends JavaPlugin {
             // Cleanup all active morphs if needed
             // morphManager.stopAllTasks();
         }
+        
+        // Shutdown advanced feature managers
+        if (rentalManager != null) rentalManager.shutdown();
+        if (crateManager != null) crateManager.shutdown();
         
         // Close database connections
         if (databaseManager != null) {
@@ -200,7 +311,34 @@ public class SneakyCosmetics extends JavaPlugin {
         // Cancel all running tasks
         getServer().getScheduler().cancelTasks(this);
         
-        getLogger().info("SneakyCosmetics has been disabled!");
+        // Display shutdown banner
+        displayShutdownBanner();
+    }
+    
+    /**
+     * Display shutdown banner with cleanup information
+     */
+    private void displayShutdownBanner() {
+        getLogger().info("");
+        getLogger().info("╔══════════════════════════════════════════════════════════════╗");
+        getLogger().info("║                                                              ║");
+        getLogger().info("║                SneakyCosmetics v" + getDescription().getVersion() + "                     ║");
+        getLogger().info("║                    Shutting Down...                         ║");
+        getLogger().info("║                                                              ║");
+        getLogger().info("╚══════════════════════════════════════════════════════════════╝");
+        getLogger().info("");
+        getLogger().info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Cleanup Status ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        getLogger().info("│ ✓ Player data saved");
+        getLogger().info("│ ✓ Database connections closed");
+        getLogger().info("│ ✓ Background tasks cancelled");
+        getLogger().info("│ ✓ Cosmetic entities cleaned up");
+        getLogger().info("│ ✓ Memory freed");
+        getLogger().info("");
+        getLogger().info("██████████████████████████████████████████████████████████████");
+        getLogger().info("█ ✓ SneakyCosmetics has been safely disabled! █");
+        getLogger().info("█ Thank you for using SneakyCosmetics! █");
+        getLogger().info("██████████████████████████████████████████████████████████████");
+        getLogger().info("");
     }
     
     private void initializeIntegrations() {
@@ -272,6 +410,10 @@ public class SneakyCosmetics extends JavaPlugin {
         this.auraManager = new AuraManager(this);
         this.morphManager = new com.sneaky.cosmetics.cosmetics.morphs.MorphManager(this);
         
+        // Initialize advanced feature managers
+        this.rentalManager = new RentalManager(this);
+        this.crateManager = new CrateManager(this);
+        
         // Initialize cosmetics
         cosmeticManager.initialize();
         
@@ -280,22 +422,46 @@ public class SneakyCosmetics extends JavaPlugin {
     }
     
     private void registerCommands() {
-        if (getCommand("cosmetics") != null) {
-            getCommand("cosmetics").setExecutor(new CosmeticsCommand(this));
-        } else {
-            getLogger().warning("Failed to register /cosmetics command - command not found in plugin.yml");
+        // Register unified command system
+        try {
+            org.bukkit.command.PluginCommand sneakyCommand = getCommand("sneakycosmetics");
+            if (sneakyCommand != null) {
+                SneakyCosmeticsCommand unifiedCommand = new SneakyCosmeticsCommand(this);
+                sneakyCommand.setExecutor(unifiedCommand);
+                sneakyCommand.setTabCompleter(unifiedCommand);
+                getLogger().info("✓ Registered unified command system: /sneakycosmetics");
+            } else {
+                getLogger().info("Command /sneakycosmetics not available - using legacy commands only");
+            }
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Could not register /sneakycosmetics command", e);
         }
         
-        if (getCommand("credits") != null) {
-            getCommand("credits").setExecutor(new CreditsCommand(this));
-        } else {
-            getLogger().warning("Failed to register /credits command - command not found in plugin.yml");
-        }
-        
-        if (getCommand("morph") != null) {
-            getCommand("morph").setExecutor(new com.sneaky.cosmetics.commands.MorphCommand(this));
-        } else {
-            getLogger().warning("Failed to register /morph command - command not found in plugin.yml");
+        // Register legacy commands for backwards compatibility
+        registerLegacyCommand("cosmetics", new CosmeticsCommand(this));
+        registerLegacyCommand("credits", new CreditsCommand(this));
+        registerLegacyCommand("morph", new com.sneaky.cosmetics.commands.MorphCommand(this));
+        registerLegacyCommand("crate", new com.sneaky.cosmetics.commands.CrateCommand(this));
+        registerLegacyCommand("rental", new com.sneaky.cosmetics.commands.RentalCommand(this));
+    }
+    
+    /**
+     * Helper method to register legacy commands with proper error handling
+     */
+    private void registerLegacyCommand(String commandName, org.bukkit.command.CommandExecutor executor) {
+        try {
+            org.bukkit.command.PluginCommand command = getCommand(commandName);
+            if (command != null) {
+                command.setExecutor(executor);
+                if (executor instanceof org.bukkit.command.TabCompleter) {
+                    command.setTabCompleter((org.bukkit.command.TabCompleter) executor);
+                }
+                getLogger().info("✓ Registered legacy command: /" + commandName);
+            } else {
+                getLogger().info("Command /" + commandName + " not available");
+            }
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Could not register /" + commandName + " command", e);
         }
     }
     
@@ -445,5 +611,13 @@ public class SneakyCosmetics extends JavaPlugin {
     
     public StatisticsManager getStatisticsManager() {
         return statisticsManager;
+    }
+    
+    public RentalManager getRentalManager() {
+        return rentalManager;
+    }
+    
+    public CrateManager getCrateManager() {
+        return crateManager;
     }
 }

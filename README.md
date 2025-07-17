@@ -1,9 +1,9 @@
 # SneakyCosmetics
 
-A comprehensive Minecraft cosmetics plugin for 1.21.7+ with 80+ cosmetics, credit system, GUI management, and extensive integrations.
+A comprehensive Minecraft cosmetics plugin for 1.21.8+ with 80+ cosmetics, credit system, GUI management, and extensive integrations.
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
-![Minecraft](https://img.shields.io/badge/minecraft-1.21.7+-green.svg)
+![Version](https://img.shields.io/badge/version-1.0.0--dev-blue.svg)
+![Minecraft](https://img.shields.io/badge/minecraft-1.21.8+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-yellow.svg)
 ![Java](https://img.shields.io/badge/java-17+-orange.svg)
 
@@ -43,7 +43,7 @@ A comprehensive Minecraft cosmetics plugin for 1.21.7+ with 80+ cosmetics, credi
 ## 📋 Requirements
 
 - **Java 17+**
-- **Paper 1.21.7+** or **Spigot 1.21.7+** or **Folia**
+- **Paper 1.21.8+** or **Spigot 1.21.8+** or **Folia**
 - **Optional Dependencies:**
   - Vault (for economy features)
   - LuckPerms (for advanced permissions)

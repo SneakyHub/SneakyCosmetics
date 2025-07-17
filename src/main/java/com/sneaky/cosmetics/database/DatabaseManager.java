@@ -277,6 +277,45 @@ public class DatabaseManager {
                 ")"
             );
             
+            // Cosmetic rentals table
+            connection.createStatement().execute(
+                "CREATE TABLE IF NOT EXISTS cosmetic_rentals (" +
+                "id " + (databaseType.equals("mysql") ? "INT AUTO_INCREMENT PRIMARY KEY" : "INTEGER PRIMARY KEY AUTOINCREMENT") + ", " +
+                "player_uuid VARCHAR(36) NOT NULL, " +
+                "cosmetic_id VARCHAR(64) NOT NULL, " +
+                "rental_id VARCHAR(128) NOT NULL, " +
+                "rented_at BIGINT NOT NULL, " +
+                "expires_at BIGINT NOT NULL, " +
+                "rental_price INTEGER NOT NULL, " +
+                "UNIQUE(player_uuid, cosmetic_id)" +
+                ")"
+            );
+            
+            // Crate system tables
+            connection.createStatement().execute(
+                "CREATE TABLE IF NOT EXISTS player_crates (" +
+                "id " + (databaseType.equals("mysql") ? "INT AUTO_INCREMENT PRIMARY KEY" : "INTEGER PRIMARY KEY AUTOINCREMENT") + ", " +
+                "player_uuid VARCHAR(36) NOT NULL, " +
+                "crate_type VARCHAR(64) NOT NULL, " +
+                "quantity INTEGER DEFAULT 1, " +
+                "obtained_at BIGINT DEFAULT " + System.currentTimeMillis() + ", " +
+                "obtained_from VARCHAR(64) DEFAULT 'unknown'" +
+                ")"
+            );
+            
+            // Crate opening history
+            connection.createStatement().execute(
+                "CREATE TABLE IF NOT EXISTS crate_openings (" +
+                "id " + (databaseType.equals("mysql") ? "INT AUTO_INCREMENT PRIMARY KEY" : "INTEGER PRIMARY KEY AUTOINCREMENT") + ", " +
+                "player_uuid VARCHAR(36) NOT NULL, " +
+                "crate_type VARCHAR(64) NOT NULL, " +
+                "reward_type VARCHAR(32) NOT NULL, " +
+                "reward_id VARCHAR(128), " +
+                "reward_amount INTEGER DEFAULT 1, " +
+                "opened_at BIGINT DEFAULT " + System.currentTimeMillis() +
+                ")"
+            );
+            
             // Create indexes for better performance
             if (databaseType.equals("mysql")) {
                 connection.createStatement().execute("CREATE INDEX IF NOT EXISTS idx_cosmetic_ownership_player ON cosmetic_ownership(player_uuid)");

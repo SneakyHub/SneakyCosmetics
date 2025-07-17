@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -191,7 +192,7 @@ public class GadgetManager implements Listener {
         Vector direction = loc.getDirection();
         
         // Create colorful particle effects
-        Particle[] particles = {Particle.DUST, Particle.HAPPY_VILLAGER, Particle.VILLAGER_ANGRY, 
+        Particle[] particles = {Particle.DUST, Particle.HAPPY_VILLAGER, Particle.ANGRY_VILLAGER, 
                                Particle.HEART, Particle.NOTE, Particle.TOTEM_OF_UNDYING};
         
         for (int i = 0; i < 10; i++) {

@@ -293,6 +293,8 @@ help:
     - "&#32CD32/cosmetics reload &#808080- Reload configuration"
     - "&#32CD32/cosmetics update &#808080- Check for updates"
     - "&#32CD32/cosmetics debug &#808080- Toggle debug mode"
+    - ""
+    - "&#808080💡 Also available: &#32CD32/sneakycosmetics cosmetics <command>"
     - "&#FF8C00╚════════════════════════════════════════╝"
   
   credits:
@@ -307,6 +309,8 @@ help:
     - "&#32CD32/credits set <player> <amount> &#808080- Set credits"
     - "&#32CD32/credits daily &#808080- Claim daily reward"
     - "&#32CD32/credits top &#808080- View credit leaderboard"
+    - ""
+    - "&#808080💡 Also available: &#32CD32/sneakycosmetics credits <command>"
     - "&#FFD700╚════════════════════════════════════════╝"
 
 # Debug Messages

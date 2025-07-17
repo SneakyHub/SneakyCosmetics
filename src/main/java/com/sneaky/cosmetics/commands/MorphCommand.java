@@ -450,6 +450,8 @@ public class MorphCommand implements CommandExecutor, TabCompleter {
         messageManager.sendInfo(sender, "   &#808080• Complete achievements to unlock morphs");
         
         messageManager.sendInfo(sender, "");
+        messageManager.sendInfo(sender, "&#FF8C00🔗 &#FFD700Alternative: &#808080Use &#32CD32/sneakycosmetics morph <command>");
+        messageManager.sendInfo(sender, "");
         messageManager.sendInfo(sender, "&#FF8C00╚══════════════════════════════════════════════════╝");
         messageManager.sendInfo(sender, "");
     }

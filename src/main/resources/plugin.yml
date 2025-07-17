@@ -11,26 +11,47 @@ depend: []
 softdepend: [Vault, LuckPerms, EssentialsX, PlaceholderAPI, CMI]
 
 commands:
+  sneakycosmetics:
+    description: "Main unified command for all SneakyCosmetics features - access cosmetics, crates, rentals, credits, and morphs"
+    usage: "/<command> <cosmetics|crate|rental|credits|morph|help|info|reload> [subcommand] [args...]"
+    aliases: [sc, sneaky]
+    permission: sneakycosmetics.use
+    permission-message: "&cYou don't have permission to use SneakyCosmetics!"
+  
   cosmetics:
-    description: Open the cosmetics menu or manage cosmetics
-    usage: /<command> [help|list|toggle|give|reload|update]
+    description: "Browse, equip, and manage your cosmetic collection including particles, hats, pets, trails, gadgets, wings, and auras"
+    usage: "/<command> [help|list|toggle|give|remove|clear|reload|update|debug] [player] [cosmetic]"
     aliases: [cosmetic, cosm]
     permission: sneakycosmetics.use
-    permission-message: "&cYou do not have permission to use cosmetics!"
+    permission-message: "&cYou don't have permission to use cosmetics!"
   
   credits:
-    description: Manage your credits
-    usage: /<command> [buy|give|remove|set|balance]
+    description: "Manage your credit balance - buy, earn, spend, and transfer credits for purchasing cosmetics"
+    usage: "/<command> [balance|buy|give|remove|set|daily|top|help] [player] [amount]"
     aliases: [credit, money]
     permission: sneakycosmetics.credits
-    permission-message: "&cYou do not have permission to use credits!"
+    permission-message: "&cYou don't have permission to use the credits system!"
+  
+  crate:
+    description: "Open mystery crates to unlock random cosmetics and rewards with different rarity levels"
+    usage: "/<command> [open|buy|list|info|give|help] [type] [quantity] [player]"
+    aliases: [crates, cratebox]
+    permission: sneakycosmetics.use
+    permission-message: "&cYou don't have permission to use crates!"
+  
+  rental:
+    description: "Rent cosmetics temporarily for a lower cost - perfect for trying before buying permanently"
+    usage: "/<command> [rent|extend|list|info|browse|help] [cosmetic] [duration]"
+    aliases: [rent, cosmeticrental]
+    permission: sneakycosmetics.use
+    permission-message: "&cYou don't have permission to use the rental system!"
   
   morph:
-    description: Transform into different creatures
-    usage: /<command> [list|help|<morph_name>]
+    description: "Transform into different creatures and entities with unique abilities and special powers"
+    usage: "/<command> [transform|unmorph|list|info|ability|check|menu|top|help] [morph_name] [player]"
     aliases: [transform, shift]
     permission: sneakycosmetics.use
-    permission-message: "&cYou do not have permission to use morphs!"
+    permission-message: "&cYou don't have permission to use morphs!"
 
 permissions:
   sneakycosmetics.*:

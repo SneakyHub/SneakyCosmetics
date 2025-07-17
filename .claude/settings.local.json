@@ -35,7 +35,10 @@
       "Bash(./tools/apache-maven-3.9.6/bin/mvn.cmd compile)",
       "Bash(\"./tools/apache-maven-3.9.6/bin/mvn\" clean compile)",
       "Bash(where javac)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(\"./tools/apache-maven-3.9.6/bin/mvn\" compile -q)",
+      "Bash(\"./tools/apache-maven-3.9.6/bin/mvn\" compile)",
+      "Bash(JAVA_HOME=\"C:\\Program Files\\Java\\jdk-24\" \"./tools/apache-maven-3.9.6/bin/mvn\" compile -q)"
     ],
     "deny": []
   }
