@@ -29,7 +29,13 @@ public class GadgetCosmetic extends Cosmetic {
         GRAPPLING_HOOK,
         TELEPORT_STICK,
         PARTY_POPPER,
-        PAINT_BRUSH
+        PAINT_BRUSH,
+        WIND_CANNON,
+        GRAVITY_GUN,
+        LIGHTNING_WAND,
+        FREEZE_RAY,
+        JUMP_BOOTS,
+        PORTAL_GUN
     }
     
     public GadgetCosmetic(String id, String displayName, int price, Material iconMaterial,

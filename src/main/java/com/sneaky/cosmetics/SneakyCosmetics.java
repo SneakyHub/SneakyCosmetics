@@ -58,6 +58,7 @@ public class SneakyCosmetics extends JavaPlugin {
     private GadgetManager gadgetManager;
     private WingManager wingManager;
     private AuraManager auraManager;
+    private com.sneaky.cosmetics.cosmetics.morphs.MorphManager morphManager;
     
     // Integration managers
     private VaultIntegration vaultIntegration;
@@ -164,6 +165,10 @@ public class SneakyCosmetics extends JavaPlugin {
         if (wingManager != null) wingManager.stopAllTasks();
         if (auraManager != null) auraManager.stopAllTasks();
         if (gadgetManager != null) gadgetManager.stopAllTasks();
+        if (morphManager != null) {
+            // Cleanup all active morphs if needed
+            // morphManager.stopAllTasks();
+        }
         
         // Close database connections
         if (databaseManager != null) {
@@ -265,6 +270,7 @@ public class SneakyCosmetics extends JavaPlugin {
         this.gadgetManager = new GadgetManager(this);
         this.wingManager = new WingManager(this);
         this.auraManager = new AuraManager(this);
+        this.morphManager = new com.sneaky.cosmetics.cosmetics.morphs.MorphManager(this);
         
         // Initialize cosmetics
         cosmeticManager.initialize();
@@ -407,6 +413,10 @@ public class SneakyCosmetics extends JavaPlugin {
     
     public AuraManager getAuraManager() {
         return auraManager;
+    }
+    
+    public com.sneaky.cosmetics.cosmetics.morphs.MorphManager getMorphManager() {
+        return morphManager;
     }
     
     public VaultIntegration getVaultIntegration() {

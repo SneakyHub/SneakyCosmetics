@@ -1296,6 +1296,86 @@ public class CosmeticRegistry {
             );
             registerCosmetic(teleportStick);
             
+            // Party Popper
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic partyPopper = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_party", "Party Popper", 250, Material.FIREWORK_ROCKET,
+                java.util.Arrays.asList("§7Celebrate with style!", "§7Create amazing party effects!"),
+                null, false, false,
+                Material.FIREWORK_ROCKET, "§6Party Popper", java.util.Arrays.asList("§6Right-click to celebrate!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.PARTY_POPPER
+            );
+            registerCosmetic(partyPopper);
+            
+            // Snowball Cannon
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic snowballCannon = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_snowball", "Snowball Cannon", 200, Material.SNOW_BLOCK,
+                java.util.Arrays.asList("§7Fire super-powered snowballs", "§7at high velocity!"),
+                null, false, false,
+                Material.SNOW_BLOCK, "§bSnowball Cannon", java.util.Arrays.asList("§bRight-click to fire!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.SNOWBALL_CANNON
+            );
+            registerCosmetic(snowballCannon);
+            
+            // Wind Cannon - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic windCannon = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_wind", "Wind Cannon", 450, Material.PHANTOM_MEMBRANE,
+                java.util.Arrays.asList("§7Blast enemies away", "§7with powerful wind gusts!"),
+                null, false, false,
+                Material.PHANTOM_MEMBRANE, "§aWind Cannon", java.util.Arrays.asList("§aRight-click to blow!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.WIND_CANNON
+            );
+            registerCosmetic(windCannon);
+            
+            // Gravity Gun - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic gravityGun = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_gravity", "Gravity Gun", 700, Material.END_ROD,
+                java.util.Arrays.asList("§7Manipulate gravity around you!", "§7Launch entities into the air!"),
+                null, false, true,
+                Material.END_ROD, "§dGravity Gun", java.util.Arrays.asList("§dRight-click to lift!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.GRAVITY_GUN
+            );
+            registerCosmetic(gravityGun);
+            
+            // Lightning Wand - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic lightningWand = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_lightning", "Lightning Wand", 900, Material.LIGHTNING_ROD,
+                java.util.Arrays.asList("§7Call down lightning strikes", "§7where you point!"),
+                "sneakycosmetics.premium", true, true,
+                Material.LIGHTNING_ROD, "§eLightning Wand", java.util.Arrays.asList("§eRight-click to strike!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.LIGHTNING_WAND
+            );
+            registerCosmetic(lightningWand);
+            
+            // Freeze Ray - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic freezeRay = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_freeze", "Freeze Ray", 550, Material.ICE,
+                java.util.Arrays.asList("§7Freeze everything in sight!", "§7Create ice blocks and effects!"),
+                null, false, false,
+                Material.ICE, "§bFreeze Ray", java.util.Arrays.asList("§bRight-click to freeze!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.FREEZE_RAY
+            );
+            registerCosmetic(freezeRay);
+            
+            // Jump Boots - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic jumpBoots = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_jump", "Jump Boots", 350, Material.LEATHER_BOOTS,
+                java.util.Arrays.asList("§7Super jump to new heights!", "§7Bounce around like a kangaroo!"),
+                null, false, false,
+                Material.LEATHER_BOOTS, "§2Jump Boots", java.util.Arrays.asList("§2Right-click to jump!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.JUMP_BOOTS
+            );
+            registerCosmetic(jumpBoots);
+            
+            // Portal Gun - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic portalGun = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_portal", "Portal Gun", 1200, Material.ENDER_PEARL,
+                java.util.Arrays.asList("§7Create dimensional portals!", "§7Travel instantly across space!"),
+                "sneakycosmetics.premium", true, true,
+                Material.ENDER_PEARL, "§5Portal Gun", java.util.Arrays.asList("§5Right-click to portal!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.PORTAL_GUN
+            );
+            registerCosmetic(portalGun);
+            
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register gadget cosmetics: " + e.getMessage());
         }

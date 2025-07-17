@@ -34,7 +34,8 @@
       "Bash(.toolsapache-maven-3.9.6binmvn.cmd compile)",
       "Bash(./tools/apache-maven-3.9.6/bin/mvn.cmd compile)",
       "Bash(\"./tools/apache-maven-3.9.6/bin/mvn\" clean compile)",
-      "Bash(where javac)"
+      "Bash(where javac)",
+      "Bash(git stash:*)"
     ],
     "deny": []
   }
