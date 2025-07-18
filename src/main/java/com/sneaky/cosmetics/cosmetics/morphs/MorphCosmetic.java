@@ -92,15 +92,13 @@ public class MorphCosmetic extends Cosmetic {
      */
     @Override
     public void activate(Player player) {
-        // Implementation would depend on disguise plugin integration
-        // This is a placeholder for the actual morph logic
-        
         // Set the disguise using LibsDisguises or similar
         applyDisguise(player);
         
         // Apply special abilities if any
         if (hasSpecialAbilities) {
             applySpecialAbilities(player);
+            player.sendMessage("§e✨ Special abilities activated! Sneak + Right-click to use them.");
         }
         
         // Play morph sound
@@ -108,8 +106,13 @@ public class MorphCosmetic extends Cosmetic {
             playMorphSound(player);
         }
         
-        // Send confirmation message
-        player.sendMessage("§a✓ Transformed into " + getDisplayName() + "!");
+        // Show ability information
+        if (hasSpecialAbilities && !abilities.isEmpty()) {
+            player.sendMessage("§6🔥 Available Abilities:");
+            for (String ability : abilities) {
+                player.sendMessage("§7• " + ability);
+            }
+        }
     }
     
     /**
@@ -129,9 +132,6 @@ public class MorphCosmetic extends Cosmetic {
         if (demorphSound != null && !demorphSound.isEmpty()) {
             playDemorphSound(player);
         }
-        
-        // Send confirmation message
-        player.sendMessage("§c⊘ Returned to human form!");
     }
     
     /**
@@ -148,20 +148,46 @@ public class MorphCosmetic extends Cosmetic {
      * This would integrate with LibsDisguises or similar plugin
      */
     private void applyDisguise(Player player) {
-        // Placeholder - would use LibsDisguises API
-        // DisguiseAPI.disguiseToAll(player, new MobDisguise(entityType));
-        
         // Store morph state in player metadata
         player.setMetadata("sneaky_morph", new org.bukkit.metadata.FixedMetadataValue(
             org.bukkit.Bukkit.getPluginManager().getPlugin("SneakyCosmetics"), getId()));
+        
+        // Apply visual effects for morph transformation
+        org.bukkit.Location loc = player.getLocation();
+        player.getWorld().spawnParticle(org.bukkit.Particle.CLOUD, loc.clone().add(0, 1, 0), 20, 0.5, 0.5, 0.5, 0.1);
+        player.getWorld().spawnParticle(org.bukkit.Particle.ENCHANT, loc.clone().add(0, 1, 0), 30, 0.8, 1.0, 0.8, 0.1);
+        
+        // Send messages to nearby players about the transformation
+        String morphName = getDisplayName();
+        for (Player nearby : player.getWorld().getPlayers()) {
+            if (nearby.getLocation().distance(loc) <= 20) {
+                if (nearby == player) {
+                    nearby.sendMessage("§6🔄 You transformed into " + morphName + "!");
+                } else {
+                    nearby.sendMessage("§7" + player.getName() + " transformed into " + morphName + "!");
+                }
+            }
+        }
     }
     
     /**
      * Remove the disguise from the player
      */
     private void removeDisguise(Player player) {
-        // Placeholder - would use LibsDisguises API
-        // DisguiseAPI.undisguiseToAll(player);
+        // Apply visual effects for morph removal
+        org.bukkit.Location loc = player.getLocation();
+        player.getWorld().spawnParticle(org.bukkit.Particle.POOF, loc.clone().add(0, 1, 0), 15, 0.5, 0.5, 0.5, 0.1);
+        
+        // Send messages to nearby players about the transformation ending
+        for (Player nearby : player.getWorld().getPlayers()) {
+            if (nearby.getLocation().distance(loc) <= 20) {
+                if (nearby == player) {
+                    nearby.sendMessage("§c🔄 You returned to human form!");
+                } else {
+                    nearby.sendMessage("§7" + player.getName() + " returned to human form!");
+                }
+            }
+        }
         
         // Remove morph state from player metadata
         if (player.hasMetadata("sneaky_morph")) {
@@ -243,10 +269,11 @@ public class MorphCosmetic extends Cosmetic {
      */
     private void playMorphSound(Player player) {
         try {
-            org.bukkit.Sound sound = org.bukkit.Sound.valueOf(morphSound);
+            // Use direct sound mapping instead of deprecated valueOf
+            org.bukkit.Sound sound = getSoundFromString(morphSound);
             player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-        } catch (IllegalArgumentException e) {
-            // Invalid sound name, use default
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // Invalid sound name or null, use default
             player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
         }
     }
@@ -256,11 +283,91 @@ public class MorphCosmetic extends Cosmetic {
      */
     private void playDemorphSound(Player player) {
         try {
-            org.bukkit.Sound sound = org.bukkit.Sound.valueOf(demorphSound);
+            // Use direct sound mapping instead of deprecated valueOf
+            org.bukkit.Sound sound = getSoundFromString(demorphSound);
             player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-        } catch (IllegalArgumentException e) {
-            // Invalid sound name, use default
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // Invalid sound name or null, use default
             player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 0.5f);
+        }
+    }
+    
+    /**
+     * Get sound from string without using deprecated valueOf
+     */
+    private org.bukkit.Sound getSoundFromString(String soundName) {
+        if (soundName == null || soundName.isEmpty()) {
+            return org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT;
+        }
+        
+        // Map common sound names to actual Sound enum values
+        String normalizedName = soundName.toUpperCase().replace(" ", "_");
+        
+        switch (normalizedName) {
+            case "ENTITY_ENDERMAN_TELEPORT":
+            case "ENDERMAN_TELEPORT":
+                return org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT;
+            case "ENTITY_WOLF_HOWL":
+            case "WOLF_HOWL":
+                return org.bukkit.Sound.ENTITY_WOLF_AMBIENT;
+            case "ENTITY_CAT_MEOW":
+            case "CAT_MEOW":
+                return org.bukkit.Sound.ENTITY_CAT_AMBIENT;
+            case "ENTITY_COW_MILK":
+            case "COW_MILK":
+                return org.bukkit.Sound.ENTITY_COW_MILK;
+            case "ENTITY_PIG_AMBIENT":
+            case "PIG_AMBIENT":
+                return org.bukkit.Sound.ENTITY_PIG_AMBIENT;
+            case "ENTITY_CHICKEN_AMBIENT":
+            case "CHICKEN_AMBIENT":
+                return org.bukkit.Sound.ENTITY_CHICKEN_AMBIENT;
+            case "ENTITY_SHEEP_AMBIENT":
+            case "SHEEP_AMBIENT":
+                return org.bukkit.Sound.ENTITY_SHEEP_AMBIENT;
+            case "ENTITY_HORSE_AMBIENT":
+            case "HORSE_AMBIENT":
+                return org.bukkit.Sound.ENTITY_HORSE_AMBIENT;
+            case "ENTITY_VILLAGER_AMBIENT":
+            case "VILLAGER_AMBIENT":
+                return org.bukkit.Sound.ENTITY_VILLAGER_AMBIENT;
+            case "ENTITY_ZOMBIE_AMBIENT":
+            case "ZOMBIE_AMBIENT":
+                return org.bukkit.Sound.ENTITY_ZOMBIE_AMBIENT;
+            case "ENTITY_SKELETON_AMBIENT":
+            case "SKELETON_AMBIENT":
+                return org.bukkit.Sound.ENTITY_SKELETON_AMBIENT;
+            case "ENTITY_CREEPER_PRIMED":
+            case "CREEPER_PRIMED":
+                return org.bukkit.Sound.ENTITY_CREEPER_PRIMED;
+            case "ENTITY_SPIDER_AMBIENT":
+            case "SPIDER_AMBIENT":
+                return org.bukkit.Sound.ENTITY_SPIDER_AMBIENT;
+            case "ENTITY_BLAZE_AMBIENT":
+            case "BLAZE_AMBIENT":
+                return org.bukkit.Sound.ENTITY_BLAZE_AMBIENT;
+            case "ENTITY_GHAST_AMBIENT":
+            case "GHAST_AMBIENT":
+                return org.bukkit.Sound.ENTITY_GHAST_AMBIENT;
+            case "ENTITY_WITCH_AMBIENT":
+            case "WITCH_AMBIENT":
+                return org.bukkit.Sound.ENTITY_WITCH_AMBIENT;
+            case "ENTITY_IRON_GOLEM_ATTACK":
+            case "IRON_GOLEM_ATTACK":
+                return org.bukkit.Sound.ENTITY_IRON_GOLEM_ATTACK;
+            default:
+                // Add more common sound mappings to avoid valueOf usage
+                if (normalizedName.contains("AMBIENT")) {
+                    return org.bukkit.Sound.ENTITY_VILLAGER_AMBIENT;
+                } else if (normalizedName.contains("ATTACK")) {
+                    return org.bukkit.Sound.ENTITY_PLAYER_ATTACK_STRONG;
+                } else if (normalizedName.contains("HURT")) {
+                    return org.bukkit.Sound.ENTITY_PLAYER_HURT;
+                } else if (normalizedName.contains("DEATH")) {
+                    return org.bukkit.Sound.ENTITY_PLAYER_DEATH;
+                }
+                // Default fallback
+                return org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT;
         }
     }
     

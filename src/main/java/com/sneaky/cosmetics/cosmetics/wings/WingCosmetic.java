@@ -30,14 +30,18 @@ public class WingCosmetic extends Cosmetic {
     private static final Map<Player, BukkitRunnable> activeTasks = new ConcurrentHashMap<>();
     
     public enum WingType {
-        ANGEL("Angel Wings", Particle.CLOUD),
+        ANGEL("Angel Wings", Particle.ENCHANT),
         DEMON("Demon Wings", Particle.SMOKE),
         FAIRY("Fairy Wings", Particle.ENCHANT),
         DRAGON("Dragon Wings", Particle.FLAME),
         BUTTERFLY("Butterfly Wings", Particle.NOTE),
-        PHOENIX("Phoenix Wings", Particle.LAVA),
+        PHOENIX("Phoenix Wings", Particle.FLAME),
         ICE("Ice Wings", Particle.SNOWFLAKE),
-        SHADOW("Shadow Wings", Particle.SQUID_INK);
+        SHADOW("Shadow Wings", Particle.SQUID_INK),
+        LIGHTNING("Lightning Wings", Particle.ELECTRIC_SPARK),
+        NATURE("Nature Wings", Particle.HAPPY_VILLAGER),
+        COSMIC("Cosmic Wings", Particle.PORTAL),
+        RAINBOW("Rainbow Wings", Particle.NOTE);
         
         private final String displayName;
         private final Particle particle;
@@ -121,42 +125,249 @@ public class WingCosmetic extends Cosmetic {
     private void createWingEffect(Player player) {
         Location playerLoc = player.getLocation();
         
-        // Get player's direction
+        // Get player's direction and position
         float yaw = playerLoc.getYaw();
         double radians = Math.toRadians(yaw);
         
-        // Calculate wing positions (left and right)
-        double leftX = playerLoc.getX() + Math.cos(radians + Math.PI/2) * 1.2;
-        double leftZ = playerLoc.getZ() + Math.sin(radians + Math.PI/2) * 1.2;
+        // Base position slightly behind and above player
+        double baseX = playerLoc.getX() - Math.cos(radians) * 0.3;
+        double baseY = playerLoc.getY() + 1.4;
+        double baseZ = playerLoc.getZ() - Math.sin(radians) * 0.3;
         
-        double rightX = playerLoc.getX() + Math.cos(radians - Math.PI/2) * 1.2;
-        double rightZ = playerLoc.getZ() + Math.sin(radians - Math.PI/2) * 1.2;
+        // Create wing animation based on time
+        long time = System.currentTimeMillis();
+        double wingBeat = Math.sin(time * 0.01) * 0.3; // Wing flapping animation
         
-        double y = playerLoc.getY() + 1.5;
+        // Create left and right wings with proper wing shape
+        createSingleWing(player, baseX, baseY, baseZ, radians, true, wingBeat);   // Left wing
+        createSingleWing(player, baseX, baseY, baseZ, radians, false, wingBeat);  // Right wing
+    }
+    
+    private void createSingleWing(Player player, double baseX, double baseY, double baseZ, 
+                                 double yaw, boolean isLeft, double wingBeat) {
         
-        // Create wing shapes
-        for (int i = 0; i < 5; i++) {
-            double offset = i * 0.3;
+        // Wing configuration
+        int wingSegments = 12; // Number of wing sections
+        double wingSpan = 2.5; // How wide the wings extend
+        double wingHeight = 1.8; // How tall the wings are
+        
+        // Direction multiplier for left/right wing
+        double sideMultiplier = isLeft ? 1.0 : -1.0;
+        
+        // Calculate wing shape points using a wing curve
+        for (int i = 0; i < wingSegments; i++) {
+            double progress = (double) i / (wingSegments - 1); // 0.0 to 1.0
             
-            // Left wing
-            Location leftWing = new Location(playerLoc.getWorld(), 
-                leftX - Math.cos(radians) * offset,
-                y - offset * 0.2,
-                leftZ - Math.sin(radians) * offset
+            // Create a realistic wing curve (starts narrow, widens, then tapers)
+            double wingCurve = Math.sin(progress * Math.PI) * wingSpan;
+            double heightCurve = Math.cos(progress * Math.PI * 0.5) * wingHeight;
+            
+            // Add wing beat animation
+            double animatedHeight = heightCurve + wingBeat * (1.0 - progress * 0.5);
+            double animatedSpan = wingCurve * (1.0 + wingBeat * 0.2);
+            
+            // Calculate the actual world position
+            double wingX = baseX + Math.cos(yaw + Math.PI/2) * animatedSpan * sideMultiplier;
+            double wingY = baseY + animatedHeight * 0.5 - progress * 0.3;
+            double wingZ = baseZ + Math.sin(yaw + Math.PI/2) * animatedSpan * sideMultiplier;
+            
+            // Add backward offset that increases with distance from body
+            wingX -= Math.cos(yaw) * progress * 0.8;
+            wingZ -= Math.sin(yaw) * progress * 0.8;
+            
+            Location wingPoint = new Location(player.getWorld(), wingX, wingY, wingZ);
+            
+            // Create wing membrane effect with multiple layers
+            createWingMembrane(player, wingPoint, progress, isLeft);
+        }
+        
+        // Add wing tips with special effects
+        createWingTips(player, baseX, baseY, baseZ, yaw, isLeft, wingBeat);
+    }
+    
+    private void createWingMembrane(Player player, Location wingPoint, double progress, boolean isLeft) {
+        // Main wing structure
+        player.getWorld().spawnParticle(wingParticle, wingPoint, 1, 0.05, 0.05, 0.05, 0.0);
+        
+        // Add wing membrane details for larger wings
+        if (progress > 0.2 && progress < 0.8) {
+            // Inner membrane with slight randomization
+            Location innerPoint = wingPoint.clone().add(
+                Math.random() * 0.3 - 0.15,
+                Math.random() * 0.2 - 0.1,
+                Math.random() * 0.3 - 0.15
             );
-            
-            // Right wing  
-            Location rightWing = new Location(playerLoc.getWorld(),
-                rightX - Math.cos(radians) * offset,
-                y - offset * 0.2,
-                rightZ - Math.sin(radians) * offset
-            );
-            
-            // Spawn particles
-            player.getWorld().spawnParticle(wingParticle, leftWing, particleCount, 
-                spreadX, spreadY, spreadZ, speed);
-            player.getWorld().spawnParticle(wingParticle, rightWing, particleCount, 
-                spreadX, spreadY, spreadZ, speed);
+            player.getWorld().spawnParticle(wingParticle, innerPoint, 1, 0.02, 0.02, 0.02, 0.0);
+        }
+        
+        // Wing-type specific membrane effects
+        switch (wingType) {
+            case ANGEL:
+                // Feathery texture
+                if (Math.random() < 0.3) {
+                    Location featherPoint = wingPoint.clone().add(0, -0.1, 0);
+                    player.getWorld().spawnParticle(Particle.CLOUD, featherPoint, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                break;
+                
+            case DEMON:
+                // Dark, smoky texture
+                if (Math.random() < 0.2) {
+                    player.getWorld().spawnParticle(Particle.SMOKE, wingPoint, 1, 0.1, 0.1, 0.1, 0.0);
+                }
+                break;
+                
+            case BUTTERFLY:
+                // Colorful patterns on wings
+                if (Math.random() < 0.4 && progress > 0.3 && progress < 0.7) {
+                    player.getWorld().spawnParticle(Particle.NOTE, wingPoint, 1, 0.0, 0.0, 0.0, 0.0);
+                }
+                break;
+                
+            case DRAGON:
+                // Scales and ember effects
+                if (Math.random() < 0.15) {
+                    player.getWorld().spawnParticle(Particle.LAVA, wingPoint, 1, 0.0, 0.0, 0.0, 0.0);
+                }
+                break;
+                
+            case PHOENIX:
+                // Fiery feathers
+                if (Math.random() < 0.25) {
+                    Location featherPoint = wingPoint.clone().add(0, -0.1, 0);
+                    player.getWorld().spawnParticle(Particle.FLAME, featherPoint, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                break;
+                
+            case ICE:
+                // Crystalline structure
+                if (Math.random() < 0.3) {
+                    player.getWorld().spawnParticle(Particle.SNOWFLAKE, wingPoint, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                break;
+                
+            case LIGHTNING:
+                // Electric arcs
+                if (Math.random() < 0.2) {
+                    player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, wingPoint, 1, 0.1, 0.1, 0.1, 0.0);
+                }
+                break;
+                
+            case NATURE:
+                // Living wing with growth particles
+                if (Math.random() < 0.25) {
+                    player.getWorld().spawnParticle(Particle.COMPOSTER, wingPoint, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                break;
+                
+            case COSMIC:
+                // Portal energy effects
+                if (Math.random() < 0.2) {
+                    player.getWorld().spawnParticle(Particle.PORTAL, wingPoint, 1, 0.1, 0.1, 0.1, 0.0);
+                }
+                break;
+                
+            case FAIRY:
+            case SHADOW:
+            case RAINBOW:
+            default:
+                // Default wing membrane (already handled above)
+                break;
+        }
+    }
+    
+    private void createWingTips(Player player, double baseX, double baseY, double baseZ, 
+                               double yaw, boolean isLeft, double wingBeat) {
+        
+        double sideMultiplier = isLeft ? 1.0 : -1.0;
+        
+        // Wing tip position (furthest point of wing)
+        double tipX = baseX + Math.cos(yaw + Math.PI/2) * (2.5 + wingBeat * 0.3) * sideMultiplier;
+        double tipY = baseY + 0.5 + wingBeat * 0.2;
+        double tipZ = baseZ + Math.sin(yaw + Math.PI/2) * (2.5 + wingBeat * 0.3) * sideMultiplier;
+        
+        // Add backward offset for wing tips
+        tipX -= Math.cos(yaw) * 1.2;
+        tipZ -= Math.sin(yaw) * 1.2;
+        
+        Location tipLocation = new Location(player.getWorld(), tipX, tipY, tipZ);
+        
+        // Wing tip effects based on wing type
+        switch (wingType) {
+            case ANGEL:
+                player.getWorld().spawnParticle(Particle.ENCHANT, tipLocation, 3, 0.1, 0.1, 0.1, 0.1);
+                player.getWorld().spawnParticle(Particle.CLOUD, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                break;
+            case DEMON:
+                player.getWorld().spawnParticle(Particle.SMOKE, tipLocation, 2, 0.1, 0.1, 0.1, 0.05);
+                if (Math.random() < 0.3) {
+                    player.getWorld().spawnParticle(Particle.LAVA, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                }
+                break;
+            case FAIRY:
+                player.getWorld().spawnParticle(Particle.ENCHANT, tipLocation, 5, 0.2, 0.2, 0.2, 0.1);
+                player.getWorld().spawnParticle(Particle.END_ROD, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                break;
+            case DRAGON:
+                player.getWorld().spawnParticle(Particle.FLAME, tipLocation, 2, 0.1, 0.1, 0.1, 0.02);
+                player.getWorld().spawnParticle(Particle.SMOKE, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                break;
+            case BUTTERFLY:
+                // Create colorful butterfly wing tips
+                player.getWorld().spawnParticle(Particle.NOTE, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                player.getWorld().spawnParticle(Particle.ENCHANT, tipLocation, 2, 0.1, 0.1, 0.1, 0.0);
+                break;
+            case PHOENIX:
+                player.getWorld().spawnParticle(Particle.FLAME, tipLocation, 3, 0.1, 0.1, 0.1, 0.02);
+                player.getWorld().spawnParticle(Particle.LAVA, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                if (Math.random() < 0.2) {
+                    player.getWorld().spawnParticle(Particle.END_ROD, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                }
+                break;
+            case ICE:
+                player.getWorld().spawnParticle(Particle.SNOWFLAKE, tipLocation, 3, 0.1, 0.1, 0.1, 0.0);
+                player.getWorld().spawnParticle(Particle.CLOUD, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                break;
+            case SHADOW:
+                player.getWorld().spawnParticle(Particle.SQUID_INK, tipLocation, 2, 0.1, 0.1, 0.1, 0.0);
+                player.getWorld().spawnParticle(Particle.SMOKE, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                break;
+            case LIGHTNING:
+                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, tipLocation, 3, 0.2, 0.2, 0.2, 0.1);
+                if (Math.random() < 0.4) {
+                    player.getWorld().spawnParticle(Particle.END_ROD, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                }
+                break;
+            case NATURE:
+                player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, tipLocation, 2, 0.1, 0.1, 0.1, 0.0);
+                if (Math.random() < 0.3) {
+                    player.getWorld().spawnParticle(Particle.COMPOSTER, tipLocation, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                break;
+            case COSMIC:
+                player.getWorld().spawnParticle(Particle.PORTAL, tipLocation, 4, 0.2, 0.2, 0.2, 0.1);
+                player.getWorld().spawnParticle(Particle.ENCHANT, tipLocation, 2, 0.1, 0.1, 0.1, 0.0);
+                break;
+            case RAINBOW:
+                // Create rainbow effect at wing tips
+                long time = System.currentTimeMillis();
+                int colorIndex = (int) ((time / 200) % 6); // Cycle through colors
+                Particle rainbowParticle = getRainbowParticle(colorIndex);
+                player.getWorld().spawnParticle(rainbowParticle, tipLocation, 2, 0.1, 0.1, 0.1, 0.0);
+                player.getWorld().spawnParticle(Particle.NOTE, tipLocation, 1, 0.0, 0.0, 0.0, 0.0);
+                break;
+        }
+    }
+    
+    private Particle getRainbowParticle(int colorIndex) {
+        switch (colorIndex) {
+            case 0: return Particle.FLAME; // Red
+            case 1: return Particle.LAVA; // Orange
+            case 2: return Particle.ENCHANT; // Yellow/Gold
+            case 3: return Particle.HAPPY_VILLAGER; // Green
+            case 4: return Particle.ENCHANT; // Blue/Cyan
+            case 5: return Particle.PORTAL; // Purple
+            default: return Particle.ENCHANT;
         }
     }
     

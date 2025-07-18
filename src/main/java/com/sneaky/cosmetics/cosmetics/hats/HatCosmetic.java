@@ -35,7 +35,7 @@ public class HatCosmetic extends Cosmetic {
     
     @Override
     public void activate(Player player) {
-        // Store the original helmet
+        // Store the original helmet using modern inventory API
         ItemStack originalHelmet = player.getInventory().getHelmet();
         if (originalHelmet != null) {
             originalHelmets.put(player, originalHelmet.clone());
@@ -52,13 +52,13 @@ public class HatCosmetic extends Cosmetic {
             hat.setItemMeta(meta);
         }
         
-        // Set the hat
+        // Set the hat using modern inventory API
         player.getInventory().setHelmet(hat);
     }
     
     @Override
     public void deactivate(Player player) {
-        // Restore the original helmet
+        // Restore the original helmet using modern inventory API
         ItemStack originalHelmet = originalHelmets.remove(player);
         player.getInventory().setHelmet(originalHelmet);
     }

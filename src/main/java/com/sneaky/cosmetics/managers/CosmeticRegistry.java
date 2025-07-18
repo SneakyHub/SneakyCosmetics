@@ -1376,6 +1376,86 @@ public class CosmeticRegistry {
             );
             registerCosmetic(portalGun);
             
+            // Rocket Launcher - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic rocketLauncher = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_rocket", "Rocket Launcher", 950, Material.FIREWORK_ROCKET,
+                java.util.Arrays.asList("§7Launch explosive rockets!", "§7Massive area damage and effects!"),
+                "sneakycosmetics.premium", true, true,
+                Material.FIREWORK_ROCKET, "§cRocket Launcher", java.util.Arrays.asList("§cRight-click to launch!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.ROCKET_LAUNCHER
+            );
+            registerCosmetic(rocketLauncher);
+            
+            // Force Field - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic forceField = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_forcefield", "Force Field", 800, Material.BARRIER,
+                java.util.Arrays.asList("§7Create an energy shield!", "§7Become invulnerable for 10 seconds!"),
+                null, false, true,
+                Material.BARRIER, "§bForce Field", java.util.Arrays.asList("§bRight-click to shield!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.FORCE_FIELD
+            );
+            registerCosmetic(forceField);
+            
+            // Time Freezer - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic timeFreezer = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_timefreezer", "Time Freezer", 1500, Material.CLOCK,
+                java.util.Arrays.asList("§7Stop time itself!", "§7Freeze all nearby creatures!"),
+                "sneakycosmetics.premium", true, true,
+                Material.CLOCK, "§fTime Freezer", java.util.Arrays.asList("§fRight-click to freeze time!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.TIME_FREEZER
+            );
+            registerCosmetic(timeFreezer);
+            
+            // Energy Sword - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic energySword = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_energysword", "Energy Sword", 650, Material.DIAMOND_SWORD,
+                java.util.Arrays.asList("§7Slice through enemies!", "§7Energy blade that cuts all!"),
+                null, false, true,
+                Material.DIAMOND_SWORD, "§eEnergy Sword", java.util.Arrays.asList("§eRight-click to slash!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.ENERGY_SWORD
+            );
+            registerCosmetic(energySword);
+            
+            // Invisibility Cloak - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic invisibilityCloak = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_invisibility", "Invisibility Cloak", 750, Material.GRAY_DYE,
+                java.util.Arrays.asList("§7Become completely invisible!", "§7Sneak around unseen!"),
+                null, false, true,
+                Material.GRAY_DYE, "§7Invisibility Cloak", java.util.Arrays.asList("§7Right-click to vanish!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.INVISIBILITY_CLOAK
+            );
+            registerCosmetic(invisibilityCloak);
+            
+            // Speed Booster - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic speedBooster = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_speedbooster", "Speed Booster", 400, Material.SUGAR,
+                java.util.Arrays.asList("§7Run at lightning speed!", "§7Zoom around the map!"),
+                null, false, false,
+                Material.SUGAR, "§fSpeed Booster", java.util.Arrays.asList("§fRight-click to boost!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.SPEED_BOOSTER
+            );
+            registerCosmetic(speedBooster);
+            
+            // Healing Staff - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic healingStaff = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_healingstaff", "Healing Staff", 500, Material.STICK,
+                java.util.Arrays.asList("§7Heal yourself and allies!", "§7Restore health and energy!"),
+                null, false, false,
+                Material.STICK, "§aHealing Staff", java.util.Arrays.asList("§aRight-click to heal!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.HEALING_STAFF
+            );
+            registerCosmetic(healingStaff);
+            
+            // Meteor Summoner - NEW
+            com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic meteorSummoner = new com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic(
+                "gadget_meteor", "Meteor Summoner", 2000, Material.MAGMA_BLOCK,
+                java.util.Arrays.asList("§7Call meteors from space!", "§7Ultimate destruction weapon!"),
+                "sneakycosmetics.premium", true, true,
+                Material.MAGMA_BLOCK, "§cMeteor Summoner", java.util.Arrays.asList("§cRight-click to summon!"),
+                com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.GadgetType.METEOR_SUMMONER
+            );
+            registerCosmetic(meteorSummoner);
+            
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register gadget cosmetics: " + e.getMessage());
         }
@@ -2079,58 +2159,355 @@ public class CosmeticRegistry {
         try {
             Class.forName("com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic");
             
-            // Fire Aura
-            com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic fireAura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
-                "aura_fire", "Fire Aura", 400, Material.FIRE_CHARGE,
-                java.util.Arrays.asList("§7A blazing aura", "§7surrounds you with flames!"),
-                null, false, false,
-                Particle.FLAME, 12, 1.5, 0.2, 0.1,
-                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.FIRE, plugin
-            );
-            registerCosmetic(fireAura);
+            // Register all aura types automatically
+            for (com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType : 
+                 com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.values()) {
+                
+                AuraData data = getAuraData(auraType);
+                
+                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic aura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
+                    data.id, data.displayName, data.price, data.iconMaterial,
+                    data.description, data.permission, data.requiresVIP, data.requiresPremium,
+                    auraType.getParticle(), data.particleCount, 
+                    auraType.getDefaultRadius(), auraType.getDefaultHeight(), data.speed,
+                    auraType, plugin
+                );
+                registerCosmetic(aura);
+            }
             
-            // Water Aura
-            com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic waterAura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
-                "aura_water", "Water Aura", 350, Material.WATER_BUCKET,
-                java.util.Arrays.asList("§7Cool water droplets", "§7dance around you!"),
-                null, false, false,
-                Particle.DRIPPING_WATER, 15, 1.4, 0.1, 0.15,
-                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.WATER, plugin
-            );
-            registerCosmetic(waterAura);
-            
-            // Holy Aura
-            com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic holyAura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
-                "aura_holy", "Holy Aura", 600, Material.ENCHANTING_TABLE,
-                java.util.Arrays.asList("§7Mystical enchantments", "§7swirl around your form!"),
-                null, false, true,
-                Particle.ENCHANT, 20, 1.5, 0.0, 0.3,
-                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.HOLY, plugin
-            );
-            registerCosmetic(holyAura);
-            
-            // Dark Aura
-            com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic darkAura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
-                "aura_dark", "Dark Aura", 700, Material.OBSIDIAN,
-                java.util.Arrays.asList("§7Shadows and darkness", "§7emanate from your being!"),
-                "sneakycosmetics.premium", true, true,
-                Particle.SMOKE, 16, 1.2, 0.0, 0.2,
-                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.DARK, plugin
-            );
-            registerCosmetic(darkAura);
-            
-            // Void Aura
-            com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic voidAura = new com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic(
-                "aura_void", "Void Aura", 1000, Material.BEACON,
-                java.util.Arrays.asList("§7A mysterious void aura", "§7marks you as otherworldly!"),
-                "sneakycosmetics.premium", true, true,
-                Particle.PORTAL, 25, 1.8, 0.4, 0.4,
-                com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.VOID, plugin
-            );
-            registerCosmetic(voidAura);
+            plugin.getLogger().info("Registered " + com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.values().length + " aura cosmetics");
             
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to register aura cosmetics: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private AuraData getAuraData(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        String name = auraType.name().toLowerCase();
+        String id = "aura_" + name;
+        String displayName = auraType.getDisplayName();
+        
+        // Default values
+        int price = 300;
+        Material iconMaterial = Material.NETHER_STAR;
+        boolean requiresVIP = false;
+        boolean requiresPremium = false;
+        String permission = null;
+        int particleCount = 12;
+        double speed = 0.1;
+        
+        // Category-based pricing and requirements
+        switch (auraType) {
+            // === ORIGINAL AURAS (Budget friendly) ===
+            case HOLY:
+            case DARK:
+            case FIRE:
+            case WATER:
+            case NATURE:
+            case LIGHTNING:
+            case FROST:
+            case VOID:
+            case RAINBOW:
+                price = getBasicAuraPrice(auraType);
+                iconMaterial = getBasicAuraIcon(auraType);
+                requiresPremium = (auraType == com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.DARK || 
+                                 auraType == com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType.VOID);
+                break;
+                
+            // === ELEMENTAL AURAS (Mid-tier) ===
+            case INFERNO: case BLIZZARD: case TORNADO: case EARTHQUAKE: case PLASMA:
+            case MAGMA: case ICE_STORM: case THUNDER: case TSUNAMI: case VOLCANIC:
+            case CRYSTAL: case STEAM: case SOLAR: case LUNAR: case WIND:
+            case EARTH: case METAL: case ACID: case POISON: case RADIANT:
+                price = 450 + (int)(Math.random() * 200); // 450-650
+                iconMaterial = getElementalAuraIcon(auraType);
+                requiresVIP = true;
+                particleCount = 15;
+                break;
+                
+            // === COSMIC AURAS (Premium) ===
+            case GALAXY: case NEBULA: case STARLIGHT: case BLACKHOLE: case COMET:
+            case SUPERNOVA: case ASTEROID: case QUASAR: case PULSAR: case METEOR:
+            case CONSTELLATION: case COSMIC_DUST: case AURORA: case ANTIMATTER: case WORMHOLE:
+                price = 800 + (int)(Math.random() * 400); // 800-1200
+                iconMaterial = getCosmicAuraIcon(auraType);
+                requiresPremium = true;
+                particleCount = 20;
+                speed = 0.15;
+                break;
+                
+            // === MYSTICAL AURAS (High-tier) ===
+            case ARCANE: case DIVINE: case DEMONIC: case ANGELIC: case NECROMANTIC:
+            case DRUIDIC: case SHAMANIC: case ETHEREAL: case SPECTRAL: case RUNIC:
+            case CELESTIAL: case INFERNAL: case ELDRITCH: case PRIMORDIAL: case TEMPORAL:
+                price = 700 + (int)(Math.random() * 300); // 700-1000
+                iconMaterial = getMysticalAuraIcon(auraType);
+                requiresPremium = true;
+                particleCount = 18;
+                break;
+                
+            // === NATURE AURAS (Affordable) ===
+            case FOREST: case OCEAN: case DESERT: case JUNGLE: case TUNDRA:
+            case SWAMP: case MOUNTAIN: case FLOWER: case MUSHROOM: case CORAL:
+            case BAMBOO: case SAKURA:
+                price = 350 + (int)(Math.random() * 150); // 350-500
+                iconMaterial = getNatureAuraIcon(auraType);
+                break;
+                
+            // === ANIMAL SPIRIT AURAS (Mid-high tier) ===
+            case WOLF: case EAGLE: case BEAR: case TIGER: case DRAGON_SPIRIT:
+            case PHOENIX_SPIRIT: case SERPENT: case SPIDER: case SHARK: case FALCON:
+            case PANTHER: case RAVEN: case FOX:
+                price = 550 + (int)(Math.random() * 250); // 550-800
+                iconMaterial = getAnimalAuraIcon(auraType);
+                requiresVIP = true;
+                break;
+                
+            // === GEMSTONE AURAS (Luxury) ===
+            case DIAMOND: case EMERALD: case RUBY: case SAPPHIRE: case AMETHYST:
+            case TOPAZ: case OPAL: case JADE: case ONYX: case PEARL:
+                price = 900 + (int)(Math.random() * 600); // 900-1500
+                iconMaterial = getGemstoneAuraIcon(auraType);
+                requiresPremium = true;
+                particleCount = 25;
+                speed = 0.2;
+                break;
+                
+            // === SPECIAL EFFECT AURAS (Ultra rare) ===
+            case MATRIX: case NEON: case HOLOGRAM: case LASER: case PRISM:
+            case MIRROR: case GLASS: case CHROME: case DISCO: case STROBE: case PULSE:
+                price = 1200 + (int)(Math.random() * 800); // 1200-2000
+                iconMaterial = getSpecialAuraIcon(auraType);
+                requiresPremium = true;
+                permission = "sneakycosmetics.premium.special";
+                particleCount = 30;
+                speed = 0.25;
+                break;
+        }
+        
+        // Create description based on aura type
+        java.util.List<String> description = generateAuraDescription(auraType);
+        
+        return new AuraData(id, displayName, price, iconMaterial, description, 
+                           permission, requiresVIP, requiresPremium, particleCount, speed);
+    }
+    
+    // Helper methods for getting appropriate icons and data
+    private int getBasicAuraPrice(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case FIRE: return 400;
+            case WATER: return 350;
+            case HOLY: return 600;
+            case DARK: return 700;
+            case VOID: return 1000;
+            case LIGHTNING: return 500;
+            case FROST: return 450;
+            case NATURE: return 300;
+            case RAINBOW: return 800;
+            default: return 400;
+        }
+    }
+    
+    private Material getBasicAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case FIRE: return Material.FIRE_CHARGE;
+            case WATER: return Material.WATER_BUCKET;
+            case HOLY: return Material.ENCHANTING_TABLE;
+            case DARK: return Material.OBSIDIAN;
+            case VOID: return Material.BEACON;
+            case LIGHTNING: return Material.LIGHTNING_ROD;
+            case FROST: return Material.ICE;
+            case NATURE: return Material.OAK_SAPLING;
+            case RAINBOW: return Material.PRISMARINE_CRYSTALS;
+            default: return Material.NETHER_STAR;
+        }
+    }
+    
+    private Material getElementalAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case INFERNO: return Material.BLAZE_POWDER;
+            case BLIZZARD: return Material.SNOWBALL;
+            case TORNADO: return Material.PHANTOM_MEMBRANE;
+            case EARTHQUAKE: return Material.COBBLESTONE;
+            case PLASMA: return Material.REDSTONE;
+            case MAGMA: return Material.MAGMA_BLOCK;
+            case ICE_STORM: return Material.PACKED_ICE;
+            case THUNDER: return Material.LIGHTNING_ROD;
+            case TSUNAMI: return Material.BLUE_ICE;
+            case VOLCANIC: return Material.BLACKSTONE;
+            case CRYSTAL: return Material.QUARTZ;
+            case STEAM: return Material.WHITE_WOOL;
+            case SOLAR: return Material.YELLOW_CONCRETE;
+            case LUNAR: return Material.END_STONE;
+            case WIND: return Material.FEATHER;
+            case EARTH: return Material.DIRT;
+            case METAL: return Material.IRON_INGOT;
+            case ACID: return Material.LIME_DYE;
+            case POISON: return Material.SPIDER_EYE;
+            case RADIANT: return Material.GLOWSTONE;
+            default: return Material.NETHER_STAR;
+        }
+    }
+    
+    private Material getCosmicAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case GALAXY: return Material.ENDER_EYE;
+            case NEBULA: return Material.PURPLE_DYE;
+            case STARLIGHT: return Material.GLOWSTONE_DUST;
+            case BLACKHOLE: return Material.OBSIDIAN;
+            case COMET: return Material.FIREWORK_ROCKET;
+            case SUPERNOVA: return Material.TNT;
+            case ASTEROID: return Material.COBBLESTONE;
+            case QUASAR: return Material.REDSTONE_TORCH;
+            case PULSAR: return Material.REDSTONE_LAMP;
+            case METEOR: return Material.FIRE_CHARGE;
+            case CONSTELLATION: return Material.DIAMOND;
+            case COSMIC_DUST: return Material.GUNPOWDER;
+            case AURORA: return Material.PRISMARINE_SHARD;
+            case ANTIMATTER: return Material.ENDER_PEARL;
+            case WORMHOLE: return Material.END_PORTAL_FRAME;
+            default: return Material.NETHER_STAR;
+        }
+    }
+    
+    private Material getMysticalAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case ARCANE: return Material.ENCHANTED_BOOK;
+            case DIVINE: return Material.BEACON;
+            case DEMONIC: return Material.WITHER_SKELETON_SKULL;
+            case ANGELIC: return Material.FEATHER;
+            case NECROMANTIC: return Material.BONE;
+            case DRUIDIC: return Material.OAK_LEAVES;
+            case SHAMANIC: return Material.TOTEM_OF_UNDYING;
+            case ETHEREAL: return Material.GHAST_TEAR;
+            case SPECTRAL: return Material.SPECTRAL_ARROW;
+            case RUNIC: return Material.ENCHANTING_TABLE;
+            case CELESTIAL: return Material.NETHER_STAR;
+            case INFERNAL: return Material.BLAZE_ROD;
+            case ELDRITCH: return Material.ENDER_EYE;
+            case PRIMORDIAL: return Material.ANCIENT_DEBRIS;
+            case TEMPORAL: return Material.CLOCK;
+            default: return Material.NETHER_STAR;
+        }
+    }
+    
+    private Material getNatureAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case FOREST: return Material.OAK_LOG;
+            case OCEAN: return Material.TROPICAL_FISH;
+            case DESERT: return Material.SAND;
+            case JUNGLE: return Material.JUNGLE_LEAVES;
+            case TUNDRA: return Material.SNOW_BLOCK;
+            case SWAMP: return Material.LILY_PAD;
+            case MOUNTAIN: return Material.STONE;
+            case FLOWER: return Material.SUNFLOWER;
+            case MUSHROOM: return Material.RED_MUSHROOM;
+            case CORAL: return Material.BRAIN_CORAL;
+            case BAMBOO: return Material.BAMBOO;
+            case SAKURA: return Material.PINK_PETALS;
+            default: return Material.GRASS_BLOCK;
+        }
+    }
+    
+    private Material getAnimalAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case WOLF: return Material.BONE;
+            case EAGLE: return Material.FEATHER;
+            case BEAR: return Material.HONEY_BLOCK;
+            case TIGER: return Material.ORANGE_DYE;
+            case DRAGON_SPIRIT: return Material.DRAGON_HEAD;
+            case PHOENIX_SPIRIT: return Material.BLAZE_POWDER;
+            case SERPENT: return Material.STRING;
+            case SPIDER: return Material.SPIDER_EYE;
+            case SHARK: return Material.PRISMARINE_SHARD;
+            case FALCON: return Material.ARROW;
+            case PANTHER: return Material.BLACK_DYE;
+            case RAVEN: return Material.BLACK_WOOL;
+            case FOX: return Material.SWEET_BERRIES;
+            default: return Material.LEATHER;
+        }
+    }
+    
+    private Material getGemstoneAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case DIAMOND: return Material.DIAMOND;
+            case EMERALD: return Material.EMERALD;
+            case RUBY: return Material.RED_DYE;
+            case SAPPHIRE: return Material.BLUE_DYE;
+            case AMETHYST: return Material.AMETHYST_SHARD;
+            case TOPAZ: return Material.YELLOW_DYE;
+            case OPAL: return Material.PRISMARINE_CRYSTALS;
+            case JADE: return Material.GREEN_DYE;
+            case ONYX: return Material.BLACK_DYE;
+            case PEARL: return Material.NAUTILUS_SHELL;
+            default: return Material.QUARTZ;
+        }
+    }
+    
+    private Material getSpecialAuraIcon(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        switch (auraType) {
+            case MATRIX: return Material.LIME_DYE;
+            case NEON: return Material.GLOWSTONE_DUST;
+            case HOLOGRAM: return Material.GLASS;
+            case LASER: return Material.REDSTONE_TORCH;
+            case PRISM: return Material.PRISMARINE_CRYSTALS;
+            case MIRROR: return Material.GLASS_PANE;
+            case GLASS: return Material.GLASS;
+            case CHROME: return Material.IRON_BLOCK;
+            case DISCO: return Material.NOTE_BLOCK;
+            case STROBE: return Material.REDSTONE_LAMP;
+            case PULSE: return Material.HEART_OF_THE_SEA;
+            default: return Material.NETHER_STAR;
+        }
+    }
+    
+    private java.util.List<String> generateAuraDescription(com.sneaky.cosmetics.cosmetics.auras.AuraCosmetic.AuraType auraType) {
+        java.util.List<String> description = new java.util.ArrayList<>();
+        
+        // Add category-specific descriptions
+        if (auraType.name().contains("COSMIC") || java.util.Arrays.asList("GALAXY", "NEBULA", "STARLIGHT", "BLACKHOLE", "COMET", "SUPERNOVA", "QUASAR", "CONSTELLATION", "AURORA", "ANTIMATTER", "WORMHOLE").contains(auraType.name())) {
+            description.add("§7Harness the power of");
+            description.add("§7the cosmos around you!");
+        } else if (java.util.Arrays.asList("DRAGON_SPIRIT", "PHOENIX_SPIRIT", "WOLF", "EAGLE", "BEAR", "TIGER", "SERPENT", "SPIDER", "SHARK", "FALCON", "PANTHER", "RAVEN", "FOX").contains(auraType.name())) {
+            description.add("§7Channel the spirit of");
+            description.add("§7this mighty creature!");
+        } else if (java.util.Arrays.asList("DIAMOND", "EMERALD", "RUBY", "SAPPHIRE", "AMETHYST", "TOPAZ", "OPAL", "JADE", "ONYX", "PEARL").contains(auraType.name())) {
+            description.add("§7Radiate the brilliance");
+            description.add("§7of precious gemstones!");
+        } else if (java.util.Arrays.asList("MATRIX", "NEON", "HOLOGRAM", "LASER", "PRISM", "CHROME", "DISCO", "STROBE", "PULSE").contains(auraType.name())) {
+            description.add("§7Experience cutting-edge");
+            description.add("§7visual effects!");
+        } else {
+            description.add("§7A mystical " + auraType.getDisplayName().toLowerCase());
+            description.add("§7surrounds your being!");
+        }
+        
+        return description;
+    }
+    
+    // Data class for aura configuration
+    private static class AuraData {
+        final String id, displayName, permission;
+        final int price, particleCount;
+        final Material iconMaterial;
+        final java.util.List<String> description;
+        final boolean requiresVIP, requiresPremium;
+        final double speed;
+        
+        AuraData(String id, String displayName, int price, Material iconMaterial, 
+                java.util.List<String> description, String permission, boolean requiresVIP, 
+                boolean requiresPremium, int particleCount, double speed) {
+            this.id = id;
+            this.displayName = displayName;
+            this.price = price;
+            this.iconMaterial = iconMaterial;
+            this.description = description;
+            this.permission = permission;
+            this.requiresVIP = requiresVIP;
+            this.requiresPremium = requiresPremium;
+            this.particleCount = particleCount;
+            this.speed = speed;
         }
     }
     

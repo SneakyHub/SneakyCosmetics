@@ -239,10 +239,15 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
                         status = "§c[LOCKED]";
                     }
                     
-                    String price = cosmetic.getPrice() == 0 ? "§aFree" : "§e" + cosmetic.getPrice() + " credits";
-                    String permission = "§7(" + cosmetic.getUniquePermission() + ")";
+                    String price = cosmetic.getPrice() == 0 ? "§aFree" : "§6" + cosmetic.getPrice() + " credits";
+                    String requirements = "";
+                    if (cosmetic.requiresPremium()) {
+                        requirements = " §7(Premium required)";
+                    } else if (cosmetic.requiresVIP()) {
+                        requirements = " §7(VIP required)";
+                    }
                     
-                    messageManager.sendInfo(sender, "  " + status + " §f" + cosmetic.getDisplayName() + " §7(" + price + ") " + permission);
+                    messageManager.sendInfo(sender, "  " + status + " §f" + cosmetic.getDisplayName() + " §7(" + price + ")" + requirements);
                 }
             } else {
                 messageManager.sendInfo(sender, type.getColorCode() + type.getDisplayName() + ": §7No cosmetics available");
@@ -288,7 +293,13 @@ public class CosmeticsCommand implements CommandExecutor, TabCompleter {
         boolean hasUniquePermission = cosmetic.hasUniquePermission(player);
         
         if (!cosmetic.isFree() && !hasFreeAccess && !hasUniquePermission && !plugin.getCosmeticManager().hasCosmetic(player, cosmeticId)) {
-            messageManager.sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits, or get permission: " + cosmetic.getUniquePermission());
+            String message = "§c✗ You don't own this cosmetic! ";
+            if (cosmetic.getPrice() > 0) {
+                message += "§fPurchase it for §6" + cosmetic.getPrice() + " credits §fin the shop.";
+            } else {
+                message += "§fContact an admin for access.";
+            }
+            messageManager.sendError(player, message);
             return;
         }
         

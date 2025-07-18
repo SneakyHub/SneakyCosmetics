@@ -162,7 +162,8 @@ public class MorphManager implements Listener {
      * Handle Enderman teleportation ability
      */
     private void handleEndermanTeleport(Player player) {
-        org.bukkit.Location targetLocation = player.getTargetBlock(null, 32).getLocation().add(0, 1, 0);
+        org.bukkit.block.Block targetBlock = player.getTargetBlockExact(32);
+        org.bukkit.Location targetLocation = (targetBlock != null) ? targetBlock.getLocation().add(0, 1, 0) : player.getLocation().add(player.getLocation().getDirection().multiply(10));
         
         if (targetLocation.getBlock().getType().isSolid()) {
             player.sendMessage("§cCannot teleport to that location!");

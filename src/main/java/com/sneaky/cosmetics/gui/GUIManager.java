@@ -5,6 +5,7 @@ import com.sneaky.cosmetics.cosmetics.Cosmetic;
 import com.sneaky.cosmetics.cosmetics.CosmeticType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -757,11 +758,25 @@ public class GUIManager implements Listener {
             if (slotIndex >= achievementSlots.length) break;
             
             boolean completed = plugin.getAchievementManager().hasAchievement(player, achievement.getId());
+            boolean claimable = !completed && achievement.isCompleted(player, plugin);
             
-            ItemStack item = new ItemStack(completed ? achievement.getIcon() : Material.GRAY_DYE);
+            // Choose item type based on status
+            Material itemType;
+            String prefix;
+            if (completed) {
+                itemType = achievement.getIcon();
+                prefix = "&a&l✓ ";
+            } else if (claimable) {
+                itemType = Material.LIME_DYE; // Bright green for claimable
+                prefix = "&e&l⚡ ";
+            } else {
+                itemType = Material.GRAY_DYE;
+                prefix = "&7&l⬜ ";
+            }
+            
+            ItemStack item = new ItemStack(itemType);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                String prefix = completed ? "&a&l✓ " : "&7&l⬜ ";
                 meta.setDisplayName(color(prefix + achievement.getName()));
                 
                 List<String> lore = new ArrayList<>();
@@ -854,10 +869,7 @@ public class GUIManager implements Listener {
                 plugin.getCosmeticManager().giveCosmetic(player, cosmetic.getId());
                 plugin.getMessageManager().sendSuccess(player, "§a✓ Purchased " + cosmetic.getDisplayName() + " for " + cosmetic.getPrice() + " credits!");
                 
-                // Check achievements after purchase
-                plugin.getSchedulerAdapter().runTask(() -> {
-                    plugin.getAchievementManager().checkAchievements(player);
-                });
+                // Note: Achievement auto-check removed - players must manually claim achievements
                 
                 // Refresh the shop category (stay on current page)
                 plugin.getSchedulerAdapter().runTask(() -> {
@@ -1026,11 +1038,22 @@ public class GUIManager implements Listener {
                 
                 // Add permission information
                 if (hasUniquePermission) {
-                    lore.add(color("&a&l✓ PERMISSION GRANTED"));
-                    lore.add(color("&7Permission: &e" + cosmetic.getUniquePermission()));
+                    lore.add(color("&a&l✓ SPECIAL ACCESS GRANTED"));
+                    lore.add(color("&7You have special access to this cosmetic"));
                 } else if (!hasCosmetic && !hasFreeAccess) {
-                    lore.add(color("&c&l✗ PERMISSION REQUIRED"));
-                    lore.add(color("&7Need: &e" + cosmetic.getUniquePermission()));
+                    if (cosmetic.requiresPremium()) {
+                        lore.add(color("&6&l⭐ PREMIUM REQUIRED"));
+                        lore.add(color("&7Requires Premium rank"));
+                    } else if (cosmetic.requiresVIP()) {
+                        lore.add(color("&6&l⭐ VIP REQUIRED"));
+                        lore.add(color("&7Requires VIP rank"));
+                    } else if (cosmetic.getPrice() > 0) {
+                        lore.add(color("&c&l✗ NOT OWNED"));
+                        lore.add(color("&7Purchase for &6" + cosmetic.getPrice() + " credits"));
+                    } else {
+                        lore.add(color("&c&l✗ SPECIAL ACCESS REQUIRED"));
+                        lore.add(color("&7Contact an admin for access"));
+                    }
                 }
                 
                 // Add status
@@ -1346,8 +1369,9 @@ public class GUIManager implements Listener {
         String cleanTitle = org.bukkit.ChatColor.stripColor(title);
         if (!cleanTitle.contains("Cosmetics") && !cleanTitle.contains("Particles") && !cleanTitle.contains("Hats") && 
             !cleanTitle.contains("Pets") && !cleanTitle.contains("Trails") && !cleanTitle.contains("Gadgets") && 
-            !cleanTitle.contains("Wings") && !cleanTitle.contains("Auras") && !cleanTitle.contains("Shop") && 
-            !cleanTitle.contains("Achievement") && !cleanTitle.contains("Daily Rewards") && !cleanTitle.contains("Statistics")) {
+            !cleanTitle.contains("Wings") && !cleanTitle.contains("Auras") && !cleanTitle.contains("Morphs") && 
+            !cleanTitle.contains("Shop") && !cleanTitle.contains("Achievement") && !cleanTitle.contains("Daily Rewards") && 
+            !cleanTitle.contains("Statistics") && !cleanTitle.contains("Pet Management")) {
             plugin.getLogger().info("GUI Click Debug - Title not matching, clean title: '" + cleanTitle + "'");
             return;
         }
@@ -1625,6 +1649,76 @@ public class GUIManager implements Listener {
             }
         }
         
+        // Handle pet management GUI clicks
+        else if (cleanTitle.contains("Pet Management")) {
+            if (clickedItem.getType() == Material.BARRIER) {
+                player.closeInventory();
+                return;
+            }
+            
+            if (clickedItem.getType() == Material.ARROW) {
+                openMainGUI(player);
+                return;
+            }
+            
+            // Handle pet collection button
+            if (clickedItem.getType() == Material.BOOK) {
+                openTypeGUI(player, CosmeticType.PET);
+                return;
+            }
+            
+            // Handle pet interactions (activate/deactivate/feed)
+            ItemMeta clickedMeta = clickedItem.getItemMeta();
+            if (clickedMeta != null && clickedMeta.hasDisplayName()) {
+                String displayName = clickedMeta.getDisplayName();
+                
+                // Extract pet information from the display name
+                // Format: "§a§lPetName §7(Level X)" or "§7§lPetName §7(Level X)"
+                String cleanDisplayName = org.bukkit.ChatColor.stripColor(displayName);
+                
+                // Find the cosmetic that matches this display name
+                List<Cosmetic> pets = plugin.getCosmeticManager().getCosmeticsByType(CosmeticType.PET);
+                for (Cosmetic pet : pets) {
+                    if (plugin.getCosmeticManager().hasCosmetic(player, pet.getId())) {
+                        boolean isActive = plugin.getCosmeticManager().isCosmeticActive(player, pet.getId());
+                        String expectedName = pet.getDisplayName();
+                        
+                        // Try to get custom name if active
+                        if (isActive && pet instanceof com.sneaky.cosmetics.cosmetics.pets.PetCosmetic) {
+                            com.sneaky.cosmetics.cosmetics.pets.PetData petData = 
+                                com.sneaky.cosmetics.cosmetics.pets.PetCosmetic.getPlayerPetData(player);
+                            if (petData != null) {
+                                expectedName = petData.getCustomName();
+                            }
+                        }
+                        
+                        if (cleanDisplayName.contains(expectedName) || cleanDisplayName.contains(pet.getDisplayName())) {
+                            if (event.getClick().isRightClick()) {
+                                // Right-click: Feed pet (if active and player has food)
+                                if (isActive) {
+                                    handlePetFeeding(player, pet);
+                                } else {
+                                    plugin.getMessageManager().sendError(player, "§cYou need to activate this pet first!");
+                                }
+                            } else {
+                                // Left-click: Toggle pet activation
+                                if (isActive) {
+                                    plugin.getCosmeticManager().deactivateCosmetic(player, pet.getId());
+                                    plugin.getMessageManager().sendSuccess(player, "§c⊘ Deactivated " + expectedName + "!");
+                                } else {
+                                    plugin.getCosmeticManager().activateCosmetic(player, pet.getId());
+                                    plugin.getMessageManager().sendSuccess(player, "§a▶ Activated " + expectedName + "!");
+                                }
+                                // Refresh the GUI
+                                openPetManagementGUI(player);
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        
         // Handle type-specific menu clicks
         else {
             if (clickedItem.getType() == Material.BARRIER) {
@@ -1767,7 +1861,13 @@ public class GUIManager implements Listener {
         boolean hasUniquePermission = cosmetic.hasUniquePermission(player);
         
         if (!cosmetic.isFree() && !hasFreeAccess && !hasUniquePermission && !plugin.getCosmeticManager().hasCosmetic(player, cosmetic.getId())) {
-            plugin.getMessageManager().sendError(player, "You don't own this cosmetic! Purchase it first for " + cosmetic.getPrice() + " credits, or get permission: " + cosmetic.getUniquePermission());
+            String message = "§c✗ You don't own this cosmetic! ";
+            if (cosmetic.getPrice() > 0) {
+                message += "§fPurchase it for §6" + cosmetic.getPrice() + " credits §fin the shop.";
+            } else {
+                message += "§fContact an admin for access.";
+            }
+            plugin.getMessageManager().sendError(player, message);
             return;
         }
         
@@ -1960,35 +2060,32 @@ public class GUIManager implements Listener {
     private void handleAchievementClick(Player player, com.sneaky.cosmetics.achievements.Achievement achievement) {
         // Check if player already has this achievement
         if (plugin.getAchievementManager().hasAchievement(player, achievement.getId())) {
-            plugin.getMessageManager().sendError(player, "You already have this achievement!");
+            plugin.getMessageManager().sendError(player, "§cYou already have this achievement!");
             return;
         }
         
-        // Check if achievement can be claimed
-        if (!achievement.isCompleted(player, plugin)) {
-            plugin.getMessageManager().sendError(player, "You haven't completed the requirements for this achievement yet!");
-            return;
-        }
-        
-        // Award the achievement (this method handles credit rewards automatically)
-        plugin.getAchievementManager().awardAchievement(player, achievement.getId());
-        
-        // Show success message using config
-        String message = plugin.getMessageManager().getMessage("achievements.unlocked-chat")
-            .replace("{name}", achievement.getName())
-            .replace("{description}", achievement.getDescription());
-        plugin.getMessageManager().sendMessage(player, message);
-        
-        String reward = plugin.getMessageManager().getMessage("achievements.reward-message")
-            .replace("{credits}", String.valueOf(achievement.getCreditReward()));
-        plugin.getMessageManager().sendMessage(player, reward);
-        
-        // Play success sound or particle effect here if desired
-        
-        // Refresh the achievements GUI
-        plugin.getSchedulerAdapter().runTask(() -> {
+        // Try to claim the achievement using the new manual claim system
+        if (plugin.getAchievementManager().claimAchievement(player, achievement.getId())) {
+            // Successfully claimed!
+            plugin.getMessageManager().sendSuccess(player, "§a✓ Achievement Claimed!");
+            plugin.getMessageManager().sendSuccess(player, "§6" + achievement.getName() + " §7- §f" + achievement.getDescription());
+            plugin.getMessageManager().sendSuccess(player, "§7Reward: §e+" + achievement.getCreditReward() + " credits");
+            
+            // Refresh the GUI to show the updated status
             openAchievementsGUI(player);
-        });
+        } else {
+            // Not eligible to claim yet
+            plugin.getMessageManager().sendError(player, "§cYou haven't completed the requirements for this achievement yet!");
+            
+            // Show progress if possible
+            List<String> requirements = achievement.getRequirements();
+            if (!requirements.isEmpty()) {
+                plugin.getMessageManager().sendMessage(player, "§7Requirements:");
+                for (String requirement : requirements) {
+                    plugin.getMessageManager().sendMessage(player, "§7• " + requirement);
+                }
+            }
+        }
     }
     
     @EventHandler
@@ -2040,9 +2137,256 @@ public class GUIManager implements Listener {
     }
     
     /**
-     * Open the pets GUI for a player
+     * Open the pets GUI for a player - shows pet selection/management
      */
     public void openPetsGUI(Player player) {
-        openTypeGUI(player, CosmeticType.PET);
+        // Check if player has any active pets to show detailed management
+        if (hasActivePets(player)) {
+            openPetManagementGUI(player);
+        } else {
+            openTypeGUI(player, CosmeticType.PET);
+        }
+    }
+    
+    /**
+     * Check if player has any active pets
+     */
+    private boolean hasActivePets(Player player) {
+        List<Cosmetic> pets = plugin.getCosmeticManager().getCosmeticsByType(CosmeticType.PET);
+        for (Cosmetic pet : pets) {
+            if (plugin.getCosmeticManager().isCosmeticActive(player, pet.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Open the pet management GUI for a player
+     */
+    public void openPetManagementGUI(Player player) {
+        String title = color("§6🐾 Pet Management 🐾");
+        Inventory gui = Bukkit.createInventory(null, 54, title);
+        
+        // Add decorative border
+        addBorder(gui, Material.ORANGE_STAINED_GLASS_PANE);
+        
+        // Header item
+        ItemStack headerItem = new ItemStack(Material.BONE);
+        ItemMeta headerMeta = headerItem.getItemMeta();
+        if (headerMeta != null) {
+            headerMeta.setDisplayName(color("§6§l🐾 Your Pet Collection 🐾"));
+            List<String> headerLore = new ArrayList<>();
+            headerLore.add(color("§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headerLore.add(color("§7Manage your pets, check their levels,"));
+            headerLore.add(color("§7feed them, and view their abilities!"));
+            headerLore.add(color("§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+            headerMeta.setLore(headerLore);
+            headerItem.setItemMeta(headerMeta);
+        }
+        gui.setItem(4, headerItem);
+        
+        // Get player's pets and their data
+        List<Cosmetic> pets = plugin.getCosmeticManager().getCosmeticsByType(CosmeticType.PET);
+        int[] petSlots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+        int petIndex = 0;
+        
+        for (Cosmetic pet : pets) {
+            if (petIndex >= petSlots.length) break;
+            
+            // Check if player owns this pet
+            boolean owns = plugin.getCosmeticManager().hasCosmetic(player, pet.getId());
+            boolean isActive = plugin.getCosmeticManager().isCosmeticActive(player, pet.getId());
+            
+            if (!owns) continue; // Only show owned pets
+            
+            ItemStack petItem = new ItemStack(pet.getIconMaterial());
+            ItemMeta petMeta = petItem.getItemMeta();
+            if (petMeta != null) {
+                // Get real pet data if pet is active
+                String petName = pet.getDisplayName();
+                int level = 1;
+                int happiness = 100;
+                double expProgress = 0.0;
+                int speedLevel = 1;
+                int jumpLevel = 1;
+                int loyaltyLevel = 1;
+                
+                // Try to get actual pet data if available
+                if (isActive && pet instanceof com.sneaky.cosmetics.cosmetics.pets.PetCosmetic) {
+                    com.sneaky.cosmetics.cosmetics.pets.PetData petData = 
+                        com.sneaky.cosmetics.cosmetics.pets.PetCosmetic.getPlayerPetData(player);
+                    if (petData != null) {
+                        petName = petData.getCustomName();
+                        level = petData.getLevel();
+                        happiness = petData.getHappiness();
+                        expProgress = petData.getExperienceProgress();
+                        speedLevel = petData.getAbilityLevel("speed");
+                        jumpLevel = petData.getAbilityLevel("jump");
+                        loyaltyLevel = petData.getAbilityLevel("loyalty");
+                    }
+                }
+                
+                String statusColor = isActive ? "§a" : "§7";
+                String status = isActive ? "ACTIVE" : "INACTIVE";
+                
+                petMeta.setDisplayName(color(statusColor + "§l" + petName + " §7(Level " + level + ")"));
+                
+                List<String> petLore = new ArrayList<>();
+                petLore.add(color("§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                petLore.add(color("§7Status: " + statusColor + "§l" + status));
+                petLore.add("");
+                petLore.add(color("§6Pet Stats:"));
+                petLore.add(color("§7• Level: §f" + level + "§7/§f100"));
+                petLore.add(color("§7• Happiness: §f" + happiness + "§7/§f100 " + getHappinessIcon(happiness)));
+                petLore.add(color("§7• Experience: §f" + String.format("%.1f", expProgress) + "%"));
+                petLore.add("");
+                petLore.add(color("§6Abilities:"));
+                petLore.add(color("§7• Speed: §f" + speedLevel + "§7/§f10"));
+                petLore.add(color("§7• Jump: §f" + jumpLevel + "§7/§f10"));
+                petLore.add(color("§7• Loyalty: §f" + loyaltyLevel + "§7/§f10"));
+                petLore.add("");
+                
+                if (isActive) {
+                    petLore.add(color("§c⊘ Click to deactivate"));
+                    petLore.add(color("§6🍖 Right-click to feed (need food in hand)"));
+                } else {
+                    petLore.add(color("§a▶ Click to activate"));
+                }
+                
+                petLore.add(color("§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
+                petMeta.setLore(petLore);
+                petItem.setItemMeta(petMeta);
+            }
+            
+            gui.setItem(petSlots[petIndex], petItem);
+            petIndex++;
+        }
+        
+        // Navigation buttons
+        ItemStack backButton = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = backButton.getItemMeta();
+        if (backMeta != null) {
+            backMeta.setDisplayName(color("§c← Back to Main Menu"));
+            backMeta.setLore(List.of(color("§7Return to the main cosmetics menu")));
+            backButton.setItemMeta(backMeta);
+        }
+        gui.setItem(45, backButton);
+        
+        // Pet collection button
+        ItemStack collectionButton = new ItemStack(Material.BOOK);
+        ItemMeta collectionMeta = collectionButton.getItemMeta();
+        if (collectionMeta != null) {
+            collectionMeta.setDisplayName(color("§6📖 Pet Collection"));
+            collectionMeta.setLore(List.of(
+                color("§7View all available pets"),
+                color("§7and purchase new ones"),
+                "",
+                color("§6▶ Click to browse!")
+            ));
+            collectionButton.setItemMeta(collectionMeta);
+        }
+        gui.setItem(49, collectionButton);
+        
+        // Close button
+        ItemStack closeButton = new ItemStack(Material.BARRIER);
+        ItemMeta closeMeta = closeButton.getItemMeta();
+        if (closeMeta != null) {
+            closeMeta.setDisplayName(color("§c✗ Close Menu"));
+            closeMeta.setLore(List.of(color("§7Close this menu")));
+            closeButton.setItemMeta(closeMeta);
+        }
+        gui.setItem(53, closeButton);
+        
+        player.openInventory(gui);
+    }
+    
+    /**
+     * Get happiness icon based on happiness level
+     */
+    private String getHappinessIcon(int happiness) {
+        if (happiness >= 80) return "§a😊";
+        if (happiness >= 60) return "§e😐";
+        if (happiness >= 40) return "§6😕";
+        if (happiness >= 20) return "§c😞";
+        return "§4😢";
+    }
+    
+    /**
+     * Get ability level (placeholder - would get from PetData)
+     */
+    private int getAbilityLevel(int defaultLevel) {
+        return defaultLevel; // Would get actual level from pet data
+    }
+    
+    /**
+     * Handle pet feeding from the Pet Management GUI
+     */
+    private void handlePetFeeding(Player player, Cosmetic pet) {
+        // Check if player has food in their hand
+        org.bukkit.inventory.ItemStack handItem = player.getInventory().getItemInMainHand();
+        if (handItem == null || handItem.getType() == Material.AIR) {
+            plugin.getMessageManager().sendError(player, "§cYou need to hold food in your hand to feed your pet!");
+            return;
+        }
+        
+        // Check if it's valid pet food
+        if (!isPetFood(handItem.getType())) {
+            plugin.getMessageManager().sendError(player, "§cThat's not valid pet food! Try: bread, meat, fish, or bones.");
+            return;
+        }
+        
+        // Try to get the pet data
+        if (pet instanceof com.sneaky.cosmetics.cosmetics.pets.PetCosmetic) {
+            com.sneaky.cosmetics.cosmetics.pets.PetData petData = 
+                com.sneaky.cosmetics.cosmetics.pets.PetCosmetic.getPlayerPetData(player);
+            
+            if (petData != null) {
+                // Attempt to feed the pet
+                if (petData.feed()) {
+                    // Remove one food item
+                    handItem.setAmount(handItem.getAmount() - 1);
+                    
+                    // Play feeding effects
+                    player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 1.0f, 1.2f);
+                    
+                    plugin.getMessageManager().sendSuccess(player, "§a✓ You fed " + petData.getCustomName() + "!");
+                    plugin.getMessageManager().sendMessage(player, "§7Happiness: " + petData.getHappiness() + "/100 " + getHappinessIcon(petData.getHappiness()));
+                    
+                    // Refresh the GUI to show updated stats
+                    openPetManagementGUI(player);
+                } else {
+                    plugin.getMessageManager().sendError(player, "§cYour pet is not hungry right now!");
+                }
+            } else {
+                plugin.getMessageManager().sendError(player, "§cUnable to access pet data!");
+            }
+        } else {
+            plugin.getMessageManager().sendError(player, "§cThis pet doesn't support feeding!");
+        }
+    }
+    
+    /**
+     * Check if a material is valid pet food
+     */
+    private boolean isPetFood(Material material) {
+        switch (material) {
+            case BONE:
+            case COOKED_BEEF:
+            case COOKED_PORKCHOP:
+            case COOKED_CHICKEN:
+            case COOKED_MUTTON:
+            case BREAD:
+            case APPLE:
+            case CARROT:
+            case POTATO:
+            case WHEAT:
+            case TROPICAL_FISH:
+            case COD:
+            case SALMON:
+                return true;
+            default:
+                return false;
+        }
     }
 }

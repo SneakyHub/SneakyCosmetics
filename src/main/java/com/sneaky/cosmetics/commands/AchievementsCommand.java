@@ -340,23 +340,21 @@ public class AchievementsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // Check if already has achievement
-        if (plugin.getAchievementManager().hasAchievement(player, achievement.getId())) {
+        // Try to claim the achievement using the new manual claim system
+        if (plugin.getAchievementManager().claimAchievement(player, achievement.getId())) {
+            messageManager.sendSuccess(player, "§a✓ Achievement unlocked: " + achievement.getName());
+            messageManager.sendSuccess(player, "§e+⭐ " + achievement.getCreditReward() + " credits earned!");
+        } else if (plugin.getAchievementManager().hasAchievement(player, achievement.getId())) {
             messageManager.sendError(player, "You already have this achievement!");
-            return;
-        }
-        
-        // Check if can claim
-        if (!achievement.isCompleted(player, plugin)) {
+        } else {
             messageManager.sendError(player, "You haven't completed the requirements for this achievement yet!");
-            return;
+            
+            // Show requirements
+            messageManager.sendMessage(player, "§7Requirements:");
+            for (String requirement : achievement.getRequirements()) {
+                messageManager.sendMessage(player, "§7• " + requirement);
+            }
         }
-        
-        // Award the achievement
-        plugin.getAchievementManager().awardAchievement(player, achievement.getId());
-        
-        messageManager.sendSuccess(player, "§a✓ Achievement unlocked: " + achievement.getName());
-        messageManager.sendSuccess(player, "§e+⭐ " + achievement.getCreditReward() + " credits earned!");
     }
     
     private void handleCheckCommand(CommandSender sender, String[] args) {
@@ -372,24 +370,13 @@ public class AchievementsCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        // Force check for new achievements
-        plugin.getAchievementManager().checkAchievements(player);
-        messageManager.sendSuccess(player, "§a✓ Checked for new achievements!");
-        
-        // Show any that are ready to claim
-        int readyToClaim = 0;
-        for (com.sneaky.cosmetics.achievements.Achievement achievement : plugin.getAchievementManager().getAllAchievements()) {
-            if (!plugin.getAchievementManager().hasAchievement(player, achievement.getId()) && 
-                achievement.isCompleted(player, plugin)) {
-                readyToClaim++;
-            }
-        }
-        
-        if (readyToClaim > 0) {
-            messageManager.sendInfo(player, "§e⚡ " + readyToClaim + " achievements ready to claim!");
-            messageManager.sendInfo(player, "§7Use §e/achievements menu §7to claim them!");
+        // Show claimable achievements
+        List<com.sneaky.cosmetics.achievements.Achievement> claimable = plugin.getAchievementManager().getClaimableAchievements(player);
+        if (!claimable.isEmpty()) {
+            messageManager.sendSuccess(player, "§a✓ You have " + claimable.size() + " achievement(s) ready to claim!");
+            messageManager.sendMessage(player, "§7Open the achievements GUI to claim them.");
         } else {
-            messageManager.sendInfo(player, "§7No new achievements available at this time.");
+            messageManager.sendMessage(player, "§7No achievements ready to claim right now.");
         }
     }
     

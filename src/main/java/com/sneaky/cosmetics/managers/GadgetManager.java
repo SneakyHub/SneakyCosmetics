@@ -7,6 +7,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +16,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GadgetManager implements Listener {
     private final SneakyCosmetics plugin;
     private final Map<Player, Long> cooldowns = new ConcurrentHashMap<>();
+    private final Map<Player, Long> damageImmunity = new ConcurrentHashMap<>();
     private final Random random = new Random();
     
     // Cooldown times in milliseconds
@@ -40,6 +43,14 @@ public class GadgetManager implements Listener {
     private static final long FREEZE_RAY_COOLDOWN = 2500; // 2.5 seconds
     private static final long JUMP_BOOTS_COOLDOWN = 1500; // 1.5 seconds
     private static final long PORTAL_GUN_COOLDOWN = 8000; // 8 seconds
+    private static final long ROCKET_LAUNCHER_COOLDOWN = 4000; // 4 seconds
+    private static final long FORCE_FIELD_COOLDOWN = 10000; // 10 seconds
+    private static final long TIME_FREEZER_COOLDOWN = 15000; // 15 seconds
+    private static final long ENERGY_SWORD_COOLDOWN = 2000; // 2 seconds
+    private static final long INVISIBILITY_CLOAK_COOLDOWN = 12000; // 12 seconds
+    private static final long SPEED_BOOSTER_COOLDOWN = 6000; // 6 seconds
+    private static final long HEALING_STAFF_COOLDOWN = 5000; // 5 seconds
+    private static final long METEOR_SUMMONER_COOLDOWN = 20000; // 20 seconds
     
     public GadgetManager(SneakyCosmetics plugin) {
         this.plugin = plugin;
@@ -87,6 +98,22 @@ public class GadgetManager implements Listener {
             handleJumpBoots(player, event);
         } else if (displayName.contains("Portal Gun")) {
             handlePortalGun(player, event);
+        } else if (displayName.contains("Rocket Launcher")) {
+            handleRocketLauncher(player, event);
+        } else if (displayName.contains("Force Field")) {
+            handleForceField(player, event);
+        } else if (displayName.contains("Time Freezer")) {
+            handleTimeFreezer(player, event);
+        } else if (displayName.contains("Energy Sword")) {
+            handleEnergySword(player, event);
+        } else if (displayName.contains("Invisibility Cloak")) {
+            handleInvisibilityCloak(player, event);
+        } else if (displayName.contains("Speed Booster")) {
+            handleSpeedBooster(player, event);
+        } else if (displayName.contains("Healing Staff")) {
+            handleHealingStaff(player, event);
+        } else if (displayName.contains("Meteor Summoner")) {
+            handleMeteorSummoner(player, event);
         }
     }
     
@@ -223,7 +250,8 @@ public class GadgetManager implements Listener {
         event.setCancelled(true);
         
         // Teleport player to where they're looking (max 20 blocks)
-        Location targetLoc = player.getTargetBlock(null, 20).getLocation().add(0, 1, 0);
+        org.bukkit.block.Block targetBlock = player.getTargetBlockExact(20);
+        Location targetLoc = (targetBlock != null) ? targetBlock.getLocation().add(0, 1, 0) : player.getLocation().add(player.getLocation().getDirection().multiply(20));
         
         // Safety check - make sure it's a safe location
         if (targetLoc.getBlock().getType().isSolid() || targetLoc.clone().add(0, 1, 0).getBlock().getType().isSolid()) {
@@ -358,7 +386,8 @@ public class GadgetManager implements Listener {
         event.setCancelled(true);
         
         // Get target location
-        Location targetLoc = player.getTargetBlock(null, 30).getLocation();
+        org.bukkit.block.Block targetBlock = player.getTargetBlockExact(30);
+        Location targetLoc = (targetBlock != null) ? targetBlock.getLocation() : player.getLocation().add(player.getLocation().getDirection().multiply(30));
         
         // Create fake lightning effect (visual only)
         player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, targetLoc.add(0, 1, 0), 50, 1.0, 3.0, 1.0, 0.3);
@@ -456,7 +485,8 @@ public class GadgetManager implements Listener {
         event.setCancelled(true);
         
         // Get target location for portal
-        Location targetLoc = player.getTargetBlock(null, 50).getLocation().add(0, 1, 0);
+        org.bukkit.block.Block targetBlock = player.getTargetBlockExact(50);
+        Location targetLoc = (targetBlock != null) ? targetBlock.getLocation().add(0, 1, 0) : player.getLocation().add(player.getLocation().getDirection().multiply(50));
         
         // Safety check
         if (targetLoc.getBlock().getType().isSolid()) {
@@ -494,6 +524,421 @@ public class GadgetManager implements Listener {
         player.sendMessage("§5✓ Portal created! Teleporting...");
     }
     
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        
+        Player player = (Player) event.getEntity();
+        
+        // Check if player has damage immunity from gadgets
+        if (damageImmunity.containsKey(player)) {
+            long immunityEnd = damageImmunity.get(player);
+            if (System.currentTimeMillis() < immunityEnd) {
+                event.setCancelled(true);
+                player.sendMessage("§6✦ Gadget protection active! ✦");
+                return;
+            } else {
+                // Immunity expired, remove it
+                damageImmunity.remove(player);
+            }
+        }
+        
+        // Check if player is using any active gadget
+        if (com.sneaky.cosmetics.cosmetics.gadgets.GadgetCosmetic.getActiveGadget(player) != null) {
+            // Provide brief damage immunity (1 second) while using gadgets
+            grantDamageImmunity(player, 1000);
+            event.setCancelled(true);
+            player.sendMessage("§a✦ Gadget user protection! ✦");
+        }
+    }
+    
+    private void grantDamageImmunity(Player player, long durationMs) {
+        long endTime = System.currentTimeMillis() + durationMs;
+        damageImmunity.put(player, endTime);
+        
+        // Remove immunity after duration
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                damageImmunity.remove(player);
+            }
+        }.runTaskLater(plugin, durationMs / 50L); // Convert ms to ticks
+    }
+    
+    private void handleRocketLauncher(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, ROCKET_LAUNCHER_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Launch explosive firework as rocket
+        Location loc = player.getEyeLocation().add(player.getLocation().getDirection().multiply(1));
+        Firework rocket = (Firework) player.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
+        
+        FireworkMeta meta = rocket.getFireworkMeta();
+        FireworkEffect.Builder builder = FireworkEffect.builder();
+        builder.withColor(Color.RED, Color.ORANGE, Color.YELLOW);
+        builder.with(FireworkEffect.Type.BALL_LARGE);
+        builder.withTrail();
+        builder.withFlicker();
+        
+        meta.addEffect(builder.build());
+        meta.setPower(2);
+        rocket.setFireworkMeta(meta);
+        
+        // Set velocity toward target
+        Vector direction = player.getLocation().getDirection().multiply(1.5);
+        rocket.setVelocity(direction);
+        
+        // Create explosion effects where it lands
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (rocket.isDead() || !rocket.isValid()) {
+                    Location explodeLoc = rocket.getLocation();
+                    explodeLoc.getWorld().spawnParticle(Particle.EXPLOSION, explodeLoc, 20, 3.0, 3.0, 3.0, 0.1);
+                    explodeLoc.getWorld().spawnParticle(Particle.LAVA, explodeLoc, 30, 2.0, 2.0, 2.0, 0.2);
+                    explodeLoc.getWorld().playSound(explodeLoc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 0.8f);
+                    
+                    // Push nearby entities away
+                    for (Entity entity : explodeLoc.getWorld().getNearbyEntities(explodeLoc, 8, 4, 8)) {
+                        if (entity instanceof LivingEntity && entity != player) {
+                            Vector pushDirection = entity.getLocation().toVector().subtract(explodeLoc.toVector()).normalize();
+                            pushDirection.multiply(2.0);
+                            pushDirection.setY(Math.max(pushDirection.getY(), 0.8));
+                            entity.setVelocity(pushDirection);
+                        }
+                    }
+                    cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 2L);
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.5f, 0.8f);
+        player.sendMessage("§c✓ Rocket launched! Incoming explosion!");
+        
+        // Grant brief damage immunity
+        grantDamageImmunity(player, 3000); // 3 seconds
+    }
+    
+    private void handleForceField(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, FORCE_FIELD_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        player.sendMessage("§b✓ Force field activated!");
+        grantDamageImmunity(player, 10000); // 10 seconds immunity
+        
+        // Visual force field effect
+        new BukkitRunnable() {
+            int ticks = 0;
+            @Override
+            public void run() {
+                if (ticks >= 200 || !player.isOnline()) { // 10 seconds
+                    cancel();
+                    return;
+                }
+                
+                Location playerLoc = player.getLocation().add(0, 1, 0);
+                
+                // Create rotating particle shield
+                for (int i = 0; i < 360; i += 30) {
+                    double angle = Math.toRadians(i + (ticks * 5));
+                    double x = Math.cos(angle) * 3;
+                    double z = Math.sin(angle) * 3;
+                    Location particleLoc = playerLoc.clone().add(x, 0, z);
+                    player.getWorld().spawnParticle(Particle.BLOCK, particleLoc, 1, 0, 0, 0, 0, Material.BARRIER.createBlockData());
+                    player.getWorld().spawnParticle(Particle.END_ROD, particleLoc, 1, 0, 0, 0, 0);
+                }
+                
+                // Vertical rings
+                for (int y = -1; y <= 2; y++) {
+                    for (int i = 0; i < 360; i += 45) {
+                        double angle = Math.toRadians(i + (ticks * 3));
+                        double x = Math.cos(angle) * 2.5;
+                        double z = Math.sin(angle) * 2.5;
+                        Location particleLoc = playerLoc.clone().add(x, y, z);
+                        player.getWorld().spawnParticle(Particle.ENCHANT, particleLoc, 1, 0, 0, 0, 0);
+                    }
+                }
+                
+                ticks += 2;
+            }
+        }.runTaskTimer(plugin, 0L, 2L);
+        
+        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.5f);
+    }
+    
+    private void handleTimeFreezer(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, TIME_FREEZER_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Freeze all nearby entities for 5 seconds
+        Collection<Entity> nearbyEntities = player.getNearbyEntities(15, 8, 15);
+        
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof LivingEntity && !(entity instanceof Player)) {
+                LivingEntity living = (LivingEntity) entity;
+                living.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SLOWNESS, 100, 255
+                ));
+                living.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.MINING_FATIGUE, 100, 255
+                ));
+                
+                // Frozen effect particles
+                Location entityLoc = entity.getLocation();
+                player.getWorld().spawnParticle(Particle.BLOCK, entityLoc.add(0, 1, 0), 20, 
+                    1.0, 1.0, 1.0, 0, org.bukkit.Material.ICE.createBlockData());
+            }
+        }
+        
+        // Time freeze visual effects
+        Location playerLoc = player.getLocation();
+        for (int i = 0; i < 50; i++) {
+            double angle = Math.toRadians(i * 7.2);
+            double radius = 10;
+            double x = Math.cos(angle) * radius;
+            double z = Math.sin(angle) * radius;
+            Location particleLoc = playerLoc.clone().add(x, 2, z);
+            player.getWorld().spawnParticle(Particle.END_ROD, particleLoc, 1, 0, 0, 0, 0);
+            player.getWorld().spawnParticle(Particle.WITCH, particleLoc, 1, 0, 0, 0, 0);
+        }
+        
+        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.0f, 0.5f);
+        player.sendMessage("§f✓ Time frozen! All creatures slowed!");
+        grantDamageImmunity(player, 5000);
+    }
+    
+    private void handleEnergySword(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, ENERGY_SWORD_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        Location loc = player.getEyeLocation();
+        Vector direction = loc.getDirection();
+        
+        // Create energy slash effect
+        for (int i = 1; i <= 8; i++) {
+            Location slashLoc = loc.clone().add(direction.clone().multiply(i * 0.8));
+            player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, slashLoc, 2, 0.3, 0.3, 0.3, 0.1);
+            player.getWorld().spawnParticle(Particle.CRIT, slashLoc, 3, 0.2, 0.2, 0.2, 0.2);
+            player.getWorld().spawnParticle(Particle.ENCHANT, slashLoc, 5, 0.4, 0.4, 0.4, 0.3);
+        }
+        
+        // Damage and knockback nearby enemies
+        for (Entity entity : player.getNearbyEntities(8, 4, 8)) {
+            if (entity instanceof LivingEntity && !(entity instanceof Player)) {
+                LivingEntity living = (LivingEntity) entity;
+                
+                // Push away with energy
+                Vector pushDirection = entity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
+                pushDirection.multiply(2.5);
+                pushDirection.setY(0.8);
+                entity.setVelocity(pushDirection);
+                
+                // Add glowing effect
+                living.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.GLOWING, 60, 0
+                ));
+                
+                // Energy impact particles
+                Location impactLoc = entity.getLocation().add(0, 1, 0);
+                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, impactLoc, 15, 0.5, 0.5, 0.5, 0.3);
+            }
+        }
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.5f, 1.2f);
+        player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.5f, 2.0f);
+        player.sendMessage("§e✓ Energy sword slash! ⚡");
+        grantDamageImmunity(player, 2000);
+    }
+    
+    private void handleMeteorSummoner(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, METEOR_SUMMONER_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Get target location
+        org.bukkit.block.Block targetBlock = player.getTargetBlockExact(50);
+        Location targetLoc = (targetBlock != null) ? targetBlock.getLocation() : player.getLocation().add(player.getLocation().getDirection().multiply(50));
+        
+        player.sendMessage("§c✓ Meteor summoned! Incoming impact in 3 seconds!");
+        
+        // Warning effects at target
+        for (int i = 0; i < 3; i++) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    targetLoc.getWorld().spawnParticle(Particle.LAVA, targetLoc.clone().add(0, 10, 0), 30, 5.0, 5.0, 5.0, 0.1);
+                    targetLoc.getWorld().spawnParticle(Particle.FLAME, targetLoc.clone().add(0, 8, 0), 50, 3.0, 3.0, 3.0, 0.2);
+                    targetLoc.getWorld().playSound(targetLoc, Sound.ENTITY_BLAZE_SHOOT, 1.0f, 0.5f);
+                }
+            }.runTaskLater(plugin, i * 20L);
+        }
+        
+        // Meteor impact after 3 seconds
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Massive explosion effect
+                targetLoc.getWorld().spawnParticle(Particle.EXPLOSION, targetLoc, 50, 5.0, 5.0, 5.0, 0.2);
+                targetLoc.getWorld().spawnParticle(Particle.LAVA, targetLoc, 100, 8.0, 8.0, 8.0, 0.3);
+                targetLoc.getWorld().spawnParticle(Particle.FLAME, targetLoc, 200, 10.0, 10.0, 10.0, 0.5);
+                targetLoc.getWorld().spawnParticle(Particle.SMOKE, targetLoc, 150, 8.0, 8.0, 8.0, 0.4);
+                
+                // Sound effects
+                targetLoc.getWorld().playSound(targetLoc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 0.5f);
+                targetLoc.getWorld().playSound(targetLoc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.5f, 0.8f);
+                
+                // Push entities away from impact
+                for (Entity entity : targetLoc.getWorld().getNearbyEntities(targetLoc, 15, 8, 15)) {
+                    if (entity instanceof LivingEntity) {
+                        Vector pushDirection = entity.getLocation().toVector().subtract(targetLoc.toVector()).normalize();
+                        pushDirection.multiply(3.0);
+                        pushDirection.setY(Math.max(pushDirection.getY(), 1.5));
+                        entity.setVelocity(pushDirection);
+                        
+                        if (entity instanceof Player && entity != player) {
+                            ((Player) entity).sendMessage("§c☀ Meteor impact! Take cover!");
+                        }
+                    }
+                }
+                
+                player.sendMessage("§c✓ Meteor impact successful! ☀");
+            }
+        }.runTaskLater(plugin, 60L); // 3 seconds delay
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0f, 0.5f);
+        grantDamageImmunity(player, 8000); // 8 seconds immunity
+    }
+    
+    private void handleInvisibilityCloak(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, INVISIBILITY_CLOAK_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Make player invisible
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.INVISIBILITY, 200, 0 // 10 seconds
+        ));
+        
+        // Cloaking effects
+        Location playerLoc = player.getLocation().add(0, 1, 0);
+        player.getWorld().spawnParticle(Particle.WITCH, playerLoc, 30, 1.0, 1.0, 1.0, 0.2);
+        player.getWorld().spawnParticle(Particle.ENCHANT, playerLoc, 50, 2.0, 2.0, 2.0, 0.3);
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1.0f, 1.5f);
+        player.sendMessage("§7✓ Invisibility cloak activated! You are hidden for 10 seconds.");
+        grantDamageImmunity(player, 10000); // 10 seconds immunity while invisible
+        
+        // Show uncloaking effect after duration
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (player.isOnline()) {
+                    Location loc = player.getLocation().add(0, 1, 0);
+                    player.getWorld().spawnParticle(Particle.FLASH, loc, 10, 1.0, 1.0, 1.0, 0.1);
+                    player.sendMessage("§7✓ Invisibility cloak deactivated.");
+                }
+            }
+        }.runTaskLater(plugin, 200L);
+    }
+    
+    private void handleSpeedBooster(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, SPEED_BOOSTER_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Super speed effect
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.SPEED, 120, 3 // 6 seconds, level 4
+        ));
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.JUMP_BOOST, 120, 2 // 6 seconds, level 3
+        ));
+        
+        // Speed trail effect
+        new BukkitRunnable() {
+            int ticks = 0;
+            @Override
+            public void run() {
+                if (ticks >= 120 || !player.isOnline()) {
+                    cancel();
+                    return;
+                }
+                
+                Location playerLoc = player.getLocation();
+                player.getWorld().spawnParticle(Particle.DUST, playerLoc, 5, 0.5, 0.1, 0.5, 0, 
+                    new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1.0f));
+                player.getWorld().spawnParticle(Particle.CRIT, playerLoc, 3, 0.3, 0.3, 0.3, 0.1);
+                
+                ticks++;
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_HORSE_GALLOP, 1.0f, 1.5f);
+        player.sendMessage("§f✓ Speed boost activated! ⚡");
+        grantDamageImmunity(player, 6000); // 6 seconds immunity
+    }
+    
+    private void handleHealingStaff(Player player, PlayerInteractEvent event) {
+        if (!checkCooldown(player, HEALING_STAFF_COOLDOWN)) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        
+        // Heal player to full health
+        player.setHealth(player.getMaxHealth());
+        player.setFoodLevel(20);
+        player.setSaturation(20.0f);
+        
+        // Remove negative effects
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.REGENERATION, 100, 2
+        ));
+        
+        // Healing effects
+        Location playerLoc = player.getLocation().add(0, 1, 0);
+        player.getWorld().spawnParticle(Particle.HEART, playerLoc, 20, 2.0, 2.0, 2.0, 0.2);
+        player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, playerLoc, 30, 1.5, 1.5, 1.5, 0.1);
+        player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, playerLoc, 15, 1.0, 1.0, 1.0, 0.3);
+        
+        // Heal nearby players too
+        for (Entity entity : player.getNearbyEntities(8, 4, 8)) {
+            if (entity instanceof Player) {
+                Player nearbyPlayer = (Player) entity;
+                nearbyPlayer.setHealth(Math.min(nearbyPlayer.getMaxHealth(), nearbyPlayer.getHealth() + 6));
+                nearbyPlayer.sendMessage("§a✓ You were healed by " + player.getName() + "'s healing staff!");
+                
+                Location healLoc = nearbyPlayer.getLocation().add(0, 1, 0);
+                nearbyPlayer.getWorld().spawnParticle(Particle.HEART, healLoc, 10, 1.0, 1.0, 1.0, 0.1);
+            }
+        }
+        
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.2f);
+        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.8f, 1.5f);
+        player.sendMessage("§a✓ Healing staff activated! You and nearby players are healed! ❤");
+        grantDamageImmunity(player, 3000); // 3 seconds immunity
+    }
+    
     private boolean checkCooldown(Player player, long cooldownTime) {
         long currentTime = System.currentTimeMillis();
         long lastUsed = cooldowns.getOrDefault(player, 0L);
@@ -511,6 +956,7 @@ public class GadgetManager implements Listener {
     public void stopAllTasks() {
         // Clear cooldowns when plugin disables
         cooldowns.clear();
+        damageImmunity.clear();
     }
     
     public void stopPlayerEffects(Player player) {

@@ -76,12 +76,8 @@ public class PlayerListener implements Listener {
             }
         });
         
-        // Check achievements for this player (delayed to allow permission loading)
-        plugin.getSchedulerAdapter().runTaskLater(() -> {
-            if (player.isOnline()) {
-                plugin.getAchievementManager().checkAchievements(player);
-            }
-        }, 40L); // Wait 2 seconds after join
+        // Note: Achievement auto-check on join has been disabled
+        // Players must now manually claim achievements via the GUI
     }
     
     @EventHandler(priority = EventPriority.MONITOR)

@@ -35,7 +35,15 @@ public class GadgetCosmetic extends Cosmetic {
         LIGHTNING_WAND,
         FREEZE_RAY,
         JUMP_BOOTS,
-        PORTAL_GUN
+        PORTAL_GUN,
+        ROCKET_LAUNCHER,
+        FORCE_FIELD,
+        TIME_FREEZER,
+        ENERGY_SWORD,
+        INVISIBILITY_CLOAK,
+        SPEED_BOOSTER,
+        HEALING_STAFF,
+        METEOR_SUMMONER
     }
     
     public GadgetCosmetic(String id, String displayName, int price, Material iconMaterial,

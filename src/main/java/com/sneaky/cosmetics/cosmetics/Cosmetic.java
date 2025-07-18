@@ -162,22 +162,22 @@ public abstract class Cosmetic {
      */
     public String getAccessDeniedReason(Player player) {
         if (requiresPremium && !player.hasPermission("sneakycosmetics.premium")) {
-            return "Requires Premium";
+            return "§6Premium rank required";
         }
         
         if (requiresVIP && !player.hasPermission("sneakycosmetics.vip")) {
-            return "Requires VIP";
+            return "§6VIP rank required";
         }
         
         if (!player.hasPermission(uniquePermission)) {
-            return "Missing Permission: " + uniquePermission;
+            return "§fSpecial permission required";
         }
         
         if (permission != null && !permission.isEmpty() && !player.hasPermission(permission)) {
-            return "Missing Permission: " + permission;
+            return "§fSpecial permission required";
         }
         
-        return "Unknown";
+        return "§cAccess denied";
     }
     
     /**

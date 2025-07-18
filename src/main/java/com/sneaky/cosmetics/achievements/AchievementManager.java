@@ -434,6 +434,40 @@ public class AchievementManager {
     }
     
     /**
+     * Check if an achievement is claimable (completed but not yet claimed)
+     */
+    public boolean isClaimable(Player player, String achievementId) {
+        Achievement achievement = achievements.get(achievementId);
+        return achievement != null && 
+               !hasAchievement(player, achievementId) && 
+               achievement.isCompleted(player, plugin);
+    }
+    
+    /**
+     * Get all claimable achievements for a player
+     */
+    public List<Achievement> getClaimableAchievements(Player player) {
+        List<Achievement> claimable = new ArrayList<>();
+        for (Achievement achievement : achievements.values()) {
+            if (isClaimable(player, achievement.getId())) {
+                claimable.add(achievement);
+            }
+        }
+        return claimable;
+    }
+    
+    /**
+     * Manually claim an achievement (for GUI interaction)
+     */
+    public boolean claimAchievement(Player player, String achievementId) {
+        if (isClaimable(player, achievementId)) {
+            awardAchievement(player, achievementId);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Get all achievements
      */
     public Collection<Achievement> getAllAchievements() {
